@@ -53,7 +53,7 @@ parentheses):
 | instrumenting | Instrument standard errors | No=0, Yes=1 (default) |
 | studylevel | Study-level correlation | None=0 (default), Fixed effects=1, Cluster=2 (default), Fixed effects and cluster = 3 |
 | SE | SE estimator |  CR0 (Huber–White)=0, CR1 (Standard empirical correction)=1, CR2 (Bias-reduced estimator)=2 , wild bootstrap=3 (default)  |
-| AR | Anderson-Rubin confidence interval (only for unweighted) | No=0,  Yes=1 (default) |
+| AR | Anderson-Rubin confidence interval (available for unweighted and MAIVE-adjusted weights) | No=0,  Yes=1 (default) |
 | first_stage | First-stage specification for the variance model | levels=0 (default), log=1 |
 
 

@@ -43,7 +43,7 @@ maive_validate_inputs <- function(dat, method, weight, instrument, studylevel, S
   type_choice <- if (SE == 3L) "CR0" else type_map[SE + 1L]
   first_stage_type <- c("levels", "log")[first_stage + 1L]
 
-  if (method == 4L || weight %in% c(1L, 2L) || instrument == 0L) {
+  if (method == 4L || weight == 1L || instrument == 0L) {
     AR <- 0L
   }
 
@@ -266,7 +266,13 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
 
   egger_inf <- maive_infer_coef(fits$fatpet, 2L, opts$SE, prepared$dat, "g", opts$type_choice)
   egger_boot_ci <- round(egger_inf$ci, 3)
-  egger_ar_ci <- maive_compute_egger_ar_ci(opts, fits, prepared, instrumentation$invNs)
+  egger_ar_ci <- maive_compute_egger_ar_ci(
+    opts,
+    fits,
+    prepared,
+    instrumentation$invNs,
+    adjusted_variance = instrumentation$sebs2fit1
+  )
   cfg <- maive_get_config(opts$method, fits, selection, ek)
   hausman_cfg <- maive_get_hausman_models(opts$method, cfg, selection, design)
   if (is.null(cfg$maive) || is.null(cfg$std)) {
@@ -282,7 +288,15 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
   hausman <- maive_compute_hausman(beta, beta0, hausman_cfg$maive, hausman_cfg$std, prepared$g, opts$type_choice)
   chi2 <- qchisq(p = 0.05, df = 1, lower.tail = FALSE)
 
-  ar_ci_res <- maive_compute_ar_ci(opts, fits, selection, prepared, instrumentation$invNs, opts$type_choice)
+  ar_ci_res <- maive_compute_ar_ci(
+    opts,
+    fits,
+    selection,
+    prepared,
+    instrumentation$invNs,
+    opts$type_choice,
+    adjusted_variance = instrumentation$sebs2fit1
+  )
 
   list(
     "beta" = round(beta, 3),
@@ -558,12 +572,19 @@ maive_normalize_ci_bounds <- function(ci_row) {
 }
 
 #' @keywords internal
-maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs) {
-  if (opts$AR != 1L || opts$weight %in% c(1L, 2L) || opts$instrument == 0L) {
+maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_variance = NULL) {
+  if (opts$AR != 1L || opts$weight == 1L || opts$instrument == 0L) {
     return("NA")
   }
   if (is.null(fits$fatpet)) {
     return("NA")
+  }
+  ar_weights <- NULL
+  if (opts$weight == 2L) {
+    if (is.null(adjusted_variance)) {
+      stop("Adjusted variance estimates are required when computing weighted AR intervals.")
+    }
+    ar_weights <- 1 / adjusted_variance
   }
   ar_result <- compute_AR_CI_optimized(
     model = fits$fatpet,
@@ -572,7 +593,8 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs) {
     sebs = prepared$sebs,
     invNs = invNs,
     g = prepared$g,
-    type_choice = opts$type_choice
+    type_choice = opts$type_choice,
+    weights = ar_weights
   )
   if (is.null(ar_result$b1_CI) || identical(ar_result$b1_CI, "NA")) {
     return("NA")
@@ -669,8 +691,8 @@ maive_compute_hausman <- function(beta_iv, beta_ols, model_iv, model_ols, g, typ
 }
 
 #' @keywords internal
-maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_choice) {
-  if (opts$AR != 1L || opts$method == 4L || opts$weight %in% c(1L, 2L)) {
+maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_choice, adjusted_variance = NULL) {
+  if (opts$AR != 1L || opts$method == 4L || opts$weight == 1L) {
     return(list(b0_CI = "NA", b1_CI = "NA"))
   }
 
@@ -685,6 +707,14 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
     stop("Invalid method")
   )
 
+  ar_weights <- NULL
+  if (opts$weight == 2L) {
+    if (is.null(adjusted_variance)) {
+      stop("Adjusted variance estimates are required when computing weighted AR intervals.")
+    }
+    ar_weights <- 1 / adjusted_variance
+  }
+
   do.call(
     compute_AR_CI_optimized,
     c(cfg_ar, list(
@@ -692,7 +722,8 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
       sebs = prepared$sebs,
       invNs = invNs,
       g = prepared$g,
-      type_choice = type_choice
+      type_choice = type_choice,
+      weights = ar_weights
     ))
   )
 }
@@ -709,8 +740,8 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
 #' @param studylevel Correlation at study level: 0 none, 1 fixed effects, 2 cluster.
 #' @param SE SE estimator: 0 CR0 (Huber–White), 1 CR1 (Standard empirical correction),
 #' 2 CR2 (Bias-reduced estimator), 3 wild bootstrap.
-#' @param AR Anderson Rubin corrected CI for weak instruments (only for unweighted MAIVE versions
-#' of PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.
+#' @param AR Anderson Rubin corrected CI for weak instruments (available for unweighted and MAIVE-adjusted weight versions of
+#' PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.
 #' @param first_stage First-stage specification for the variance model: 0 levels, 1 log.
 #'
 #' @details Data \code{dat} can be imported from an Excel file via:

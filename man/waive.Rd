@@ -20,8 +20,8 @@ waive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 \item{SE}{SE estimator: 0 CR0 (Huber–White), 1 CR1 (Standard empirical correction),
 2 CR2 (Bias-reduced estimator), 3 wild bootstrap.}
 
-\item{AR}{Anderson Rubin corrected CI for weak instruments (only for unweighted MAIVE versions
-of PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
+\item{AR}{Anderson Rubin corrected CI for weak instruments (available for unweighted and MAIVE-adjusted weight versions of
+PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
 
 \item{first_stage}{First-stage specification for the variance model: 0 levels, 1 log.}
 }

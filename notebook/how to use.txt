@@ -13,7 +13,7 @@ library(MAIVE)
   instrument <- 1 
 # correlation at study level: none: 0 (default), fixed effects: 1, cluster: 2
   studylevel <-2
-  # Anderson-Rubin confidence interval for weak instruments (only for unweighted MAIVE -- PET, PEESE or PET-PEESE): 0 no, 1 yes
+  # Anderson-Rubin confidence interval for weak instruments (unweighted or MAIVE-adjusted MAIVE -- PET, PEESE or PET-PEESE): 0 no, 1 yes
   AR <-1
 # default options are method=3; weight=0; instrument=1; studylevel=0; AR=0 
 
