@@ -599,6 +599,11 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
   if (is.null(ar_result$b1_CI) || identical(ar_result$b1_CI, "NA")) {
     return("NA")
   }
+  if (all(is.na(ar_result$b1_CI)) || any(is.infinite(ar_result$b1_CI))) {
+    ci_vals <- c(NA_real_, NA_real_)
+    names(ci_vals) <- c("lower", "upper")
+    return(ci_vals)
+  }
   ci_vals <- round(ar_result$b1_CI, 3)
   names(ci_vals) <- c("lower", "upper")
   ci_vals

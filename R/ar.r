@@ -14,6 +14,7 @@ compute_AR_CI_optimized <- function(model, adjust_fun, bs, sebs, invNs, g, type_
 
   M <- length(bs)
 
+  unstable_weights <- FALSE
   if (!is.null(weights)) {
     if (length(weights) != M) {
       stop("weights must have the same length as the data used in the AR test.")
@@ -26,6 +27,7 @@ compute_AR_CI_optimized <- function(model, adjust_fun, bs, sebs, invNs, g, type_
       warning(
         "Adjusted weights vary substantially (ratio > 1000); Anderson-Rubin CI may be unstable."
       )
+      unstable_weights <- TRUE
     }
     sqrt_weights <- sqrt(weights)
   } else {
@@ -147,8 +149,8 @@ compute_AR_CI_optimized <- function(model, adjust_fun, bs, sebs, invNs, g, type_
   }
 
   if (!accepted) {
-    warning("AR search grid failed to locate an acceptance region; returning unbounded interval.")
-    return(list(b0_CI = c(-Inf, Inf), b1_CI = c(-Inf, Inf)))
+    warning("AR search grid failed to locate an acceptance region; returning NA interval.")
+    return(list(b0_CI = c(NA_real_, NA_real_), b1_CI = c(NA_real_, NA_real_)))
   }
 
   b0_accept_idx <- which(rowSums(AR_accept) > 0)
@@ -164,8 +166,17 @@ compute_AR_CI_optimized <- function(model, adjust_fun, bs, sebs, invNs, g, type_
   disjoint_b0 <- detect_disjoint(b0_accept_idx)
   disjoint_b1 <- detect_disjoint(b1_accept_idx)
 
+  # Check for extreme heterogeneity in standard errors
+  sebs_ratio <- max(sebs) / min(sebs)
+  extreme_heterogeneity <- is.finite(sebs_ratio) && sebs_ratio > 100
+
   if (disjoint_b0 || disjoint_b1) {
-    warning("AR acceptance region is disjoint; returning conservative interval spanning all segments.")
+    if (unstable_weights || extreme_heterogeneity) {
+      warning("AR acceptance region is disjoint with extreme heterogeneity; returning NA interval.")
+      return(list(b0_CI = c(NA_real_, NA_real_), b1_CI = c(NA_real_, NA_real_)))
+    } else {
+      warning("AR acceptance region is disjoint; returning conservative interval spanning all segments.")
+    }
   }
 
   b0_CI <- c(min(b0_grid[b0_accept_idx]), max(b0_grid[b0_accept_idx]))
