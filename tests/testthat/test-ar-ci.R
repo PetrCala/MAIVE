@@ -48,9 +48,9 @@ test_that("weighted AR computation handles weight diagnostics", {
   invNs <- 1 / c(80, 90, 85, 88)
   model <- lm(bs ~ invNs)
 
-  base <- MAIVE:compute_AR_CI_optimized(
+  base <- MAIVE:::compute_AR_CI_optimized(
     model = model,
-    adjust_fun = MAIVE:PET_adjust,
+    adjust_fun = MAIVE:::PET_adjust,
     bs = bs,
     sebs = sebs,
     invNs = invNs,
@@ -58,9 +58,9 @@ test_that("weighted AR computation handles weight diagnostics", {
     type_choice = "CR0"
   )
 
-  identical_weights <- MAIVE:compute_AR_CI_optimized(
+  identical_weights <- MAIVE:::compute_AR_CI_optimized(
     model = model,
-    adjust_fun = MAIVE:PET_adjust,
+    adjust_fun = MAIVE:::PET_adjust,
     bs = bs,
     sebs = sebs,
     invNs = invNs,
@@ -72,9 +72,9 @@ test_that("weighted AR computation handles weight diagnostics", {
   expect_equal(base, identical_weights)
 
   expect_warning(
-    MAIVE:compute_AR_CI_optimized(
+    MAIVE:::compute_AR_CI_optimized(
       model = model,
-      adjust_fun = MAIVE:PET_adjust,
+      adjust_fun = MAIVE:::PET_adjust,
       bs = bs,
       sebs = sebs,
       invNs = invNs,
