@@ -57,7 +57,7 @@ test_that("Hausman statistic uses difference-in-estimators variance", {
     opts$instrument,
     opts$first_stage_type
   )
-  w <- MAIVE:::maive_compute_weights(opts$weight, prepared$sebs, instrumentation$sebs2fit1)
+  w <- MAIVE:::maive_compute_weights(opts$weight, prepared$sebs, instrumentation$sebs2fit1, prepared$studyid)
   x <- if (opts$instrument == 0L) prepared$sebs else sqrt(instrumentation$sebs2fit1)
   x2 <- if (opts$instrument == 0L) prepared$sebs^2 else instrumentation$sebs2fit1
   design <- MAIVE:::maive_build_design_matrices(prepared$bs, prepared$sebs, w, x, x2, prepared$D, prepared$dummy)
@@ -104,7 +104,7 @@ test_that("Hausman PET-PEESE uses MAIVE weights", {
     opts$instrument,
     opts$first_stage_type
   )
-  w <- MAIVE:::maive_compute_weights(opts$weight, prepared$sebs, instrumentation$sebs2fit1)
+  w <- MAIVE:::maive_compute_weights(opts$weight, prepared$sebs, instrumentation$sebs2fit1, prepared$studyid)
   x <- if (opts$instrument == 0L) prepared$sebs else sqrt(instrumentation$sebs2fit1)
   x2 <- if (opts$instrument == 0L) prepared$sebs^2 else instrumentation$sebs2fit1
   design <- MAIVE:::maive_build_design_matrices(prepared$bs, prepared$sebs, w, x, x2, prepared$D, prepared$dummy)
