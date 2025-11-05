@@ -46,7 +46,7 @@ The user needs to specify the following options (with defaults in parentheses):
 | Option       | Description                                  | Values                                              |
 |--------------|----------------------------------------------|-----------------------------------------------------|
 | method       | Meta-analysis method                         | PET=1, PEESE=2, PET-PEESE=3 (default), EK=4        |
-| weighting    | Weighting scheme                            | No weights=0 (default), Weights=1, Adjusted weights=2 |
+| weighting    | Weighting scheme                            | No weights=0 (default), Weights=1, Adjusted weights=2, Study weights=3 |
 | instrumenting| Instrument standard errors                  | No=0, Yes=1 (default)                               |
 | studylevel   | Study-level correlation                     | None=0 (default), Fixed effects=1, Cluster=2       |
 | AR           | Anderson-Rubin confidence interval (available for unweighted and MAIVE-adjusted weights) | No=0 (default), Yes=1                      |
@@ -56,7 +56,7 @@ The user needs to specify the following options (with defaults in parentheses):
 The default MAIVE meta-estimator is MAIVE-PET-PEESE with instrumented standard errors and no weights. However, the user can adjust:
 
 - The meta-analysis method (PET, PEESE, PET-PEESE, EK).
-- The weighting (no weights, inverse-variance weights, or MAIVE-adjusted weights).
+- The weighting (no weights, inverse-variance weights, MAIVE-adjusted weights, or study weights).
 - Instrumentation of standard errors (yes or no).
 - Accounting for study-level correlation (none, fixed effects, or cluster-robust methods).
 
