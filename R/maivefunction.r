@@ -324,7 +324,8 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     "egger_ar_ci" = egger_ar_ci,
     "is_quadratic_fit" = slope_summary,
     "boot_result" = se_ma$boot_result,
-    "slope_coef" = slope_info$coefficient
+    "slope_coef" = slope_info$coefficient,
+    "weights" = w
   )
 }
 
