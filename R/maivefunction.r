@@ -266,7 +266,7 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
 
   design <- maive_build_design_matrices(prepared$bs, prepared$sebs, w, x, x2, prepared$D, prepared$dummy)
   fits <- maive_fit_models(design)
-  selection <- maive_select_petpeese(fits, design, opts$alpha_s)
+  selection <- maive_select_petpeese(fits, design, opts$alpha_s, opts$SE, prepared$dat, opts$type_choice)
   sighats <- maive_compute_sigma_h(fits, design$w, design$sebs)
   ek <- maive_fit_ek(selection, design, sighats, opts$method)
 
@@ -408,15 +408,29 @@ maive_fit_models <- function(design) {
 }
 
 #' @keywords internal
-maive_select_petpeese <- function(fits, design, alpha_s) {
+maive_select_petpeese <- function(fits, design, alpha_s, SE = NULL, data = NULL, type_choice = NULL) {
   M <- length(design$y)
 
-  quad_stat <- abs(coef(fits$fatpet)[1] / sqrt(vcov(fits$fatpet)[1, 1]))
+  # Use proper SE method for PET/PEESE selection to respect clustering/bootstrapping
+  if (!is.null(SE) && !is.null(data) && !is.null(type_choice)) {
+    # Get robust SE for the intercept using the user's chosen method
+    intercept_inf <- maive_infer_coef(fits$fatpet, 1L, SE, data, "g", type_choice)
+    quad_stat <- abs(intercept_inf$b / intercept_inf$se)
+  } else {
+    # Fallback to unclustered variance (backward compatibility)
+    quad_stat <- abs(coef(fits$fatpet)[1] / sqrt(vcov(fits$fatpet)[1, 1]))
+  }
   quad_cutoff <- qt(1 - alpha_s / 2, M - ncol(design$X))
   quadratic_decision <- quad_stat > quad_cutoff
   petpeese <- if (quadratic_decision) fits$peese else fits$fatpet
 
-  quad_stat0 <- abs(coef(fits$fatpet0)[1] / sqrt(vcov(fits$fatpet0)[1, 1]))
+  # For the standard model (fatpet0), also use proper SE if available
+  if (!is.null(SE) && !is.null(data) && !is.null(type_choice)) {
+    intercept_inf0 <- maive_infer_coef(fits$fatpet0, 1L, SE, data, "g", type_choice)
+    quad_stat0 <- abs(intercept_inf0$b / intercept_inf0$se)
+  } else {
+    quad_stat0 <- abs(coef(fits$fatpet0)[1] / sqrt(vcov(fits$fatpet0)[1, 1]))
+  }
   quad_cutoff0 <- qt(1 - alpha_s / 2, M - ncol(design$X0))
   quadratic_decision0 <- quad_stat0 > quad_cutoff0
   petpeese0 <- if (quadratic_decision0) fits$peese0 else fits$fatpet0
