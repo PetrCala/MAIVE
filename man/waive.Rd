@@ -17,7 +17,7 @@ waive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 
 \item{studylevel}{Correlation at study level: 0 none, 1 fixed effects, 2 cluster.}
 
-\item{SE}{SE estimator: 0 CR0 (Huber–White), 1 CR1 (Standard empirical correction),
+\item{SE}{SE estimator: 0 CR0 (Huber-White), 1 CR1 (Standard empirical correction),
 2 CR2 (Bias-reduced estimator), 3 wild bootstrap.}
 
 \item{AR}{Anderson Rubin corrected CI for weak instruments (available for unweighted and MAIVE-adjusted weight versions of
@@ -45,8 +45,10 @@ dat <- data.frame(
   Ns = c(50, 80, 65, 90)
 )
 
-result <- waive(dat, method = 3, weight = 0, instrument = 1,
-                studylevel = 0, SE = 0, AR = 0, first_stage = 0)
+result <- waive(dat,
+  method = 3, weight = 0, instrument = 1,
+  studylevel = 0, SE = 0, AR = 0, first_stage = 0
+)
 }
 
 }
