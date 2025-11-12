@@ -3,7 +3,8 @@
 
 .PHONY: help install check test document build clean cran-check submit-cran \
         update-docs coverage install-deps vignettes site preview-site \
-        lint style check-version
+        lint style check-version update-version version-patch version-minor \
+        version-major version-check
 
 # Default target - show help
 help:
@@ -28,9 +29,15 @@ help:
 	@echo "  make preview-site   Preview pkgdown site in browser"
 	@echo "  make update-docs    Update all documentation (document + site)"
 	@echo ""
+	@echo "Version Management:"
+	@echo "  make check-version  Show current version"
+	@echo "  make update-version Interactive version updater (recommended)"
+	@echo "  make version-patch  Bump patch version (0.0.X)"
+	@echo "  make version-minor  Bump minor version (0.X.0)"
+	@echo "  make version-major  Bump major version (X.0.0)"
+	@echo ""
 	@echo "CRAN Submission:"
 	@echo "  make submit-cran    Interactive CRAN submission (uses helper script)"
-	@echo "  make check-version  Check current version"
 	@echo ""
 	@echo "Code Quality:"
 	@echo "  make lint           Check code style"
@@ -97,14 +104,54 @@ coverage:
 	@echo "[*] Generating coverage report..."
 	@Rscript -e "covr::report()"
 
+# Version Management
+check-version:
+	@echo "Current version: $$(grep '^Version:' DESCRIPTION | sed 's/Version: //')"
+
+version-check: check-version
+
+update-version:
+	@echo "[*] Starting interactive version updater..."
+	@Rscript scripts/update-version.R
+
+version-patch:
+	@echo "[*] Bumping patch version (X.Y.Z -> X.Y.Z+1)..."
+	@$(MAKE) _version-bump TYPE=patch
+
+version-minor:
+	@echo "[*] Bumping minor version (X.Y.Z -> X.Y+1.0)..."
+	@$(MAKE) _version-bump TYPE=minor
+
+version-major:
+	@echo "[*] Bumping major version (X.Y.Z -> X+1.0.0)..."
+	@$(MAKE) _version-bump TYPE=major
+
+# Internal version bump (don't call directly)
+_version-bump:
+	@current=$$(grep '^Version:' DESCRIPTION | sed 's/Version: //'); \
+	IFS='.' read -r major minor patch <<< "$$current"; \
+	if [ "$(TYPE)" = "patch" ]; then \
+		new="$$major.$$minor.$$((patch + 1))"; \
+	elif [ "$(TYPE)" = "minor" ]; then \
+		new="$$major.$$((minor + 1)).0"; \
+	elif [ "$(TYPE)" = "major" ]; then \
+		new="$$((major + 1)).0.0"; \
+	fi; \
+	echo "Updating version: $$current -> $$new"; \
+	sed -i.bak "s/^Version: .*/Version: $$new/" DESCRIPTION && rm DESCRIPTION.bak; \
+	echo ""; \
+	echo "[OK] Version updated to $$new"; \
+	echo ""; \
+	echo "Next steps:"; \
+	echo "  1. Update NEWS.md with changes for version $$new"; \
+	echo "  2. Review changes: git diff DESCRIPTION"; \
+	echo "  3. Commit: git commit -am 'Bump version to $$new'"; \
+	echo "  4. Run checks: make release-prep"
+
 # CRAN Submission
 submit-cran:
 	@echo "[*] Starting CRAN submission process..."
 	@Rscript scripts/submit-cran.R
-
-check-version:
-	@echo "[*] Current version:"
-	@grep "^Version:" DESCRIPTION | sed 's/Version: //'
 
 # Code Quality
 lint:
@@ -131,7 +178,7 @@ clean-all: clean
 	@echo "[OK] Deep cleaned"
 
 # Advanced targets for specific workflows
-.PHONY: release-prep quick-check fix-style
+.PHONY: release-prep quick-check fix-style new-release
 
 # Prepare for release
 release-prep: clean document test cran-check
@@ -141,10 +188,31 @@ release-prep: clean document test cran-check
 	@echo "==============================================================="
 	@echo ""
 	@echo "Checklist:"
-	@echo "  [?] Update NEWS.md with changes"
-	@echo "  [?] Update cran-comments.md"
-	@echo "  [?] Run 'make submit-cran' when ready"
+	@echo "  [?] Version updated (current: $$(grep '^Version:' DESCRIPTION | sed 's/Version: //'))"
+	@echo "  [?] NEWS.md updated with changes"
+	@echo "  [?] cran-comments.md updated"
+	@echo "  [?] All checks passed"
 	@echo ""
+	@echo "When ready:"
+	@echo "  make submit-cran"
+	@echo ""
+
+# Complete new release workflow
+new-release:
+	@echo "==============================================================="
+	@echo "  New Release Workflow"
+	@echo "==============================================================="
+	@echo ""
+	@echo "This will guide you through a complete release."
+	@echo ""
+	@read -p "Press Enter to continue or Ctrl-C to cancel..." dummy
+	@$(MAKE) update-version
+	@echo ""
+	@read -p "Version updated. Press Enter to run checks..." dummy
+	@$(MAKE) release-prep
+	@echo ""
+	@echo "Release preparation complete!"
+	@echo "Review everything and run 'make submit-cran' when ready."
 
 # Quick check (no examples, no vignettes)
 quick-check:
