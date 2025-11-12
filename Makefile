@@ -118,7 +118,7 @@ version-check: check-version
 
 update-version:
 	@echo "[*] Starting interactive version updater..."
-	@Rscript scripts/update-version.R
+	@R --interactive --vanilla < scripts/update-version.R
 
 version-patch:
 	@echo "[*] Bumping patch version (X.Y.Z -> X.Y.Z+1)..."
@@ -157,7 +157,7 @@ _version-bump:
 # CRAN Submission
 submit-cran:
 	@echo "[*] Starting CRAN submission process..."
-	@Rscript scripts/submit-cran.R
+	@R --interactive --vanilla < scripts/submit-cran.R
 
 # Code Quality
 lint:
