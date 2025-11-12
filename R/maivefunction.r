@@ -599,7 +599,7 @@ maive_normalize_ci_bounds <- function(ci_row) {
 
 #' @keywords internal
 maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_variance = NULL) {
-  if (opts$AR != 1L || opts$weight == 1L || opts$instrument == 0L) {
+  if (opts$AR != 1L || opts$weight == 1L || opts$instrument == 0L || prepared$dummy == 1L) {
     return("NA")
   }
   if (is.null(fits$fatpet)) {
@@ -723,7 +723,7 @@ maive_compute_hausman <- function(beta_iv, beta_ols, model_iv, model_ols, g, typ
 
 #' @keywords internal
 maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_choice, adjusted_variance = NULL) {
-  if (opts$AR != 1L || opts$method == 4L || opts$weight == 1L) {
+  if (opts$AR != 1L || opts$method == 4L || opts$weight == 1L || prepared$dummy == 1L) {
     return(list(b0_CI = "NA", b1_CI = "NA"))
   }
 
