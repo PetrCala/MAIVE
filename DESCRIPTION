@@ -2,8 +2,10 @@ Package: MAIVE
 Type: Package
 Title: Meta Analysis Instrumental Variable Estimator
 Encoding: UTF-8
-Version: 0.0.4.0
+Version: 0.0.4
 RoxygenNote: 7.3.3
+URL: https://meta-analysis.cz/maive, https://github.com/meta-analysis-es/maive
+BugReports: https://github.com/meta-analysis-es/maive/issues
 Authors@R: 
     c(
         person(given = "Zuzana", family = "Irsova",
@@ -36,12 +38,11 @@ Depends:
     R (>= 4.0.0)
 Imports: 
     stats,
-    utils,
-    clubSandwich,
-    metafor
+    clubSandwich
 Suggests: 
     testthat,
     knitr,
-    rmarkdown
+    rmarkdown,
+    varhandle
 VignetteBuilder: knitr
 LazyData: true
