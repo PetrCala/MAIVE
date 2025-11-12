@@ -62,3 +62,6 @@ rsconnect/
 *.o
 *.so
 *.dll
+
+# Make temporary files
+.make_*
