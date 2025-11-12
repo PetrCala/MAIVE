@@ -1,109 +1,193 @@
-MAIVE in R: Instructions to the User
-================
+# MAIVE: Meta-Analysis Instrumental Variable Estimator
 
-July 2025
+<!-- badges: start -->
+[![CRAN status](https://www.r-pkg.org/badges/version/MAIVE)](https://CRAN.R-project.org/package=MAIVE)
+[![R-CMD-check](https://github.com/meta-analysis-es/maive/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/meta-analysis-es/maive/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/meta-analysis-es/maive/branch/main/graph/badge.svg)](https://app.codecov.io/gh/meta-analysis-es/maive?branch=main)
+<!-- badges: end -->
 
-This readme provides instructions on the implementation of the MAIVE
-meta-analysis estimator in R: The `MAIVE` package with the
-`maive.r` function.
+**Spurious Precision in Meta-Analysis of Observational Research**  
+by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger
 
-Spurious Precision in Meta-Analysis of Observational Research by Zuzana
-Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger  
-<https://meta-analysis.cz/maive>
+**Project Website**: <https://meta-analysis.cz/maive>
 
-------------------------------------------------------------------------
+---
+
+## Overview
+
+MAIVE addresses a fundamental problem in meta-analysis of observational research: **spurious precision**.
+
+Traditional meta-analysis assigns more weight to studies with lower standard errors, assuming higher precision. However, in observational research, precision can be manipulated through p-hacking and other questionable research practices, invalidating:
+
+- Inverse-variance weighting schemes
+- Traditional bias-correction methods (funnel plots, trim-and-fill)
+- Selection models for publication bias
+
+MAIVE implements an **instrumental variable approach** to limit bias caused by spurious precision in meta-analysis.
 
 ## Installation
 
-Once you have installed R and RStudio Desktop, you can install MAIVE
-using **devtools**:
+### From CRAN (coming soon)
 
-``` r
+```r
+install.packages("MAIVE")
+```
+
+### Development version
+
+```r
 install.packages("devtools")
 devtools::install_github("meta-analysis-es/maive")
+```
+
+### Load package
+
+```r
 library(MAIVE)
 ```
 
-For help on the `maive.r` function:
+## Quick Start
 
-``` r
-help(maive)
+```r
+# Prepare your data
+data <- data.frame(
+  bs = c(...),        # Effect sizes
+  sebs = c(...),      # Standard errors
+  Ns = c(...),        # Sample sizes
+  study_id = c(...)   # Study IDs (optional)
+)
+
+# Run MAIVE with defaults (PET-PEESE, instrumented SEs, no weights)
+result <- maive(
+  dat = data,
+  method = 3,      # PET-PEESE (default)
+  weight = 0,      # No weights (default)
+  instrument = 1,  # Instrument SEs (default)
+  studylevel = 2,  # Cluster-robust (default)
+  SE = 3,          # Wild bootstrap (default)
+  AR = 1           # Anderson-Rubin CI (default)
+)
+
+# View results
+print(result$Estimate)    # MAIVE estimate
+print(result$SE)          # Standard error
+print(result$Hausman)     # Hausman test
+print(result$`F-test`)    # First-stage F-test
 ```
 
 ## Data Structure
 
-The data should have the following structure:
+The `maive()` function expects a data frame with:
 
 | Column | Label | Description |
-|----|----|----|
-| 1 | bs | Primary estimates |
-| 2 | sebs | Standard errors |
-| 3 | Ns | Sample sizes |
-| 4 | study id | Study identification number (needed for clustering/study fixed effects) |
+|--------|-------|-------------|
+| 1 | `bs` | Primary estimates (effect sizes) |
+| 2 | `sebs` | Standard errors (must be > 0) |
+| 3 | `Ns` | Sample sizes (must be > 0) |
+| 4 | `study_id` | Study identification (optional, for clustering/fixed effects) |
 
-## Options
+## Key Features
 
-The user needs to specify the following options (with defaults in
-parentheses):
+### Methods
 
-| Option | Description | Values |
-|----|----|----|
-| method | Meta-analysis method | PET=1, PEESE=2, PET-PEESE=3 (default), EK=4 |
-| weighting | Weighting scheme | No weights=0 (default), Weights=1, MAIVE adjusted weights=2 |
-| instrumenting | Instrument standard errors | No=0, Yes=1 (default) |
-| studylevel | Study-level correlation | None=0, Fixed effects=1, Cluster=2 (default), Fixed effects and Cluster=3|
-| SE | Standard errors | CR0 (Huber–White)=0, CR1 (Standard empirical correction)=1, CR2 (Bias-reduced estimator)=2, wild bootstrap=3 (default)|
-| AR | Anderson-Rubin confidence interval (available for unweighted and MAIVE-adjusted weights) | No=0 , Yes=1 (default)|
+- **PET** (Precision-Effect Test)
+- **PEESE** (Precision-Effect Estimate with Standard Error)
+- **PET-PEESE** (Conditional method, default)
+- **EK** (Endogenous Kink)
 
-## Description of Default Settings
+### Weighting Schemes
 
-The default MAIVE meta-estimator is MAIVE-PET-PEESE with instrumented
-standard errors, no weights, cluster and wild bootstrap. However, the user can adjust:
+- No weights (recommended when spurious precision is a concern)
+- Inverse-variance weights
+- MAIVE-adjusted weights (using instrumented SEs)
+- **WAIVE** weights (robust downweighting via `waive()` function)
 
-- The meta-analysis method (PET, PEESE, PET-PEESE, EK).
-- The weighting (no weights, inverse-variance weights, MAIVE-adjusted weights).
-- Instrumentation of standard errors (yes or no).
-- Accounting for study-level correlation (none, fixed effects,
-  cluster-robust methods, or fixed effects and cluster-robust methods).
-- Use CR0 (Huber–White), CR1 (Standard empirical correction)=1, or CR2 (Bias-reduced estimator) for the estimation of the standard errors
+### Robust Inference
 
-## Output
+- Study-level correlation (fixed effects, clustering, or both)
+- Multiple SE estimators (CR0, CR1, CR2, wild bootstrap)
+- Anderson-Rubin confidence intervals for weak instruments
+- First-stage specification options (levels or log transformation)
+
+### Output
 
 The function returns:
 
-- A MAIVE point estimate and standard error.
-- A point estimate and standard error from the method chosen.
-- A Hausman-type test statistic and a 5% critical value.
-- If instrumenting SEs, a heteroskedasticity-robust F test of the
-  first-stage regression.
-- If AR option is chosen, an Anderson-Rubin confidence interval for weak
-  instruments.
-- Instrumented standard errors saved as `MAIVE$SE_instrumented`.
-- p-value of test for publication bias / p-hacking based on instrumented FAT.
+- MAIVE point estimate and standard error
+- Standard (non-IV) estimate for comparison
+- Hausman-type test statistic
+- First-stage F-test of instrument strength
+- Anderson-Rubin confidence interval
+- Publication bias test p-value
+- Instrumented standard errors
 
-## Technical Comments
+## Documentation
 
-- The first stage regresses variances on a constant and inverse sample
-  sizes.
-- The Hausman-type test compares the MAIVE IV intercept with its OLS counterpart using
-  the difference-in-estimators variance under the selected robust/clustered option.
-  estimator (conservative test). When PET-PEESE estimators are compared, MAIVE now fits
-  an auxiliary PET-PEESE with the same weighting scheme as the MAIVE estimator so the
-  Hausman statistic remains available even when weighting choices differ.
-- Study fixed effects are demeaned so intercept measures a grand mean.
-- If no study-id column is provided, the program assumes no study-level
-  correlation.
-- The Anderson-Rubin confidence interval follows Keane and Neal (2023).
-- **WAIVE**: An optional robust extension (`waive()`) that downweights
-  studies with spurious precision or extreme outliers. See `?waive` for details.
+- **Getting Started Guide**: See `vignette("introduction")`
+- **Function Reference**: `?maive` and `?waive`
+- **Website**: <https://meta-analysis-es.github.io/maive/>
+- **Project Page**: <https://meta-analysis.cz/maive>
+
+## Example
+
+```r
+# Create example data
+set.seed(123)
+data <- data.frame(
+  bs = rnorm(50, mean = 0.3, sd = 0.2),
+  sebs = runif(50, min = 0.05, max = 0.3),
+  Ns = sample(100:1000, 50, replace = TRUE),
+  study_id = rep(1:10, each = 5)
+)
+
+# Run MAIVE
+result <- maive(data, method = 3, weight = 0, instrument = 1, 
+                studylevel = 2, SE = 3, AR = 1)
+
+# Compare with standard estimate
+cat("MAIVE Estimate:", result$Estimate, "\n")
+cat("Standard Estimate:", result$StdEstimate, "\n")
+cat("Hausman Test:", result$Hausman, "\n")
+
+# Use WAIVE for robust estimation with outlier downweighting
+result_waive <- waive(data, method = 3, instrument = 1, 
+                      studylevel = 2, SE = 3, AR = 1)
+cat("WAIVE Estimate:", result_waive$Estimate, "\n")
+```
+
+## Citation
+
+If you use MAIVE in your research, please cite:
+
+> Irsova, Z., Bom, P. R. D., Havranek, T., & Rachinger, H. (2024).
+> Spurious Precision in Meta-Analysis of Observational Research.
+> Available at: <https://meta-analysis.cz/maive>
 
 ## References
 
-Keane, Michael and Neal, Timothy. 2023. “Instrument strength in IV
-estimation and inference: A guide to theory and practice”, Journal of
-Econometrics, 235(2), 1625-1653.
-<https://doi.org/10.1016/j.jeconom.2022.12.009>
+Keane, M., & Neal, T. (2023). Instrument strength in IV estimation and inference: A guide to theory and practice. *Journal of Econometrics*, 235(2), 1625-1653. <https://doi.org/10.1016/j.jeconom.2022.12.009>
 
-Keane, Michael and Neal, Timothy. 2023. “Instrument strength in IV estimation and inference: A guide to theory and practice”, Journal of Econometrics, 235(2), 1625-1653. <https://doi.org/10.1016/j.jeconom.2022.12.009>
+Tipton, E. (2015). Small sample adjustments for robust variance estimation with cluster-correlated data. *Psychological Methods*, 20(3), 375–389. <https://doi.org/10.1037/met0000019>
 
-Tipton, E. (2015). Small sample adjustments for robust variance estimation with cluster-correlated data. Psychological Methods, 20(3), 375–389. <https://doi.org/10.1037/met0000019>
+## Contributing
+
+We welcome contributions! Please see our [GitHub repository](https://github.com/meta-analysis-es/maive) for:
+
+- Bug reports and feature requests (use [Issues](https://github.com/meta-analysis-es/maive/issues))
+- Code contributions (submit Pull Requests)
+- Questions and discussions
+
+## License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+## Authors
+
+- **Zuzana Irsova** - Charles University, Prague
+- **Pedro R. D. Bom** - University of Deusto, Bilbao  
+- **Tomas Havranek** - Charles University, Prague; CEPR, London; METRICS, Stanford
+- **Heiko Rachinger** (Maintainer) - University of the Balearic Islands, Palma
+
+---
+
+**Questions?** Contact the maintainer or visit our [project website](https://meta-analysis.cz/maive).

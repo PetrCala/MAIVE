@@ -207,11 +207,12 @@ maive_compute_weights <- function(weight, sebs, sebs2fit1, studyid = NULL) {
   }
 }
 
-#' @keywords internal
 #' Compute exponential-decay weights from first-stage residuals
 #'
 #' @param first_stage_model Fitted lm object from first-stage regression
 #' @return Exponential-decay weights normalized to mean 1
+#' @keywords internal
+#' @noRd
 maive_compute_waive_weights <- function(first_stage_model) {
   if (is.null(first_stage_model)) {
     stop("first_stage_model must be supplied for weighting.")
@@ -248,7 +249,6 @@ maive_compute_waive_weights <- function(first_stage_model) {
   w / mean_w
 }
 
-#' @keywords internal
 #' Run the shared analysis pipeline
 #'
 #' @param opts Validated options
@@ -256,6 +256,8 @@ maive_compute_waive_weights <- function(first_stage_model) {
 #' @param instrumentation First-stage results
 #' @param w Weights for second-stage regression
 #' @return List of analysis results
+#' @keywords internal
+#' @noRd
 maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
   if (!is.numeric(w) || length(w) != prepared$M) {
     stop("w must be a numeric vector aligned with the input data.")
