@@ -21,13 +21,13 @@ Source:
 [`DESCRIPTION`](https://github.com/meta-analysis-es/maive/blob/main/DESCRIPTION)
 
 Irsova Z, Bom P, Havranek T, Rachinger H (2025). *MAIVE: Meta Analysis
-Instrumental Variable Estimator*. R package version 0.1.1,
+Instrumental Variable Estimator*. R package version 0.1.2,
 <https://meta-analysis.cz/maive>.
 
     @Manual{,
       title = {MAIVE: Meta Analysis Instrumental Variable Estimator},
       author = {Zuzana Irsova and Pedro R. D. Bom and Tomas Havranek and Heiko Rachinger},
       year = {2025},
-      note = {R package version 0.1.1},
+      note = {R package version 0.1.2},
       url = {https://meta-analysis.cz/maive},
     }
