@@ -3,14 +3,14 @@
 # Version Update Helper
 # Utility to bump version number and update NEWS.md
 
-cat("<U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550>\n")
+cat("===============================================================\n")
 cat("  MAIVE Package - Version Updater\n")
-cat("<U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550>\n\n")
+cat("===============================================================\n\n")
 
 # Read current DESCRIPTION
 desc_path <- "DESCRIPTION"
 if (!file.exists(desc_path)) {
-  cat("<U+274C> DESCRIPTION file not found. Are you in the package root?\n")
+  cat("[ERROR] DESCRIPTION file not found. Are you in the package root?\n")
   quit(status = 1)
 }
 
@@ -45,12 +45,12 @@ new_version <- switch(choice,
     custom
   },
   {
-    cat("<U+274C> Cancelled\n")
+    cat("[!] Cancelled\n")
     quit(status = 0)
   }
 )
 
-cat("\n<U+0001F4DD> Updating version from", current_version, "to", new_version, "\n\n")
+cat("\n[*] Updating version from", current_version, "to", new_version, "\n\n")
 
 # Update DESCRIPTION
 desc_lines <- sub(
@@ -59,12 +59,12 @@ desc_lines <- sub(
   desc_lines
 )
 writeLines(desc_lines, desc_path)
-cat("<U+2705> Updated DESCRIPTION\n")
+cat("[OK] Updated DESCRIPTION\n")
 
 # Update NEWS.md
 news_path <- "NEWS.md"
 if (file.exists(news_path)) {
-  cat("\n<U+0001F4F0> Update NEWS.md\n")
+  cat("\n[*] Update NEWS.md\n")
   cat("Enter changes for this version (empty line to finish):\n")
 
   changes <- character()
@@ -84,19 +84,19 @@ if (file.exists(news_path)) {
       news_content
     )
     writeLines(new_entry, news_path)
-    cat("<U+2705> Updated NEWS.md\n")
+    cat("[OK] Updated NEWS.md\n")
   }
 }
 
 # Update cran-comments.md
 cran_comments_path <- "cran-comments.md"
 if (file.exists(cran_comments_path)) {
-  cat("\n<U+0001F4CB> Remember to update cran-comments.md before submission\n")
+  cat("\n[*] Remember to update cran-comments.md before submission\n")
 }
 
-cat("\n<U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550>\n")
+cat("\n===============================================================\n")
 cat("  Version Update Complete\n")
-cat("<U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550><U+2550>\n\n")
+cat("===============================================================\n\n")
 cat("Next steps:\n")
 cat("1. Review changes in DESCRIPTION and NEWS.md\n")
 cat("2. Commit version bump: git commit -am 'Bump version to", new_version, "'\n")
