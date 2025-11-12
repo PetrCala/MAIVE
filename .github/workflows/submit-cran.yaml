@@ -57,8 +57,8 @@ jobs:
 
       - name: Run R CMD check --as-cran
         run: |
-          echo "🔍 Running R CMD check --as-cran..."
           tarball <- list.files(pattern = "\\.tar\\.gz$", full.names = TRUE)
+          cat("🔍 Running R CMD check --as-cran...\n")
           rcmdcheck::rcmdcheck(
             tarball,
             args = c("--as-cran", "--no-manual"),
@@ -69,14 +69,14 @@ jobs:
 
       - name: Check on Windows (via R-hub)
         run: |
-          echo "🪟 Submitting checks to R-hub for Windows..."
+          cat("🪟 Submitting checks to R-hub for Windows...\n")
           rhub::rhub_check(platforms = "windows")
         shell: Rscript {0}
         continue-on-error: true
 
       - name: Check on other platforms (via R-hub)
         run: |
-          echo "🌍 Submitting checks to R-hub for additional platforms..."
+          cat("🌍 Submitting checks to R-hub for additional platforms...\n")
           rhub::rhub_check(platforms = c("linux", "macos"))
         shell: Rscript {0}
         continue-on-error: true
