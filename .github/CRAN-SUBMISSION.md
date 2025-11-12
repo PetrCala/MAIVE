@@ -31,6 +31,7 @@ Before attempting CRAN submission, ensure you have:
 Before each CRAN submission (initial or update), verify:
 
 ### Code Quality
+
 - [ ] `R CMD check --as-cran` passes with 0 errors, 0 warnings, 0 notes
 - [ ] All tests pass: `devtools::test()`
 - [ ] Package builds successfully: `devtools::build()`
@@ -38,6 +39,7 @@ Before each CRAN submission (initial or update), verify:
 - [ ] All examples run successfully (or are marked with `\dontrun{}`)
 
 ### Documentation
+
 - [ ] All exported functions have complete documentation
 - [ ] `DESCRIPTION` file is accurate and properly formatted
 - [ ] `NEWS.md` is updated with version changes
@@ -46,6 +48,7 @@ Before each CRAN submission (initial or update), verify:
 - [ ] Vignettes build successfully
 
 ### Version Management
+
 - [ ] Version number follows semantic versioning (X.Y.Z)
 - [ ] Version number is incremented appropriately:
   - Patch (0.0.X): Bug fixes only
@@ -54,11 +57,13 @@ Before each CRAN submission (initial or update), verify:
 - [ ] Version in `DESCRIPTION` matches `NEWS.md` entry
 
 ### Legal and Licensing
+
 - [ ] LICENSE file is present and properly formatted
 - [ ] All authors and contributors are credited
 - [ ] Copyright holders are correctly listed
 
 ### GitHub
+
 - [ ] All GitHub Actions checks pass (see badges in README)
 - [ ] Latest changes are pushed to GitHub
 - [ ] Version is tagged in git (optional but recommended)
@@ -79,6 +84,7 @@ This approach uses automated checks followed by manual submission for maximum sa
 6. Click **"Run workflow"** button
 
 The workflow will:
+
 - Run `R CMD check --as-cran`
 - Submit to R-hub for Windows/Linux/macOS checks
 - Upload check results as artifacts
@@ -199,6 +205,7 @@ Rscript scripts/submit-cran.R
 CRAN reviewers frequently request changes for:
 
 #### Description Field
+
 - Must be in title case
 - No package name repetition
 - Must describe what the package does, not just repeat the title
@@ -206,21 +213,25 @@ CRAN reviewers frequently request changes for:
 - References should be in the form: Author (Year) <DOI or URL>
 
 #### Examples
+
 - Must not write to the user's home directory
 - Should not require internet connection (or use `\donttest{}`)
 - Must run in < 5 seconds (or use `\donttest{}`)
 - Should demonstrate main functionality
 
 #### Documentation
+
 - All exported functions must have `\value` sections
 - References must be complete and correctly formatted
 - Links must be working
 
 #### License
+
 - Must be a standard CRAN license or have LICENSE file
 - Copyright holders must be clearly stated
 
 #### Technical
+
 - No calls to `library()` or `require()` in package code
 - Use `Imports` in DESCRIPTION and `::` notation instead
 - No modifications to user's options or par() without restoration
@@ -264,6 +275,7 @@ source("scripts/update-version.R")
 #### 2. Document Changes
 
 Update `NEWS.md` with:
+
 - Version number and date
 - All user-facing changes
 - Bug fixes
@@ -319,17 +331,20 @@ The package includes several helper scripts in the `scripts/` directory:
 Comprehensive CRAN readiness checker.
 
 **What it does:**
+
 - Updates roxygen documentation
 - Runs `R CMD check --as-cran`
 - Submits to R-hub for multi-platform checks
 - Summarizes results
 
 **Usage:**
+
 ```r
 source("scripts/check-cran.R")
 ```
 
 **When to use:**
+
 - Before every CRAN submission
 - After making significant changes
 - When troubleshooting check failures
@@ -339,17 +354,20 @@ source("scripts/check-cran.R")
 Interactive CRAN submission wizard.
 
 **What it does:**
+
 - Walks through pre-submission checklist
 - Runs final Windows builder checks
 - Submits to CRAN
 - Provides post-submission instructions
 
 **Usage:**
+
 ```r
 source("scripts/submit-cran.R")
 ```
 
 **When to use:**
+
 - For final CRAN submission
 - When you want guided submission process
 
@@ -358,16 +376,19 @@ source("scripts/submit-cran.R")
 Documentation builder and previewer.
 
 **What it does:**
+
 - Updates roxygen documentation
 - Builds pkgdown website
 - Optionally opens preview in browser
 
 **Usage:**
+
 ```r
 source("scripts/build-docs.R")
 ```
 
 **When to use:**
+
 - After changing documentation
 - Before releasing new version
 - When updating website
@@ -377,17 +398,20 @@ source("scripts/build-docs.R")
 Version management utility.
 
 **What it does:**
+
 - Interactive version bumping (patch/minor/major)
 - Updates DESCRIPTION
 - Updates NEWS.md template
 - Provides git tagging instructions
 
 **Usage:**
+
 ```r
 source("scripts/update-version.R")
 ```
 
 **When to use:**
+
 - At the start of each release cycle
 - When preparing for CRAN submission
 
@@ -398,10 +422,12 @@ source("scripts/update-version.R")
 **Purpose**: Continuous integration testing across platforms
 
 **Triggers**:
+
 - Every push to main
 - Every pull request
 
 **What it does**:
+
 - Runs `R CMD check` on multiple platforms:
   - Windows (R-release)
   - macOS (R-release)
@@ -410,6 +436,7 @@ source("scripts/update-version.R")
 - Updates status badge
 
 **How to monitor**:
+
 - Check README badge
 - View Actions tab on GitHub
 - Receive email notifications on failures
@@ -419,16 +446,19 @@ source("scripts/update-version.R")
 **Purpose**: Automated documentation website
 
 **Triggers**:
+
 - Push to main branch
 - Pull requests (for testing)
 - Releases
 
 **What it does**:
+
 - Builds pkgdown website
 - Deploys to GitHub Pages
 - Updates documentation site
 
 **Setup required**:
+
 1. Enable GitHub Pages in repository settings
 2. Set source to `gh-pages` branch
 3. Website will be at: `https://USERNAME.github.io/REPO/`
@@ -438,15 +468,18 @@ source("scripts/update-version.R")
 **Purpose**: Track test coverage
 
 **Triggers**:
+
 - Every push to main
 - Every pull request
 
 **What it does**:
+
 - Runs test suite with coverage tracking
 - Uploads results to Codecov (if configured)
 - Updates coverage badge
 
 **Optional setup**:
+
 - Add `CODECOV_TOKEN` to GitHub secrets
 - Badge will show in README
 
@@ -455,16 +488,19 @@ source("scripts/update-version.R")
 **Purpose**: Pre-submission validation
 
 **Triggers**:
+
 - Manual (workflow_dispatch)
 - Requires typing "CONFIRM"
 
 **What it does**:
+
 - Runs comprehensive CRAN checks
 - Submits to R-hub
 - Provides submission guidance
 - Does NOT automatically submit to CRAN (manual step required)
 
 **Safety features**:
+
 - Requires explicit confirmation
 - Multiple check layers
 - Human review before final submission
@@ -478,6 +514,7 @@ source("scripts/update-version.R")
 **Issue**: `R CMD check` returns notes
 
 **Solutions**:
+
 - Some notes are acceptable (e.g., "New submission")
 - Read each note carefully
 - Common acceptable notes:
@@ -495,6 +532,7 @@ source("scripts/update-version.R")
 **Issue**: Examples in documentation don't run
 
 **Solutions**:
+
 - Wrap long-running examples in `\donttest{}`
 - Wrap examples requiring user input in `\dontrun{}`
 - Ensure all example data is available
@@ -506,6 +544,7 @@ source("scripts/update-version.R")
 **Issue**: Tests work locally but fail during check
 
 **Common causes and solutions**:
+
 - Internet dependency: Mock external calls or skip when offline
 - File writing: Use `tempdir()` instead of user directories
 - Random numbers: Set seed for reproducibility
@@ -513,6 +552,7 @@ source("scripts/update-version.R")
 - Parallel processing: May cause timing issues, consider sequential for CRAN
 
 **Check**:
+
 ```r
 devtools::check(cran = TRUE)  # Mimics CRAN checks locally
 ```
@@ -524,6 +564,7 @@ devtools::check(cran = TRUE)  # Mimics CRAN checks locally
 **Issue**: Package fails on R-hub but passes locally
 
 **Solutions**:
+
 - R-hub is stricter than local checks
 - Common issues:
   - Missing system dependencies
@@ -532,6 +573,7 @@ devtools::check(cran = TRUE)  # Mimics CRAN checks locally
   - Platform-specific function calls
 - Check R-hub output carefully for specific errors
 - Test on specific platform:
+
   ```r
   rhub::rhub_check(platform = "windows-x86_64-devel")
   ```
@@ -541,12 +583,14 @@ devtools::check(cran = TRUE)  # Mimics CRAN checks locally
 **Issue**: Package fails on Windows but works on Unix
 
 **Common issues**:
+
 - Path separators: Use `file.path()` not paste with "/"
 - Line endings: Git should handle automatically
 - Case sensitivity: Windows is case-insensitive
 - File locking: Windows locks files more aggressively
 
 **Solution**:
+
 ```r
 devtools::check_win_devel()  # Test on Windows
 ```
@@ -558,6 +602,7 @@ devtools::check_win_devel()  # Test on Windows
 **Issue**: Documentation formatting is incorrect
 
 **Solutions**:
+
 - Use roxygen2, don't edit .Rd files directly
 - Check for unescaped special characters: `%`, `\`, `#`
 - Ensure all cross-references exist
@@ -568,6 +613,7 @@ devtools::check_win_devel()  # Test on Windows
 **Issue**: Vignettes don't build during check
 
 **Solutions**:
+
 - Ensure all vignette dependencies in Suggests
 - Use `eval=FALSE` for code that needs special setup
 - Don't require internet connection
@@ -581,12 +627,14 @@ devtools::check_win_devel()  # Test on Windows
 **Issue**: GitHub Actions workflow doesn't complete
 
 **Common causes**:
+
 - Network timeouts: Add retries or increase timeout
 - Missing dependencies: Add to DESCRIPTION or workflow
 - R version compatibility: Test against matrix of R versions
 - Secrets missing: Check repository secrets settings
 
 **Debug**:
+
 - View workflow logs in Actions tab
 - Check step-by-step output
 - Reproduce locally if possible
@@ -596,6 +644,7 @@ devtools::check_win_devel()  # Test on Windows
 **Issue**: README badge shows red
 
 **Solutions**:
+
 - Click badge to see workflow run
 - Check which platform failed
 - Review error messages
@@ -711,4 +760,3 @@ devtools::check_win_devel()  # Test on Windows
 ---
 
 *This guide is maintained as part of the package repository. Updates and corrections are welcome via pull requests.*
-
