@@ -89,6 +89,15 @@ maive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 
 - slope_coef: Slope coefficient
 
+- petpeese_selected: Which model (PET or PEESE) was selected when
+  method=3 (NA otherwise)
+
+- peese_se2_coef: Coefficient on SE^2 when PEESE is the final model (NA
+  otherwise)
+
+- peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA
+  otherwise)
+
 ## Details
 
 Data `dat` can be imported from an Excel file via:
