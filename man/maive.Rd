@@ -44,6 +44,9 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
   \item is_quadratic_fit: Details on quadratic selection and slope behaviour
   \item boot_result: Boot result
   \item slope_coef: Slope coefficient
+  \item petpeese_selected: Which model (PET or PEESE) was selected when method=3 (NA otherwise)
+  \item peese_se2_coef: Coefficient on SE^2 when PEESE is the final model (NA otherwise)
+  \item peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA otherwise)
 }
 }
 \description{

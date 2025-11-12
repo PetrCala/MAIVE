@@ -275,6 +275,24 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
   slope_info <- maive_slope_information(opts$method, fits, selection, ek)
   slope_summary <- maive_quadratic_summary(opts$method, selection, slope_info)
 
+  # Determine PET-PEESE selection (method == 3 only)
+  petpeese_selected <- if (opts$method == 3L) {
+    if (isTRUE(selection$quadratic_decision)) "PEESE" else "PET"
+  } else {
+    NA_character_
+  }
+
+  # Compute PEESE SE^2 coefficient and standard error when PEESE is final model
+  peese_is_final <- (opts$method == 2L) || (opts$method == 3L && isTRUE(selection$quadratic_decision))
+  if (peese_is_final) {
+    peese_se2_inf <- maive_infer_coef(fits$peese, 2L, opts$SE, prepared$dat, "g", opts$type_choice)
+    peese_se2_coef <- round(peese_se2_inf$b, 3)
+    peese_se2_se <- round(peese_se2_inf$se, 3)
+  } else {
+    peese_se2_coef <- NA_real_
+    peese_se2_se <- NA_real_
+  }
+
   egger_inf <- maive_infer_coef(fits$fatpet, 2L, opts$SE, prepared$dat, "g", opts$type_choice)
   egger_boot_ci <- round(egger_inf$ci, 3)
   egger_ar_ci <- maive_compute_egger_ar_ci(
@@ -327,6 +345,9 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     "is_quadratic_fit" = slope_summary,
     "boot_result" = se_ma$boot_result,
     "slope_coef" = slope_info$coefficient,
+    "petpeese_selected" = petpeese_selected,
+    "peese_se2_coef" = peese_se2_coef,
+    "peese_se2_se" = peese_se2_se,
     "weights" = w
   )
 }
@@ -804,6 +825,9 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
 #'   \item is_quadratic_fit: Details on quadratic selection and slope behaviour
 #'   \item boot_result: Boot result
 #'   \item slope_coef: Slope coefficient
+#'   \item petpeese_selected: Which model (PET or PEESE) was selected when method=3 (NA otherwise)
+#'   \item peese_se2_coef: Coefficient on SE^2 when PEESE is the final model (NA otherwise)
+#'   \item peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA otherwise)
 #' }
 #'
 #' @export
