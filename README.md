@@ -125,6 +125,8 @@ The function returns:
 
 - **Getting Started Guide**: See `vignette("introduction")`
 - **Function Reference**: `?maive` and `?waive`
+- **Development Workflow**: `.github/DEVELOPMENT-WORKFLOW.md`
+- **CRAN Submission**: `.github/CRAN-SUBMISSION.md`
 - **Website**: <https://meta-analysis-es.github.io/maive/>
 - **Project Page**: <https://meta-analysis.cz/maive>
 
