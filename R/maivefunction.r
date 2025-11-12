@@ -644,7 +644,9 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
     weights = ar_weights
   )
   if (is.null(ar_result$b1_CI) || identical(ar_result$b1_CI, "NA")) {
-    return("NA")
+    ci_vals <- c(NA_real_, NA_real_)
+    names(ci_vals) <- c("lower", "upper")
+    return(ci_vals)
   }
   if (all(is.na(ar_result$b1_CI)) || any(is.infinite(ar_result$b1_CI))) {
     ci_vals <- c(NA_real_, NA_real_)
