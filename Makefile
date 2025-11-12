@@ -1,10 +1,10 @@
 # Makefile for MAIVE R Package Development
 # Common commands for package development workflow
 
-.PHONY: help install check test document build clean cran-check submit-cran \
+.PHONY: help install check test document build clean cran-check \
         update-docs coverage install-deps vignettes site preview-site \
-        lint style check-version update-version version-patch version-minor \
-        version-major version-check
+        lint style check-version version-patch version-minor version-major \
+        version-check
 
 # Default target - show help
 help:
@@ -31,17 +31,18 @@ help:
 	@echo ""
 	@echo "Version Management:"
 	@echo "  make check-version  Show current version"
-	@echo "  make update-version Interactive version updater (recommended)"
 	@echo "  make version-patch  Bump patch version (0.0.X)"
 	@echo "  make version-minor  Bump minor version (0.X.0)"
 	@echo "  make version-major  Bump major version (X.0.0)"
 	@echo ""
 	@echo "CRAN Submission:"
-	@echo "  make submit-cran    Interactive CRAN submission (uses helper script)"
+	@echo "  make cran-check     Comprehensive CRAN checks (required before submit)"
+	@echo ""
+	@echo "Note: For interactive version updates and CRAN submission,"
+	@echo "      see scripts/ directory or run 'ls scripts/*.R'"
 	@echo ""
 	@echo "Release Workflows:"
 	@echo "  make release-prep   Full release preparation (clean, doc, test, check)"
-	@echo "  make new-release    Complete guided release workflow"
 	@echo "  make quick-check    Fast check (skip vignettes)"
 	@echo ""
 	@echo "Code Quality:"
@@ -116,10 +117,6 @@ check-version:
 
 version-check: check-version
 
-update-version:
-	@echo "[*] Starting interactive version updater..."
-	@R --interactive --vanilla < scripts/update-version.R
-
 version-patch:
 	@echo "[*] Bumping patch version (X.Y.Z -> X.Y.Z+1)..."
 	@$(MAKE) _version-bump TYPE=patch
@@ -154,11 +151,6 @@ _version-bump:
 	echo "  3. Commit: git commit -am 'Bump version to $$new'"; \
 	echo "  4. Run checks: make release-prep"
 
-# CRAN Submission
-submit-cran:
-	@echo "[*] Starting CRAN submission process..."
-	@R --interactive --vanilla < scripts/submit-cran.R
-
 # Code Quality
 lint:
 	@echo "[*] Checking code style..."
@@ -184,7 +176,7 @@ clean-all: clean
 	@echo "[OK] Deep cleaned"
 
 # Advanced targets for specific workflows
-.PHONY: release-prep quick-check fix-style new-release
+.PHONY: release-prep quick-check fix-style
 
 # Prepare for release
 release-prep: clean document test cran-check
@@ -193,32 +185,24 @@ release-prep: clean document test cran-check
 	@echo "  Release Preparation Complete"
 	@echo "==============================================================="
 	@echo ""
+	@echo "Current version: $$(grep '^Version:' DESCRIPTION | sed 's/Version: //')"
+	@echo ""
 	@echo "Checklist:"
-	@echo "  [?] Version updated (current: $$(grep '^Version:' DESCRIPTION | sed 's/Version: //'))"
-	@echo "  [?] NEWS.md updated with changes"
-	@echo "  [?] cran-comments.md updated"
-	@echo "  [?] All checks passed"
+	@echo "  [✓] Package cleaned"
+	@echo "  [✓] Documentation updated"
+	@echo "  [✓] Tests passed"
+	@echo "  [✓] CRAN checks passed"
 	@echo ""
-	@echo "When ready:"
-	@echo "  make submit-cran"
+	@echo "Before submission:"
+	@echo "  [ ] Update version: make version-patch (or minor/major)"
+	@echo "  [ ] Update NEWS.md with changes"
+	@echo "  [ ] Update cran-comments.md"
+	@echo "  [ ] Commit changes: git commit -am 'Prepare release vX.Y.Z'"
+	@echo "  [ ] Tag release: git tag vX.Y.Z"
 	@echo ""
-
-# Complete new release workflow
-new-release:
-	@echo "==============================================================="
-	@echo "  New Release Workflow"
-	@echo "==============================================================="
+	@echo "When ready to submit:"
+	@echo "  Rscript scripts/submit-cran.R"
 	@echo ""
-	@echo "This will guide you through a complete release."
-	@echo ""
-	@read -p "Press Enter to continue or Ctrl-C to cancel..." dummy
-	@$(MAKE) update-version
-	@echo ""
-	@read -p "Version updated. Press Enter to run checks..." dummy
-	@$(MAKE) release-prep
-	@echo ""
-	@echo "Release preparation complete!"
-	@echo "Review everything and run 'make submit-cran' when ready."
 
 # Quick check (no examples, no vignettes)
 quick-check:
