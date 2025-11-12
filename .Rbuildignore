@@ -4,7 +4,6 @@
 ^scripts$
 ^CLAUDE\.md$
 ^\.DS_Store$
-^notebook$
 ^readme copy\.txt$
 ^_pkgdown\.yml$
 ^docs$
