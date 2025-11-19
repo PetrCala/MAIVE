@@ -300,7 +300,8 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     fits,
     prepared,
     instrumentation$invNs,
-    adjusted_variance = instrumentation$sebs2fit1
+    adjusted_variance = instrumentation$sebs2fit1,
+    f_stat = instrumentation$F_hac
   )
   cfg <- maive_get_config(opts$method, fits, selection, ek)
   hausman_cfg <- maive_get_hausman_models(opts$method, cfg, selection, design)
@@ -619,7 +620,7 @@ maive_normalize_ci_bounds <- function(ci_row) {
 }
 
 #' @keywords internal
-maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_variance = NULL) {
+maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_variance = NULL, f_stat = NULL) {
   if (opts$AR != 1L || opts$weight == 1L || opts$instrument == 0L || prepared$dummy == 1L) {
     return("NA")
   }
@@ -633,6 +634,22 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
     }
     ar_weights <- 1 / adjusted_variance
   }
+
+  # Auto-select AR method based on first-stage F-statistic
+  # Use slope-only inversion under weak instruments (F < 10)
+  ar_method <- "joint"  # Default: 2D joint grid
+  if (!is.null(f_stat) && is.numeric(f_stat) && is.finite(f_stat)) {
+    if (f_stat < 10) {
+      ar_method <- "slope_only"
+      warning(
+        sprintf(
+          "Weak instrument detected (F = %.2f < 10). Using slope-only AR inversion for robust inference.",
+          f_stat
+        )
+      )
+    }
+  }
+
   ar_result <- compute_AR_CI_optimized(
     model = fits$fatpet,
     adjust_fun = PET_adjust,
@@ -641,7 +658,8 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
     invNs = invNs,
     g = prepared$g,
     type_choice = opts$type_choice,
-    weights = ar_weights
+    weights = ar_weights,
+    method = ar_method
   )
   if (is.null(ar_result$b1_CI) || identical(ar_result$b1_CI, "NA")) {
     ci_vals <- c(NA_real_, NA_real_)
