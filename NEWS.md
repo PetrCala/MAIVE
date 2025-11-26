@@ -1,3 +1,24 @@
+# MAIVE 0.1.6
+
+*Released: 2025-11-26*
+
+## New Features
+
+* Add automatic news updates
+
+
+## Bug Fixes
+
+* Automatic news release
+
+
+## Documentation
+
+* Update release instructions docs
+
+---
+
+
 # MAIVE 0.0.4
 
 ## Initial CRAN submission
