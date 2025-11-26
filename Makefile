@@ -118,69 +118,13 @@ check-version:
 version-check: check-version
 
 version-patch:
-	@echo "[*] Bumping patch version (X.Y.Z -> X.Y.Z+1)..."
-	@$(MAKE) _version-bump TYPE=patch
+	@./scripts/bump-version.sh patch
 
 version-minor:
-	@echo "[*] Bumping minor version (X.Y.Z -> X.Y+1.0)..."
-	@$(MAKE) _version-bump TYPE=minor
+	@./scripts/bump-version.sh minor
 
 version-major:
-	@echo "[*] Bumping major version (X.Y.Z -> X+1.0.0)..."
-	@$(MAKE) _version-bump TYPE=major
-
-# Internal version bump (don't call directly)
-# Automatically commits, tags, and pushes to GitHub
-_version-bump:
-	@# Check for unstaged changes
-	@if [ -n "$$(git status --porcelain)" ]; then \
-		echo "[ERROR] Working directory is not clean."; \
-		echo "Please commit or stash your changes before bumping the version."; \
-		echo ""; \
-		git status --short; \
-		exit 1; \
-	fi; \
-	\
-	# Calculate new version
-	current=$$(grep '^Version:' DESCRIPTION | sed 's/Version: //'); \
-	IFS='.' read -r major minor patch <<< "$$current"; \
-	if [ "$(TYPE)" = "patch" ]; then \
-		new="$$major.$$minor.$$((patch + 1))"; \
-	elif [ "$(TYPE)" = "minor" ]; then \
-		new="$$major.$$((minor + 1)).0"; \
-	elif [ "$(TYPE)" = "major" ]; then \
-		new="$$((major + 1)).0.0"; \
-	fi; \
-	\
-	echo "Updating version: $$current -> $$new"; \
-	\
-	# Update DESCRIPTION
-	sed -i.bak "s/^Version: .*/Version: $$new/" DESCRIPTION && rm DESCRIPTION.bak; \
-	\
-	# Commit the version bump
-	echo "[*] Committing version bump..."; \
-	git add DESCRIPTION; \
-	git commit -m "chore: bump version to $$new"; \
-	\
-	# Create and push tag
-	echo "[*] Creating tag v$$new..."; \
-	git tag "v$$new"; \
-	\
-	echo "[*] Pushing to GitHub..."; \
-	git push origin HEAD; \
-	git push origin "v$$new"; \
-	\
-	echo ""; \
-	echo "╔════════════════════════════════════════════════════════════════╗"; \
-	echo "║              ✅ VERSION BUMP COMPLETE                          ║"; \
-	echo "╚════════════════════════════════════════════════════════════════╝"; \
-	echo ""; \
-	echo "  Version: $$current -> $$new"; \
-	echo "  Tag:     v$$new"; \
-	echo ""; \
-	echo "The tag push will trigger the CRAN submission workflow."; \
-	echo "Monitor the workflow at: https://github.com/meta-analysis-es/maive/actions"; \
-	echo ""
+	@./scripts/bump-version.sh major
 
 # Code Quality
 lint:
