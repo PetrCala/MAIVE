@@ -79,6 +79,14 @@
 <span><span class="co"># View help for main function</span></span>
 <span><span class="op">?</span><span class="va">maive</span></span></code></pre></div>
 </div>
+<div class="section level3">
+<h3 id="releasing-to-cran">Releasing to CRAN<a class="anchor" aria-label="anchor" href="#releasing-to-cran"></a></h3>
+<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Ensure clean working directory, then bump version (auto-commits, tags, pushes)</span></span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">make</span> version-patch   <span class="co"># 0.1.4 -&gt; 0.1.5 (bug fixes)</span></span>
+<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">make</span> version-minor   <span class="co"># 0.1.4 -&gt; 0.2.0 (new features)</span></span>
+<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">make</span> version-major   <span class="co"># 0.1.4 -&gt; 1.0.0 (breaking changes)</span></span></code></pre></div>
+<p>The tag push triggers the CRAN submission workflow automatically.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="architecture">Architecture<a class="anchor" aria-label="anchor" href="#architecture"></a></h2>

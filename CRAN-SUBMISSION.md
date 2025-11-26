@@ -1,11 +1,28 @@
 # CRAN Submission Guide
 
+## Quick Reference
+
+**Release to CRAN in one command:**
+
+``` bash
+# Ensure working directory is clean, then:
+make version-patch   # Bug fixes (0.0.X)
+make version-minor   # New features (0.X.0)  
+make version-major   # Breaking changes (X.0.0)
+```
+
+This automatically: bumps version → commits → creates tag → pushes →
+triggers CRAN submission workflow.
+
+------------------------------------------------------------------------
+
 This guide provides comprehensive instructions for submitting and
 maintaining this package on CRAN. It is intended for package maintainers
 and contains both initial submission and update procedures.
 
 ## Table of Contents
 
+- [Quick Reference](#quick-reference)
 - [Prerequisites](#prerequisites)
 - [Pre-Submission Checklist](#pre-submission-checklist)
 - [Submission Methods](#submission-methods)
@@ -90,90 +107,50 @@ Version is tagged in git (optional but recommended)
 
 ## Submission Methods
 
-### Method 1: GitHub Actions + Manual Submission (Recommended)
+### Method 1: Makefile (Recommended)
 
-This approach uses automated checks followed by manual submission for
-maximum safety.
-
-#### Step 1: Run Automated Checks
-
-1.  Navigate to your GitHub repository
-2.  Go to the **Actions** tab
-3.  Select **“Submit to CRAN”** workflow
-4.  Click **“Run workflow”**
-5.  Type `CONFIRM` in the input field
-6.  Click **“Run workflow”** button
-
-The workflow will:
-
-- Run `R CMD check --as-cran`
-- Submit to R-hub for Windows/Linux/macOS checks
-- Upload check results as artifacts
-- Provide next-step instructions
-
-#### Step 2: Review Results
-
-- Check the workflow output for any issues
-- Download artifacts if needed
-- Review R-hub results (sent to your email)
-- Ensure all checks pass before proceeding
-
-#### Step 3: Submit to CRAN
-
-After all checks pass, run locally:
-
-``` r
-devtools::submit_cran()
-```
-
-Or use the interactive script:
-
-``` r
-source("scripts/submit-cran.R")
-```
-
-### Method 2: Fully Manual Submission
-
-For complete manual control over the submission process.
-
-#### Step 1: Local Checks
-
-``` r
-# Run comprehensive checks
-source("scripts/check-cran.R")
-
-# Or manually:
-devtools::document()
-devtools::check(cran = TRUE)
-```
-
-#### Step 2: R-hub Checks
-
-``` r
-# Check on Windows
-devtools::check_win_devel()
-devtools::check_win_release()
-
-# Check on R-hub platforms
-rhub::rhub_check(platforms = c("windows", "linux", "macos"))
-```
-
-#### Step 3: Submit
-
-``` r
-# Interactive submission
-source("scripts/submit-cran.R")
-
-# Or direct submission
-devtools::submit_cran()
-```
-
-### Method 3: Command Line
+The simplest way to release. Requires a clean working directory.
 
 ``` bash
-# From package root directory
-Rscript scripts/check-cran.R
-Rscript scripts/submit-cran.R
+# 1. Ensure all changes are committed
+git status  # Should show "nothing to commit"
+
+# 2. Run the appropriate version bump
+make version-patch   # 0.1.4 -> 0.1.5 (bug fixes)
+make version-minor   # 0.1.4 -> 0.2.0 (new features)
+make version-major   # 0.1.4 -> 1.0.0 (breaking changes)
+```
+
+This single command:
+
+1.  Validates clean working directory
+2.  Bumps version in `DESCRIPTION`
+3.  Commits with message `chore: bump version to X.Y.Z`
+4.  Creates git tag `vX.Y.Z`
+5.  Pushes commit and tag to GitHub
+6.  Triggers the CRAN submission workflow
+
+Monitor progress at: <https://github.com/meta-analysis-es/maive/actions>
+
+### Method 2: Manual Workflow Trigger
+
+For running checks without releasing:
+
+1.  Go to **Actions** → **“Submit to CRAN”**
+2.  Click **“Run workflow”**
+3.  Type `CONFIRM` and optionally check “Skip CRAN submission”
+4.  Review results in workflow artifacts
+
+### Method 3: Local Submission
+
+For complete manual control:
+
+``` bash
+# Run checks
+make cran-check
+
+# Submit manually
+Rscript -e 'devtools::submit_cran()'
 ```
 
 ## After Submission

@@ -38,10 +38,20 @@
 
 <div id="cran-submission-guide" class="section level1">
 
-<p>This guide provides comprehensive instructions for submitting and maintaining this package on CRAN. It is intended for package maintainers and contains both initial submission and update procedures.</p>
+<div class="section level2">
+<h2 id="quick-reference">Quick Reference<a class="anchor" aria-label="anchor" href="#quick-reference"></a></h2>
+<p><strong>Release to CRAN in one command:</strong></p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="co"># Ensure working directory is clean, then:</span></span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a><span class="fu">make</span> version-patch   <span class="co"># Bug fixes (0.0.X)</span></span>
+<span id="cb1-3"><a href="#cb1-3" tabindex="-1"></a><span class="fu">make</span> version-minor   <span class="co"># New features (0.X.0)  </span></span>
+<span id="cb1-4"><a href="#cb1-4" tabindex="-1"></a><span class="fu">make</span> version-major   <span class="co"># Breaking changes (X.0.0)</span></span></code></pre></div>
+<p>This automatically: bumps version → commits → creates tag → pushes → triggers CRAN submission workflow.</p>
+<hr><p>This guide provides comprehensive instructions for submitting and maintaining this package on CRAN. It is intended for package maintainers and contains both initial submission and update procedures.</p>
+</div>
 <div class="section level2">
 <h2 id="table-of-contents">Table of Contents<a class="anchor" aria-label="anchor" href="#table-of-contents"></a></h2>
-<ul><li><a href="#prerequisites">Prerequisites</a></li>
+<ul><li><a href="#quick-reference">Quick Reference</a></li>
+<li><a href="#prerequisites">Prerequisites</a></li>
 <li><a href="#pre-submission-checklist">Pre-Submission Checklist</a></li>
 <li><a href="#submission-methods">Submission Methods</a></li>
 <li><a href="#after-submission">After Submission</a></li>
@@ -110,79 +120,45 @@
 <div class="section level2">
 <h2 id="submission-methods">Submission Methods<a class="anchor" aria-label="anchor" href="#submission-methods"></a></h2>
 <div class="section level3">
-<h3 id="method-1-github-actions--manual-submission-recommended">Method 1: GitHub Actions + Manual Submission (Recommended)<a class="anchor" aria-label="anchor" href="#method-1-github-actions--manual-submission-recommended"></a></h3>
-<p>This approach uses automated checks followed by manual submission for maximum safety.</p>
-<div class="section level4">
-<h4 id="step-1-run-automated-checks">Step 1: Run Automated Checks<a class="anchor" aria-label="anchor" href="#step-1-run-automated-checks"></a></h4>
-<ol style="list-style-type: decimal"><li>Navigate to your GitHub repository</li>
-<li>Go to the <strong>Actions</strong> tab</li>
-<li>Select <strong>“Submit to CRAN”</strong> workflow</li>
+<h3 id="method-1-makefile-recommended">Method 1: Makefile (Recommended)<a class="anchor" aria-label="anchor" href="#method-1-makefile-recommended"></a></h3>
+<p>The simplest way to release. Requires a clean working directory.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># 1. Ensure all changes are committed</span></span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a><span class="fu">git</span> status  <span class="co"># Should show "nothing to commit"</span></span>
+<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
+<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a><span class="co"># 2. Run the appropriate version bump</span></span>
+<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="fu">make</span> version-patch   <span class="co"># 0.1.4 -&gt; 0.1.5 (bug fixes)</span></span>
+<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a><span class="fu">make</span> version-minor   <span class="co"># 0.1.4 -&gt; 0.2.0 (new features)</span></span>
+<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a><span class="fu">make</span> version-major   <span class="co"># 0.1.4 -&gt; 1.0.0 (breaking changes)</span></span></code></pre></div>
+<p>This single command:</p>
+<ol style="list-style-type: decimal"><li>Validates clean working directory</li>
+<li>Bumps version in <code>DESCRIPTION</code>
+</li>
+<li>Commits with message <code>chore: bump version to X.Y.Z</code>
+</li>
+<li>Creates git tag <code>vX.Y.Z</code>
+</li>
+<li>Pushes commit and tag to GitHub</li>
+<li>Triggers the CRAN submission workflow</li>
+</ol><p>Monitor progress at: <a href="https://github.com/meta-analysis-es/maive/actions" class="external-link uri">https://github.com/meta-analysis-es/maive/actions</a></p>
+</div>
+<div class="section level3">
+<h3 id="method-2-manual-workflow-trigger">Method 2: Manual Workflow Trigger<a class="anchor" aria-label="anchor" href="#method-2-manual-workflow-trigger"></a></h3>
+<p>For running checks without releasing:</p>
+<ol style="list-style-type: decimal"><li>Go to <strong>Actions</strong> → <strong>“Submit to CRAN”</strong>
+</li>
 <li>Click <strong>“Run workflow”</strong>
 </li>
-<li>Type <code>CONFIRM</code> in the input field</li>
-<li>Click <strong>“Run workflow”</strong> button</li>
-</ol><p>The workflow will:</p>
-<ul><li>Run <code>R CMD check --as-cran</code>
-</li>
-<li>Submit to R-hub for Windows/Linux/macOS checks</li>
-<li>Upload check results as artifacts</li>
-<li>Provide next-step instructions</li>
-</ul></div>
-<div class="section level4">
-<h4 id="step-2-review-results">Step 2: Review Results<a class="anchor" aria-label="anchor" href="#step-2-review-results"></a></h4>
-<ul><li>Check the workflow output for any issues</li>
-<li>Download artifacts if needed</li>
-<li>Review R-hub results (sent to your email)</li>
-<li>Ensure all checks pass before proceeding</li>
-</ul></div>
-<div class="section level4">
-<h4 id="step-3-submit-to-cran">Step 3: Submit to CRAN<a class="anchor" aria-label="anchor" href="#step-3-submit-to-cran"></a></h4>
-<p>After all checks pass, run locally:</p>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/submit_cran.html" class="external-link">submit_cran</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-<p>Or use the interactive script:</p>
-<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/submit-cran.R"</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
+<li>Type <code>CONFIRM</code> and optionally check “Skip CRAN submission”</li>
+<li>Review results in workflow artifacts</li>
+</ol></div>
 <div class="section level3">
-<h3 id="method-2-fully-manual-submission">Method 2: Fully Manual Submission<a class="anchor" aria-label="anchor" href="#method-2-fully-manual-submission"></a></h3>
-<p>For complete manual control over the submission process.</p>
-<div class="section level4">
-<h4 id="step-1-local-checks">Step 1: Local Checks<a class="anchor" aria-label="anchor" href="#step-1-local-checks"></a></h4>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Run comprehensive checks</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/check-cran.R"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Or manually:</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span>cran <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="step-2-r-hub-checks">Step 2: R-hub Checks<a class="anchor" aria-label="anchor" href="#step-2-r-hub-checks"></a></h4>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Check on Windows</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check_win.html" class="external-link">check_win_devel</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check_win.html" class="external-link">check_win_release</a></span><span class="op">(</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Check on R-hub platforms</span></span>
-<span><span class="fu">rhub</span><span class="fu">::</span><span class="fu"><a href="https://r-hub.github.io/rhub/reference/rhub_check.html" class="external-link">rhub_check</a></span><span class="op">(</span>platforms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"windows"</span>, <span class="st">"linux"</span>, <span class="st">"macos"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
-</div>
-<div class="section level4">
-<h4 id="step-3-submit">Step 3: Submit<a class="anchor" aria-label="anchor" href="#step-3-submit"></a></h4>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Interactive submission</span></span>
-<span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/submit-cran.R"</span><span class="op">)</span></span>
-<span></span>
-<span><span class="co"># Or direct submission</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/submit_cran.html" class="external-link">submit_cran</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
-</div>
-</div>
-<div class="section level3">
-<h3 id="method-3-command-line">Method 3: Command Line<a class="anchor" aria-label="anchor" href="#method-3-command-line"></a></h3>
-<div class="sourceCode" id="cb6"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># From package root directory</span></span>
-<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a><span class="ex">Rscript</span> scripts/check-cran.R</span>
-<span id="cb6-3"><a href="#cb6-3" tabindex="-1"></a><span class="ex">Rscript</span> scripts/submit-cran.R</span></code></pre></div>
+<h3 id="method-3-local-submission">Method 3: Local Submission<a class="anchor" aria-label="anchor" href="#method-3-local-submission"></a></h3>
+<p>For complete manual control:</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Run checks</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a><span class="fu">make</span> cran-check</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a><span class="co"># Submit manually</span></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="ex">Rscript</span> <span class="at">-e</span> <span class="st">'devtools::submit_cran()'</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -315,7 +291,7 @@
 <h3 id="update-workflow">Update Workflow<a class="anchor" aria-label="anchor" href="#update-workflow"></a></h3>
 <div class="section level4">
 <h4 id="id_1-version-bump">1. Version Bump<a class="anchor" aria-label="anchor" href="#id_1-version-bump"></a></h4>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/update-version.R"</span><span class="op">)</span></span>
 <span><span class="co"># Follow prompts to select version increment type</span></span></code></pre></div>
 </div>
@@ -331,7 +307,7 @@
 </ul></div>
 <div class="section level4">
 <h4 id="id_3-update-documentation">3. Update Documentation<a class="anchor" aria-label="anchor" href="#id_3-update-documentation"></a></h4>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update roxygen documentation</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -340,15 +316,15 @@
 </div>
 <div class="section level4">
 <h4 id="id_4-run-checks">4. Run Checks<a class="anchor" aria-label="anchor" href="#id_4-run-checks"></a></h4>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/check-cran.R"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="id_5-commit-and-tag">5. Commit and Tag<a class="anchor" aria-label="anchor" href="#id_5-commit-and-tag"></a></h4>
-<div class="sourceCode" id="cb10"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">git</span> add .</span>
-<span id="cb10-2"><a href="#cb10-2" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Release vX.Y.Z"</span></span>
-<span id="cb10-3"><a href="#cb10-3" tabindex="-1"></a><span class="fu">git</span> tag vX.Y.Z</span>
-<span id="cb10-4"><a href="#cb10-4" tabindex="-1"></a><span class="fu">git</span> push origin main <span class="at">--tags</span></span></code></pre></div>
+<div class="sourceCode" id="cb7"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a><span class="fu">git</span> add .</span>
+<span id="cb7-2"><a href="#cb7-2" tabindex="-1"></a><span class="fu">git</span> commit <span class="at">-m</span> <span class="st">"Release vX.Y.Z"</span></span>
+<span id="cb7-3"><a href="#cb7-3" tabindex="-1"></a><span class="fu">git</span> tag vX.Y.Z</span>
+<span id="cb7-4"><a href="#cb7-4" tabindex="-1"></a><span class="fu">git</span> push origin main <span class="at">--tags</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="id_6-submit-update">6. Submit Update<a class="anchor" aria-label="anchor" href="#id_6-submit-update"></a></h4>
@@ -357,7 +333,7 @@
 <div class="section level4">
 <h4 id="id_7-update-documentation-after-acceptance">7. Update Documentation After Acceptance<a class="anchor" aria-label="anchor" href="#id_7-update-documentation-after-acceptance"></a></h4>
 <p>Once published on CRAN:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update README badges if needed</span></span>
 <span><span class="co"># Update website</span></span>
 <span><span class="fu">pkgdown</span><span class="fu">::</span><span class="fu"><a href="https://pkgdown.r-lib.org/reference/build_site.html" class="external-link">build_site</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
@@ -377,7 +353,7 @@
 <li>Submits to R-hub for multi-platform checks</li>
 <li>Summarizes results</li>
 </ul><p><strong>Usage:</strong></p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/check-cran.R"</span><span class="op">)</span></span></code></pre></div>
 <p><strong>When to use:</strong></p>
 <ul><li>Before every CRAN submission</li>
@@ -393,7 +369,7 @@
 <li>Submits to CRAN</li>
 <li>Provides post-submission instructions</li>
 </ul><p><strong>Usage:</strong></p>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/submit-cran.R"</span><span class="op">)</span></span></code></pre></div>
 <p><strong>When to use:</strong></p>
 <ul><li>For final CRAN submission</li>
@@ -407,7 +383,7 @@
 <li>Builds pkgdown website</li>
 <li>Optionally opens preview in browser</li>
 </ul><p><strong>Usage:</strong></p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/build-docs.R"</span><span class="op">)</span></span></code></pre></div>
 <p><strong>When to use:</strong></p>
 <ul><li>After changing documentation</li>
@@ -423,7 +399,7 @@
 <li>Updates NEWS.md template</li>
 <li>Provides git tagging instructions</li>
 </ul><p><strong>Usage:</strong></p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/update-version.R"</span><span class="op">)</span></span></code></pre></div>
 <p><strong>When to use:</strong></p>
 <ul><li>At the start of each release cycle</li>
@@ -543,7 +519,7 @@
 <li>Platform differences: Use <code>skip_on_cran()</code> for platform-specific tests</li>
 <li>Parallel processing: May cause timing issues, consider sequential for CRAN</li>
 </ul><p><strong>Check</strong>:</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span>cran <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># Mimics CRAN checks locally</span></span></code></pre></div>
 </div>
 </div>
@@ -564,7 +540,7 @@
 <li><p>Check R-hub output carefully for specific errors</p></li>
 <li>
 <p>Test on specific platform:</p>
-<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">rhub</span><span class="fu">::</span><span class="fu"><a href="https://r-hub.github.io/rhub/reference/rhub_check.html" class="external-link">rhub_check</a></span><span class="op">(</span>platform <span class="op">=</span> <span class="st">"windows-x86_64-devel"</span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul></div>
@@ -577,7 +553,7 @@
 <li>Case sensitivity: Windows is case-insensitive</li>
 <li>File locking: Windows locks files more aggressively</li>
 </ul><p><strong>Solution</strong>:</p>
-<div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check_win.html" class="external-link">check_win_devel</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Test on Windows</span></span></code></pre></div>
 </div>
 </div>
