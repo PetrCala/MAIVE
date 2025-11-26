@@ -9,7 +9,7 @@
 **Spurious Precision in Meta-Analysis of Observational Research**  
 by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger
 
-**Project Website**: <https://meta-analysis.cz/maive>
+**Project Website**: <http://meta-analysis.cz/maive/>
 
 ---
 
@@ -127,8 +127,7 @@ The function returns:
 - **Function Reference**: `?maive` and `?waive`
 - **Development Workflow**: `.github/DEVELOPMENT-WORKFLOW.md`
 - **CRAN Submission**: `.github/CRAN-SUBMISSION.md`
-- **Website**: <https://meta-analysis-es.github.io/maive/>
-- **Project Page**: <https://meta-analysis.cz/maive>
+- **Project Page**: <http://meta-analysis.cz/maive/>
 
 ## Example
 
@@ -163,7 +162,7 @@ If you use MAIVE in your research, please cite:
 
 > Irsova, Z., Bom, P. R. D., Havranek, T., & Rachinger, H. (2024).
 > Spurious Precision in Meta-Analysis of Observational Research.
-> Available at: <https://meta-analysis.cz/maive>
+> Available at: <http://meta-analysis.cz/maive/>
 
 ## References
 
@@ -193,4 +192,4 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Questions?** Contact the maintainer or visit our [project website](https://meta-analysis.cz/maive).
+**Questions?** Contact the maintainer or visit our [project website](http://meta-analysis.cz/maive/).
