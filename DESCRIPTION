@@ -21,7 +21,7 @@ Authors@R:
                                            "Meta-Research Innovation Center, Stanford"))),
         person(given = "Heiko", family = "Rachinger",
                role = c("aut"),
-               comment = c(affiliation = "University of the Balearic Islands, Palma"))
+               comment = c(affiliation = "University of the Balearic Islands, Palma")),
         person(given = "Petr", family = "Cala",
                email = "cala.p@seznam.cz",
                role = c("aut", "cre"),
