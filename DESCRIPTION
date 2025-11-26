@@ -20,9 +20,12 @@ Authors@R:
                                            "Centre for Economic Policy Research, London",
                                            "Meta-Research Innovation Center, Stanford"))),
         person(given = "Heiko", family = "Rachinger",
-               email = "heiko.rachinger@uib.es",
-               role = c("aut", "cre"),
+               role = c("aut"),
                comment = c(affiliation = "University of the Balearic Islands, Palma"))
+        person(given = "Petr", family = "Cala",
+               email = "cala.p@seznam.cz",
+               role = c("aut", "cre"),
+               comment = c(affiliation = "Charles University, Prague"))
     )
 Description: 
     Meta-analysis traditionally assigns more weight to studies with lower standard errors, 

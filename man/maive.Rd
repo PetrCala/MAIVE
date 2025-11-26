@@ -51,7 +51,7 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
 }
 \description{
 R package for MAIVE: "Spurious Precision in Meta-Analysis of Observational Research" by
-Zuzana Irsova, Pedro Bom, Tomas Havranek, and Heiko Rachinger.
+Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.
 }
 \details{
 Data \code{dat} can be imported from an Excel file via:

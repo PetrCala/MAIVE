@@ -188,7 +188,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 - **Zuzana Irsova** - Charles University, Prague
 - **Pedro R. D. Bom** - University of Deusto, Bilbao  
 - **Tomas Havranek** - Charles University, Prague; CEPR, London; METRICS, Stanford
-- **Heiko Rachinger** (Maintainer) - University of the Balearic Islands, Palma
+- **Petr Cala** (Maintainer) - Charles University, Prague
+- **Heiko Rachinger** - University of the Balearic Islands, Palma
 
 ---
 

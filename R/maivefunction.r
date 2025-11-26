@@ -637,7 +637,7 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
 
   # Auto-select AR method based on first-stage F-statistic
   # Use slope-only inversion under weak instruments (F < 10)
-  ar_method <- "joint"  # Default: 2D joint grid
+  ar_method <- "joint" # Default: 2D joint grid
   if (!is.null(f_stat) && is.numeric(f_stat) && is.finite(f_stat)) {
     if (f_stat < 10) {
       ar_method <- "slope_only"
@@ -803,7 +803,7 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
 #' R code for MAIVE
 #'
 #' R package for MAIVE: "Spurious Precision in Meta-Analysis of Observational Research" by
-#' Zuzana Irsova, Pedro Bom, Tomas Havranek, and Heiko Rachinger.
+#' Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.
 #'
 #' @param dat Data frame with columns bs, sebs, Ns, study_id (optional).
 #' @param method 1 FAT-PET, 2 PEESE, 3 PET-PEESE, 4 EK.
