@@ -12,21 +12,24 @@
   Charles University, Prague,Centre for Economic Policy Research,
   London,Meta-Research Innovation Center, Stanford
 
-- **[Heiko Rachinger](https://www.uib.es)**. Author, maintainer.  
+- **[Heiko Rachinger](https://www.uib.es)**. Author.  
   University of the Balearic Islands, Palma
+
+- **Petr Cala**. Author, maintainer.  
+  Charles University, Prague
 
 ## Citation
 
 Source:
 [`DESCRIPTION`](https://github.com/meta-analysis-es/maive/blob/main/DESCRIPTION)
 
-Irsova Z, Bom P, Havranek T, Rachinger H (2025). *MAIVE: Meta Analysis
-Instrumental Variable Estimator*. R package version 0.1.3,
+Irsova Z, Bom P, Havranek T, Rachinger H, Cala P (2025). *MAIVE: Meta
+Analysis Instrumental Variable Estimator*. R package version 0.1.3,
 <https://meta-analysis.cz/maive>.
 
     @Manual{,
       title = {MAIVE: Meta Analysis Instrumental Variable Estimator},
-      author = {Zuzana Irsova and Pedro R. D. Bom and Tomas Havranek and Heiko Rachinger},
+      author = {Zuzana Irsova and Pedro R. D. Bom and Tomas Havranek and Heiko Rachinger and Petr Cala},
       year = {2025},
       note = {R package version 0.1.3},
       url = {https://meta-analysis.cz/maive},

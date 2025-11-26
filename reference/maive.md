@@ -1,8 +1,8 @@
 # R code for MAIVE
 
 R package for MAIVE: "Spurious Precision in Meta-Analysis of
-Observational Research" by Zuzana Irsova, Pedro Bom, Tomas Havranek, and
-Heiko Rachinger.
+Observational Research" by Zuzana Irsova, Pedro Bom, Tomas Havranek,
+Petr Cala, and Heiko Rachinger.
 
 ## Usage
 
