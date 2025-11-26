@@ -399,7 +399,7 @@ Tests for publication bias using instrumented FAT:
 
 Irsova, Z., Bom, P. R. D., Havranek, T., & Rachinger, H. (2024).
 Spurious Precision in Meta-Analysis of Observational Research. Available
-at: <https://meta-analysis.cz/maive>
+at: <http://meta-analysis.cz/maive/>
 
 Keane, M., & Neal, T. (2023). Instrument strength in IV estimation and
 inference: A guide to theory and practice. *Journal of Econometrics*,
@@ -411,4 +411,4 @@ inference: A guide to theory and practice. *Journal of Econometrics*,
   for detailed parameter documentation
 - [`?waive`](https://meta-analysis-es.github.io/maive/reference/waive.md)
   for the robust WAIVE estimator
-- Project website: <https://meta-analysis.cz/maive>
+- Project website: <http://meta-analysis.cz/maive/>
