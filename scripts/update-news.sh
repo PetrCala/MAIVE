@@ -25,6 +25,11 @@ if grep -q "^# MAIVE $VERSION" "$NEWS_FILE"; then
     exit 0
 fi
 
+# Function to capitalize first letter (portable)
+capitalize() {
+    echo "$1" | awk '{print toupper(substr($0,1,1)) substr($0,2)}'
+}
+
 # Get the last version tag
 LAST_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
 
@@ -51,25 +56,36 @@ OTHER=""
 while IFS= read -r commit; do
     [ -z "$commit" ] && continue
     
-    # Extract type and message
-    if [[ "$commit" =~ ^feat(\(.+\))?:\ (.+)$ ]]; then
-        msg="${BASH_REMATCH[2]}"
-        FEATURES="${FEATURES}\n* ${msg^}"
-    elif [[ "$commit" =~ ^fix(\(.+\))?:\ (.+)$ ]]; then
-        msg="${BASH_REMATCH[2]}"
-        FIXES="${FIXES}\n* ${msg^}"
-    elif [[ "$commit" =~ ^docs(\(.+\))?:\ (.+)$ ]]; then
-        msg="${BASH_REMATCH[2]}"
-        DOCS="${DOCS}\n* ${msg^}"
-    elif [[ "$commit" =~ ^(chore|build|ci|style|refactor|perf|test)(\(.+\))?:\ (.+)$ ]]; then
-        msg="${BASH_REMATCH[3]}"
-        CHORES="${CHORES}\n* ${msg^}"
-    elif [[ "$commit" =~ ^[Bb]ump\ version ]]; then
-        # Skip version bump commits
+    # Skip version bump commits
+    if echo "$commit" | grep -qi "bump version"; then
         continue
+    fi
+    
+    # Extract type and message using sed (portable)
+    if echo "$commit" | grep -qE "^feat(\(.+\))?:"; then
+        msg=$(echo "$commit" | sed -E 's/^feat(\([^)]+\))?:[[:space:]]*//')
+        msg=$(capitalize "$msg")
+        FEATURES="${FEATURES}* ${msg}
+"
+    elif echo "$commit" | grep -qE "^fix(\(.+\))?:"; then
+        msg=$(echo "$commit" | sed -E 's/^fix(\([^)]+\))?:[[:space:]]*//')
+        msg=$(capitalize "$msg")
+        FIXES="${FIXES}* ${msg}
+"
+    elif echo "$commit" | grep -qE "^docs(\(.+\))?:"; then
+        msg=$(echo "$commit" | sed -E 's/^docs(\([^)]+\))?:[[:space:]]*//')
+        msg=$(capitalize "$msg")
+        DOCS="${DOCS}* ${msg}
+"
+    elif echo "$commit" | grep -qE "^(chore|build|ci|style|refactor|perf|test)(\(.+\))?:"; then
+        msg=$(echo "$commit" | sed -E 's/^(chore|build|ci|style|refactor|perf|test)(\([^)]+\))?:[[:space:]]*//')
+        msg=$(capitalize "$msg")
+        CHORES="${CHORES}* ${msg}
+"
     else
-        # Other commits (capitalize first letter)
-        OTHER="${OTHER}\n* ${commit^}"
+        msg=$(capitalize "$commit")
+        OTHER="${OTHER}* ${msg}
+"
     fi
 done <<< "$COMMITS"
 
@@ -83,35 +99,40 @@ if [ -n "$FEATURES" ]; then
     NEW_ENTRY="${NEW_ENTRY}
 
 ## New Features
-$(echo -e "$FEATURES")"
+
+${FEATURES}"
 fi
 
 if [ -n "$FIXES" ]; then
     NEW_ENTRY="${NEW_ENTRY}
 
 ## Bug Fixes
-$(echo -e "$FIXES")"
+
+${FIXES}"
 fi
 
 if [ -n "$DOCS" ]; then
     NEW_ENTRY="${NEW_ENTRY}
 
 ## Documentation
-$(echo -e "$DOCS")"
+
+${DOCS}"
 fi
 
 if [ -n "$CHORES" ]; then
     NEW_ENTRY="${NEW_ENTRY}
 
 ## Internal
-$(echo -e "$CHORES")"
+
+${CHORES}"
 fi
 
 if [ -n "$OTHER" ]; then
     NEW_ENTRY="${NEW_ENTRY}
 
 ## Other Changes
-$(echo -e "$OTHER")"
+
+${OTHER}"
 fi
 
 # If no commits found, add placeholder
@@ -120,18 +141,18 @@ if [ -z "$FEATURES" ] && [ -z "$FIXES" ] && [ -z "$DOCS" ] && [ -z "$CHORES" ] &
 
 ## Changes
 
-* Minor updates and improvements"
+* Minor updates and improvements
+"
 fi
 
 # Add separator
 NEW_ENTRY="${NEW_ENTRY}
-
 ---
 
 "
 
 # Prepend new entry to NEWS.md
-echo -e "$NEW_ENTRY" | cat - "$NEWS_FILE" > "$NEWS_FILE.tmp" && mv "$NEWS_FILE.tmp" "$NEWS_FILE"
+echo "$NEW_ENTRY" | cat - "$NEWS_FILE" > "$NEWS_FILE.tmp" && mv "$NEWS_FILE.tmp" "$NEWS_FILE"
 
 echo "[OK] Updated $NEWS_FILE with version $VERSION"
 
@@ -139,4 +160,4 @@ echo "[OK] Updated $NEWS_FILE with version $VERSION"
 echo ""
 echo "Added to NEWS.md:"
 echo "─────────────────"
-echo -e "$NEW_ENTRY" | head -30
+echo "$NEW_ENTRY" | head -30
