@@ -29,11 +29,11 @@ help:
 	@echo "  make preview-site   Preview pkgdown site in browser"
 	@echo "  make update-docs    Update all documentation (document + site)"
 	@echo ""
-	@echo "Version Management:"
+	@echo "Version Management (auto-commits, tags, and pushes):"
 	@echo "  make check-version  Show current version"
-	@echo "  make version-patch  Bump patch version (0.0.X)"
-	@echo "  make version-minor  Bump minor version (0.X.0)"
-	@echo "  make version-major  Bump major version (X.0.0)"
+	@echo "  make version-patch  Bump patch version (0.0.X) and release"
+	@echo "  make version-minor  Bump minor version (0.X.0) and release"
+	@echo "  make version-major  Bump major version (X.0.0) and release"
 	@echo ""
 	@echo "CRAN Submission:"
 	@echo "  make cran-check     Comprehensive CRAN checks (required before submit)"
@@ -130,8 +130,19 @@ version-major:
 	@$(MAKE) _version-bump TYPE=major
 
 # Internal version bump (don't call directly)
+# Automatically commits, tags, and pushes to GitHub
 _version-bump:
-	@current=$$(grep '^Version:' DESCRIPTION | sed 's/Version: //'); \
+	@# Check for unstaged changes
+	@if [ -n "$$(git status --porcelain)" ]; then \
+		echo "[ERROR] Working directory is not clean."; \
+		echo "Please commit or stash your changes before bumping the version."; \
+		echo ""; \
+		git status --short; \
+		exit 1; \
+	fi; \
+	\
+	# Calculate new version
+	current=$$(grep '^Version:' DESCRIPTION | sed 's/Version: //'); \
 	IFS='.' read -r major minor patch <<< "$$current"; \
 	if [ "$(TYPE)" = "patch" ]; then \
 		new="$$major.$$minor.$$((patch + 1))"; \
@@ -140,16 +151,36 @@ _version-bump:
 	elif [ "$(TYPE)" = "major" ]; then \
 		new="$$((major + 1)).0.0"; \
 	fi; \
+	\
 	echo "Updating version: $$current -> $$new"; \
+	\
+	# Update DESCRIPTION
 	sed -i.bak "s/^Version: .*/Version: $$new/" DESCRIPTION && rm DESCRIPTION.bak; \
+	\
+	# Commit the version bump
+	echo "[*] Committing version bump..."; \
+	git add DESCRIPTION; \
+	git commit -m "chore: bump version to $$new"; \
+	\
+	# Create and push tag
+	echo "[*] Creating tag v$$new..."; \
+	git tag "v$$new"; \
+	\
+	echo "[*] Pushing to GitHub..."; \
+	git push origin HEAD; \
+	git push origin "v$$new"; \
+	\
 	echo ""; \
-	echo "[OK] Version updated to $$new"; \
+	echo "╔════════════════════════════════════════════════════════════════╗"; \
+	echo "║              ✅ VERSION BUMP COMPLETE                          ║"; \
+	echo "╚════════════════════════════════════════════════════════════════╝"; \
 	echo ""; \
-	echo "Next steps:"; \
-	echo "  1. Update NEWS.md with changes for version $$new"; \
-	echo "  2. Review changes: git diff DESCRIPTION"; \
-	echo "  3. Commit: git commit -am 'Bump version to $$new'"; \
-	echo "  4. Run checks: make release-prep"
+	echo "  Version: $$current -> $$new"; \
+	echo "  Tag:     v$$new"; \
+	echo ""; \
+	echo "The tag push will trigger the CRAN submission workflow."; \
+	echo "Monitor the workflow at: https://github.com/meta-analysis-es/maive/actions"; \
+	echo ""
 
 # Code Quality
 lint:
@@ -181,9 +212,9 @@ clean-all: clean
 # Prepare for release
 release-prep: clean document test cran-check
 	@echo ""
-	@echo "==============================================================="
-	@echo "  Release Preparation Complete"
-	@echo "==============================================================="
+	@echo "╔════════════════════════════════════════════════════════════════╗"
+	@echo "║              ✅ RELEASE PREPARATION COMPLETE                   ║"
+	@echo "╚════════════════════════════════════════════════════════════════╝"
 	@echo ""
 	@echo "Current version: $$(grep '^Version:' DESCRIPTION | sed 's/Version: //')"
 	@echo ""
@@ -193,15 +224,14 @@ release-prep: clean document test cran-check
 	@echo "  [✓] Tests passed"
 	@echo "  [✓] CRAN checks passed"
 	@echo ""
-	@echo "Before submission:"
-	@echo "  [ ] Update version: make version-patch (or minor/major)"
-	@echo "  [ ] Update NEWS.md with changes"
-	@echo "  [ ] Update cran-comments.md"
-	@echo "  [ ] Commit changes: git commit -am 'Prepare release vX.Y.Z'"
-	@echo "  [ ] Tag release: git tag vX.Y.Z"
+	@echo "Before bumping version:"
+	@echo "  1. Update NEWS.md with changes for the new version"
+	@echo "  2. Commit all changes: git add -A && git commit -m 'Prepare release'"
 	@echo ""
-	@echo "When ready to submit:"
-	@echo "  Rscript scripts/submit-cran.R"
+	@echo "To release (auto-commits, tags, and triggers CRAN submission):"
+	@echo "  make version-patch   # For bug fixes (0.0.X)"
+	@echo "  make version-minor   # For new features (0.X.0)"
+	@echo "  make version-major   # For breaking changes (X.0.0)"
 	@echo ""
 
 # Quick check (no examples, no vignettes)
