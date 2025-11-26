@@ -52,9 +52,13 @@ else
     sed -i "s/^Version: .*/Version: $new/" DESCRIPTION
 fi
 
+# Update NEWS.md
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+"$SCRIPT_DIR/update-news.sh" "$new"
+
 # Commit the version bump
 echo "[*] Committing version bump..."
-git add DESCRIPTION
+git add DESCRIPTION NEWS.md
 git commit -m "chore: bump version to $new"
 
 # Create tag
