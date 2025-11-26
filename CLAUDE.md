@@ -48,6 +48,17 @@ devtools::document()
 ?maive
 ```
 
+### Releasing to CRAN
+
+```bash
+# Ensure clean working directory, then bump version (auto-commits, tags, pushes)
+make version-patch   # 0.1.4 -> 0.1.5 (bug fixes)
+make version-minor   # 0.1.4 -> 0.2.0 (new features)
+make version-major   # 0.1.4 -> 1.0.0 (breaking changes)
+```
+
+The tag push triggers the CRAN submission workflow automatically.
+
 ## Architecture
 
 ### Core Function: `maive()`
