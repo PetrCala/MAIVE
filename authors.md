@@ -9,8 +9,7 @@
   University of Deusto, Bilbao
 
 - **[Tomas Havranek](https://meta-analysis.cz)**. Author.  
-  Charles University, Prague,Centre for Economic Policy Research,
-  London,Meta-Research Innovation Center, Stanford
+  Charles University, Prague; CEPR, London; METRICS, Stanford
 
 - **[Heiko Rachinger](https://www.uib.es)**. Author.  
   University of the Balearic Islands, Palma
