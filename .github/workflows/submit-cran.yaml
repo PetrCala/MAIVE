@@ -67,17 +67,18 @@ jobs:
           )
         shell: Rscript {0}
 
-      - name: Check on Windows (via R-hub)
+      - name: List R-hub platforms (informational)
         run: |
-          cat("🪟 Submitting checks to R-hub for Windows...\n")
-          rhub::rhub_check(platforms = "windows")
-        shell: Rscript {0}
-        continue-on-error: true
-
-      - name: Check on other platforms (via R-hub)
-        run: |
-          cat("🌍 Submitting checks to R-hub for additional platforms...\n")
-          rhub::rhub_check(platforms = c("linux", "macos"))
+          cat("🌍 Available R-hub platforms for additional testing:\n")
+          tryCatch({
+            platforms <- rhub::rhub_platforms()
+            print(platforms[, c("name", "os_type")])
+            cat("\n📋 To run R-hub checks, use the separate rhub.yaml workflow or run locally:\n")
+            cat("   rhub::rhub_check()\n")
+          }, error = function(e) {
+            cat("Note: Could not fetch R-hub platforms.\n")
+            cat("For multi-platform checks, use the R-hub GitHub Actions workflow.\n")
+          })
         shell: Rscript {0}
         continue-on-error: true
 
