@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">MAIVE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.3</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -69,8 +69,8 @@
 <div class="section level3">
 <h3 id="code-quality">Code Quality<a class="anchor" aria-label="anchor" href="#code-quality"></a></h3>
 <ul class="task-list"><li><label><input type="checkbox"><code>R CMD check --as-cran</code> passes with 0 errors, 0 warnings, 0 notes</label></li>
-<li><label><input type="checkbox">All tests pass: <code><a href="https://devtools.r-lib.org/reference/test.html" class="external-link">devtools::test()</a></code></label></li>
-<li><label><input type="checkbox">Package builds successfully: <code><a href="https://devtools.r-lib.org/reference/build.html" class="external-link">devtools::build()</a></code></label></li>
+<li><label><input type="checkbox">All tests pass: <code>devtools::test()</code></label></li>
+<li><label><input type="checkbox">Package builds successfully: <code>devtools::build()</code></label></li>
 <li><label><input type="checkbox">No non-ASCII characters unless properly declared</label></li>
 <li><label><input type="checkbox">All examples run successfully (or are marked with <code>\dontrun{}</code>)</label></li>
 </ul></div>
@@ -139,7 +139,7 @@
 <h4 id="step-3-submit-to-cran">Step 3: Submit to CRAN<a class="anchor" aria-label="anchor" href="#step-3-submit-to-cran"></a></h4>
 <p>After all checks pass, run locally:</p>
 <div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/submit_cran.html" class="external-link">submit_cran</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">submit_cran</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <p>Or use the interactive script:</p>
 <div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/submit-cran.R"</span><span class="op">)</span></span></code></pre></div>
@@ -155,18 +155,18 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/check-cran.R"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or manually:</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span>cran <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span>cran <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="step-2-r-hub-checks">Step 2: R-hub Checks<a class="anchor" aria-label="anchor" href="#step-2-r-hub-checks"></a></h4>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Check on Windows</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check_win.html" class="external-link">check_win_devel</a></span><span class="op">(</span><span class="op">)</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check_win.html" class="external-link">check_win_release</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check_win_devel</span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check_win_release</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Check on R-hub platforms</span></span>
-<span><span class="fu">rhub</span><span class="fu">::</span><span class="fu"><a href="https://r-hub.github.io/rhub/reference/rhub_check.html" class="external-link">rhub_check</a></span><span class="op">(</span>platforms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"windows"</span>, <span class="st">"linux"</span>, <span class="st">"macos"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">rhub</span><span class="fu">::</span><span class="fu">rhub_check</span><span class="op">(</span>platforms <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"windows"</span>, <span class="st">"linux"</span>, <span class="st">"macos"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level4">
 <h4 id="step-3-submit">Step 3: Submit<a class="anchor" aria-label="anchor" href="#step-3-submit"></a></h4>
@@ -175,7 +175,7 @@
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/submit-cran.R"</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Or direct submission</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/submit_cran.html" class="external-link">submit_cran</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">submit_cran</span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -333,7 +333,7 @@
 <h4 id="id_3-update-documentation">3. Update Documentation<a class="anchor" aria-label="anchor" href="#id_3-update-documentation"></a></h4>
 <div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Update roxygen documentation</span></span>
-<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">document</span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># Rebuild pkgdown site</span></span>
 <span><span class="kw"><a href="https://rdrr.io/r/base/source.html" class="external-link">source</a></span><span class="op">(</span><span class="st">"scripts/build-docs.R"</span><span class="op">)</span></span></code></pre></div>
@@ -518,7 +518,7 @@
 <li>Large package size without justification</li>
 <li>Unquoted URLs in DESCRIPTION</li>
 </ul></li>
-</ul><p><strong>Check</strong>: Run <code><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">devtools::check()</a></code> to see specific notes</p>
+</ul><p><strong>Check</strong>: Run <code>devtools::check()</code> to see specific notes</p>
 </div>
 <div class="section level4">
 <h4 id="examples-fail">“Examples fail”<a class="anchor" aria-label="anchor" href="#examples-fail"></a></h4>
@@ -530,7 +530,7 @@
 </li>
 <li>Ensure all example data is available</li>
 <li>Check for missing library calls (use <code>::</code> notation instead)</li>
-<li>Test examples: <code><a href="https://devtools.r-lib.org/reference/run_examples.html" class="external-link">devtools::run_examples()</a></code>
+<li>Test examples: <code>devtools::run_examples()</code>
 </li>
 </ul></div>
 <div class="section level4">
@@ -544,7 +544,7 @@
 <li>Parallel processing: May cause timing issues, consider sequential for CRAN</li>
 </ul><p><strong>Check</strong>:</p>
 <div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check.html" class="external-link">check</a></span><span class="op">(</span>cran <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># Mimics CRAN checks locally</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check</span><span class="op">(</span>cran <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>  <span class="co"># Mimics CRAN checks locally</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -565,7 +565,7 @@
 <li>
 <p>Test on specific platform:</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">rhub</span><span class="fu">::</span><span class="fu"><a href="https://r-hub.github.io/rhub/reference/rhub_check.html" class="external-link">rhub_check</a></span><span class="op">(</span>platform <span class="op">=</span> <span class="st">"windows-x86_64-devel"</span><span class="op">)</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">rhub</span><span class="fu">::</span><span class="fu">rhub_check</span><span class="op">(</span>platform <span class="op">=</span> <span class="st">"windows-x86_64-devel"</span><span class="op">)</span></span></code></pre></div>
 </li>
 </ul></div>
 <div class="section level4">
@@ -578,7 +578,7 @@
 <li>File locking: Windows locks files more aggressively</li>
 </ul><p><strong>Solution</strong>:</p>
 <div class="sourceCode" id="cb18"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/check_win.html" class="external-link">check_win_devel</a></span><span class="op">(</span><span class="op">)</span>  <span class="co"># Test on Windows</span></span></code></pre></div>
+<code class="sourceCode R"><span><span class="fu">devtools</span><span class="fu">::</span><span class="fu">check_win_devel</span><span class="op">(</span><span class="op">)</span>  <span class="co"># Test on Windows</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level3">
@@ -591,7 +591,7 @@
 <li>Check for unescaped special characters: <code>%</code>, <code>\</code>, <code>#</code>
 </li>
 <li>Ensure all cross-references exist</li>
-<li>Validate: <code><a href="https://devtools.r-lib.org/reference/check_man.html" class="external-link">devtools::check_man()</a></code>
+<li>Validate: <code>devtools::check_man()</code>
 </li>
 </ul></div>
 <div class="section level4">
@@ -602,7 +602,7 @@
 <li>Use <code>eval=FALSE</code> for code that needs special setup</li>
 <li>Don’t require internet connection</li>
 <li>Keep vignettes small and fast</li>
-<li>Test: <code><a href="https://devtools.r-lib.org/reference/build_vignettes.html" class="external-link">devtools::build_vignettes()</a></code>
+<li>Test: <code>devtools::build_vignettes()</code>
 </li>
 </ul></div>
 </div>
