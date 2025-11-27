@@ -1,5 +1,16 @@
 # Changelog
 
+## MAIVE 0.1.7
+
+*Released: 2025-11-27*
+
+### Internal
+
+- Keep the ar tests more neutral
+- Ar calculation - avoid banana projection
+
+------------------------------------------------------------------------
+
 ## MAIVE 0.1.6
 
 *Released: 2025-11-26*
