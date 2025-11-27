@@ -635,26 +635,27 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
     ar_weights <- 1 / adjusted_variance
   }
 
-  # Auto-select AR method based on first-stage F-statistic
-  # Use slope-only inversion under weak instruments (F < 10)
-  ar_method <- "joint" # Default: 2D joint grid
-  if (!is.null(f_stat) && is.numeric(f_stat) && is.finite(f_stat)) {
-    if (f_stat < 10) {
-      ar_method <- "slope_only"
-      warning(
-        sprintf(
-          "Weak instrument detected (F = %.2f < 10). Using slope-only AR inversion for robust inference.",
-          f_stat
-        )
-      )
-    }
+  # Determine which SE to use for AR test
+
+  # When instrument=1, the fatpet model uses instrumented SE (sqrt(adjusted_variance))
+  # The AR test must use the same SE for consistency
+  if (opts$instrument == 1L && !is.null(adjusted_variance)) {
+    sebs_for_ar <- sqrt(adjusted_variance)
+  } else {
+    sebs_for_ar <- prepared$sebs
   }
+
+  # Always use subset AR for Egger slope CI
+
+  # The joint method can produce spuriously narrow CIs due to banana-projection
+  # even when F-stat is strong. Subset AR is more robust for slope inference.
+  ar_method <- "slope_only"
 
   ar_result <- compute_AR_CI_optimized(
     model = fits$fatpet,
     adjust_fun = PET_adjust,
     bs = prepared$bs,
-    sebs = prepared$sebs,
+    sebs = sebs_for_ar,
     invNs = invNs,
     g = prepared$g,
     type_choice = opts$type_choice,
@@ -787,11 +788,18 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
     ar_weights <- 1 / adjusted_variance
   }
 
+  # When instrument=1, use instrumented SE for consistency with fitted model
+  if (opts$instrument == 1L && !is.null(adjusted_variance)) {
+    sebs_for_ar <- sqrt(adjusted_variance)
+  } else {
+    sebs_for_ar <- prepared$sebs
+  }
+
   do.call(
     compute_AR_CI_optimized,
     c(cfg_ar, list(
       bs = prepared$bs,
-      sebs = prepared$sebs,
+      sebs = sebs_for_ar,
       invNs = invNs,
       g = prepared$g,
       type_choice = type_choice,
