@@ -85,12 +85,13 @@ test_that("subset AR gives wider or comparable CI under weak instruments", {
   }
 })
 
-test_that("MAIVE auto-selects slope-only method for weak instruments", {
-  # Create dataset with larger sample
+test_that("MAIVE always uses subset AR for Egger slope CI", {
+  # Egger AR CI always uses subset AR method for robust inference
+  # regardless of instrument strength (avoids banana-projection)
   set.seed(999)
   n <- 40
   Ns <- exp(rnorm(n, 8, 0.5))
-  sebs <- 0.15 + rnorm(n, 0, 0.005) # Nearly constant SE (weak instrument)
+  sebs <- 0.15 + rnorm(n, 0, 0.005)
   bs <- 0.5 + 0.1 * sebs + rnorm(n, 0, sebs)
 
   dat <- data.frame(
@@ -100,7 +101,6 @@ test_that("MAIVE auto-selects slope-only method for weak instruments", {
     studyid = rep(1:10, each = 4)
   )
 
-  # This should trigger weak instrument warning when F < 10
   result <- suppressWarnings(maive(
     dat = dat,
     method = 1,
@@ -112,9 +112,10 @@ test_that("MAIVE auto-selects slope-only method for weak instruments", {
     first_stage = 0
   ))
 
-  # Check that result was computed
+  # Check that Egger AR CI was computed
   expect_true(!is.null(result))
   expect_true(!is.null(result$egger_ar_ci))
+  expect_true(is.numeric(result$egger_ar_ci))
 })
 
 test_that("slope-only method handles PEESE adjustment", {
