@@ -30,7 +30,7 @@ test_that("slope-only AR CI method is available", {
 })
 
 test_that("subset AR gives wider or comparable CI under weak instruments", {
-  # Simulate weak instrument scenario (similar to Hasikova dataset with log(n))
+  # Simulate weak instrument scenario where SE has low correlation with 1/N
   # The subset AR method should produce wider CIs that are more consistent
   # with cluster-robust Wald CIs under weak identification
   set.seed(123)
@@ -190,9 +190,10 @@ test_that("slope-only handles extreme weight heterogeneity", {
   expect_true("b1_CI" %in% names(result))
 })
 
-test_that("subset AR produces reasonable CI width under weak instruments (Hasikova-style)", {
-  # This test simulates a scenario similar to the Hasikova dataset
-  # with log(n) instrument where the joint AR gave spuriously narrow CIs
+test_that("subset AR produces reasonable CI width under weak instruments", {
+  # Simulates a clustered meta-analysis with weak first-stage instrument
+  # (log sample size has low correlation with SE). Under such conditions,
+  # the joint AR can produce spuriously narrow CIs due to banana-projection.
   # Expected behavior: subset AR should give CIs comparable to Wald CI width
 
   set.seed(2025)
