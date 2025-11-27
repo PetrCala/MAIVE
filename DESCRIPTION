@@ -2,7 +2,7 @@ Package: MAIVE
 Type: Package
 Title: Meta Analysis Instrumental Variable Estimator
 Encoding: UTF-8
-Version: 0.1.7
+Version: 0.1.8
 RoxygenNote: 7.3.3
 URL: http://meta-analysis.cz/maive/, https://github.com/meta-analysis-es/maive
 BugReports: https://github.com/meta-analysis-es/maive/issues

@@ -1,3 +1,20 @@
+# MAIVE 0.1.8
+
+*Released: 2025-11-27*
+
+## Bug Fixes
+
+* Further issues in the ar calculation
+* Ar SE usage
+
+
+## Internal
+
+* Fix outdated tests
+
+---
+
+
 # MAIVE 0.1.7
 
 *Released: 2025-11-27*
