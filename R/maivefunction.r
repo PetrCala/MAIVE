@@ -157,6 +157,8 @@ maive_compute_variance_instrumentation <- function(sebs, Ns, g, type_choice, ins
     smearing <- sum(weights_varreg1 * exp(resid_varreg1)) / sum(weights_varreg1)
     sebs2fit1 <- exp(stats::fitted(varreg1)) * smearing
     slope_index <- 2L
+    # Use log(Ns) as instrument for AR test (matches first-stage)
+    instrument_for_ar <- log_Ns
   } else {
     Xiv <- cbind(1, invNs)
     varreg1 <- lm(sebs2 ~ 0 + Xiv)
@@ -169,6 +171,8 @@ maive_compute_variance_instrumentation <- function(sebs, Ns, g, type_choice, ins
 
     sebs2fit1 <- stats::fitted(varreg1)
     slope_index <- dimiv
+    # Use 1/Ns as instrument for AR test (matches first-stage)
+    instrument_for_ar <- invNs
   }
   if (instrument == 0L) {
     F_hac <- "NA"
@@ -179,6 +183,7 @@ maive_compute_variance_instrumentation <- function(sebs, Ns, g, type_choice, ins
 
   list(
     invNs = invNs,
+    instrument_for_ar = instrument_for_ar,
     sebs2fit1 = sebs2fit1,
     F_hac = F_hac,
     first_stage_model = varreg1
@@ -299,7 +304,7 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     opts,
     fits,
     prepared,
-    instrumentation$invNs,
+    instrumentation$instrument_for_ar,
     adjusted_variance = instrumentation$sebs2fit1,
     f_stat = instrumentation$F_hac
   )
@@ -323,7 +328,7 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     fits,
     selection,
     prepared,
-    instrumentation$invNs,
+    instrumentation$instrument_for_ar,
     opts$type_choice,
     adjusted_variance = instrumentation$sebs2fit1
   )
