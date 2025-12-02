@@ -3,7 +3,7 @@ pkgdown: 2.2.0
 pkgdown_sha: ~
 articles:
   introduction: introduction.html
-last_built: 2025-12-02T00:50Z
+last_built: 2025-12-02T00:52Z
 urls:
   reference: https://meta-analysis-es.github.io/maive/reference
   article: https://meta-analysis-es.github.io/maive/articles
