@@ -1,3 +1,14 @@
+# MAIVE 0.1.9
+
+*Released: 2025-12-02*
+
+## Bug Fixes
+
+* Cran submission issues
+
+---
+
+
 # MAIVE 0.1.8
 
 *Released: 2025-11-27*
