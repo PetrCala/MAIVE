@@ -1,3 +1,14 @@
+# MAIVE 0.1.10
+
+*Released: 2025-12-02*
+
+## Internal
+
+* Update outdated cran files
+
+---
+
+
 # MAIVE 0.1.9
 
 *Released: 2025-12-02*
