@@ -6,12 +6,12 @@
 \alias{MAIVE-package}
 \title{MAIVE: Meta Analysis Instrumental Variable Estimator}
 \description{
-Meta-analysis traditionally assigns more weight to studies with lower standard errors, assuming higher precision. However, in observational research, precision must be estimated and is vulnerable to manipulation, such as p-hacking, to achieve statistical significance. This can lead to spurious precision, invalidating inverse-variance weighting and bias-correction methods like funnel plots. Common methods for addressing publication bias, including selection models, often fail or exacerbate the problem. This package introduces an instrumental variable approach to limit bias caused by spurious precision in meta-analysis. Methods are described in Irsova et al. (2025) \doi{10.1038/s41467-025-63261-0}.
+Meta-analysis traditionally assigns more weight to studies with lower standard errors, assuming higher precision. However, in observational research, precision must be estimated and is vulnerable to manipulation, such as p-hacking, to achieve statistical significance. This can lead to spurious precision, invalidating inverse-variance weighting and bias-correction methods like funnel plots. Common methods for addressing publication bias, including selection models, often fail or exacerbate the problem. This package introduces an instrumental variable approach to limit bias caused by spurious precision in meta-analysis. Methods are described in 'Irsova et al.' (2025) \doi{10.1038/s41467-025-63261-0}.
 }
 \seealso{
 Useful links:
 \itemize{
-  \item \url{http://meta-analysis.cz/maive/}
+  \item \url{https://meta-analysis.cz/maive/}
   \item \url{https://github.com/meta-analysis-es/maive}
   \item Report bugs at \url{https://github.com/meta-analysis-es/maive/issues}
 }

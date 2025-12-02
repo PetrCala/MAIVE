@@ -4,7 +4,7 @@ Title: Meta Analysis Instrumental Variable Estimator
 Encoding: UTF-8
 Version: 0.1.9
 RoxygenNote: 7.3.3
-URL: http://meta-analysis.cz/maive/, https://github.com/meta-analysis-es/maive
+URL: https://meta-analysis.cz/maive/, https://github.com/meta-analysis-es/maive
 BugReports: https://github.com/meta-analysis-es/maive/issues
 Authors@R: 
     c(
@@ -33,7 +33,7 @@ Description:
     weighting and bias-correction methods like funnel plots. Common methods for addressing
     publication bias, including selection models, often fail or exacerbate the problem.
     This package introduces an instrumental variable approach to limit bias caused by
-    spurious precision in meta-analysis. Methods are described in Irsova et al. (2025)
+    spurious precision in meta-analysis. Methods are described in 'Irsova et al.' (2025)
     <doi:10.1038/s41467-025-63261-0>.
 License: MIT + file LICENSE
 Depends: 
