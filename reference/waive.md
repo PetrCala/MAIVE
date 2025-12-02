@@ -68,7 +68,6 @@ with negative residuals (spurious precision) or extreme residuals
 ## Examples
 
 ``` r
-if (FALSE) { # \dontrun{
 dat <- data.frame(
   bs = c(0.5, 0.45, 0.55, 0.6),
   sebs = c(0.25, 0.2, 0.22, 0.27),
@@ -79,5 +78,4 @@ result <- waive(dat,
   method = 3, weight = 0, instrument = 1,
   studylevel = 0, SE = 0, AR = 0, first_stage = 0
 )
-} # }
 ```

@@ -114,3 +114,21 @@ Data `dat` can be imported from an Excel file via:
 
 Default option for MAIVE: MAIVE-PET-PEESE, unweighted, instrumented,
 cluster SE, wild bootstrap, AR.
+
+## Examples
+
+``` r
+dat <- data.frame(
+  bs = c(0.5, 0.45, 0.55, 0.6),
+  sebs = c(0.25, 0.2, 0.22, 0.27),
+  Ns = c(50, 80, 65, 90)
+)
+
+result <- maive(dat,
+  method = 3, weight = 0, instrument = 1,
+  studylevel = 0, SE = 0, AR = 0, first_stage = 0
+)
+#> Registered S3 method overwritten by 'clubSandwich':
+#>   method    from    
+#>   bread.mlm sandwich
+```

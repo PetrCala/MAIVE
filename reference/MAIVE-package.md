@@ -8,7 +8,10 @@ spurious precision, invalidating inverse-variance weighting and
 bias-correction methods like funnel plots. Common methods for addressing
 publication bias, including selection models, often fail or exacerbate
 the problem. This package introduces an instrumental variable approach
-to limit bias caused by spurious precision in meta-analysis.
+to limit bias caused by spurious precision in meta-analysis. Methods are
+described in Irsova et al. (2025)
+[doi:10.1038/s41467-025-63261-0](https://doi.org/10.1038/s41467-025-63261-0)
+.
 
 ## See also
 

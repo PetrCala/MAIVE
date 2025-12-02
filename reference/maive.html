@@ -122,6 +122,24 @@ It should contain:</p><ul><li><p>Estimates: bs</p></li>
 </ul><p>Default option for MAIVE: MAIVE-PET-PEESE, unweighted, instrumented, cluster SE, wild bootstrap, AR.</p>
     </div>
 
+    <div class="section level2">
+    <h2 id="ref-examples">Examples<a class="anchor" aria-label="anchor" href="#ref-examples"></a></h2>
+    <div class="sourceCode"><pre class="sourceCode r"><code><span class="r-in"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span></span>
+<span class="r-in"><span>  bs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.45</span>, <span class="fl">0.55</span>, <span class="fl">0.6</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  sebs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.25</span>, <span class="fl">0.2</span>, <span class="fl">0.22</span>, <span class="fl">0.27</span><span class="op">)</span>,</span></span>
+<span class="r-in"><span>  Ns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">80</span>, <span class="fl">65</span>, <span class="fl">90</span><span class="op">)</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-in"><span></span></span>
+<span class="r-in"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu">maive</span><span class="op">(</span><span class="va">dat</span>,</span></span>
+<span class="r-in"><span>  method <span class="op">=</span> <span class="fl">3</span>, weight <span class="op">=</span> <span class="fl">0</span>, instrument <span class="op">=</span> <span class="fl">1</span>,</span></span>
+<span class="r-in"><span>  studylevel <span class="op">=</span> <span class="fl">0</span>, SE <span class="op">=</span> <span class="fl">0</span>, AR <span class="op">=</span> <span class="fl">0</span>, first_stage <span class="op">=</span> <span class="fl">0</span></span></span>
+<span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Registered S3 method overwritten by 'clubSandwich':</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   method    from    </span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span>   bread.mlm sandwich</span>
+<span class="r-in"><span></span></span>
+</code></pre></div>
+    </div>
   </main><aside class="col-md-3"><nav id="toc" aria-label="Table of contents"><h2>On this page</h2>
     </nav></aside></div>
 

@@ -207,7 +207,7 @@ Key test patterns:
 - All robust standard errors use the `clubSandwich` package with
   CR0/CR1/CR2 estimators
 - Infinite bounds in AR computation are handled by the optimization in
-  `compute_AR_CI_optimized()`
+  [`compute_AR_CI_optimized()`](https://meta-analysis-es.github.io/maive/reference/compute_AR_CI_optimized.md)
 
 ## Dependencies
 
