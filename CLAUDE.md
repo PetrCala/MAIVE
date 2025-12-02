@@ -12,7 +12,7 @@ where observational research precision can be manipulated through
 p-hacking, invalidating traditional inverse-variance weighting and
 bias-correction methods.
 
-**Project Page**: <http://meta-analysis.cz/maive/> **GitHub**:
+**Project Page**: <https://meta-analysis.cz/maive/> **GitHub**:
 meta-analysis-es/maive
 
 ## Development Commands
