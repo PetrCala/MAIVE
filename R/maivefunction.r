@@ -863,6 +863,18 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
 #'   \item peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA otherwise)
 #' }
 #'
+#' @examples
+#' dat <- data.frame(
+#'   bs = c(0.5, 0.45, 0.55, 0.6),
+#'   sebs = c(0.25, 0.2, 0.22, 0.27),
+#'   Ns = c(50, 80, 65, 90)
+#' )
+#'
+#' result <- maive(dat,
+#'   method = 3, weight = 0, instrument = 1,
+#'   studylevel = 0, SE = 0, AR = 0, first_stage = 0
+#' )
+#'
 #' @export
 maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L) {
   opts <- maive_validate_inputs(dat, method, weight, instrument, studylevel, SE, AR, first_stage)
@@ -888,7 +900,6 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #' reduced influence in the meta-analytic estimate.
 #'
 #' @examples
-#' \dontrun{
 #' dat <- data.frame(
 #'   bs = c(0.5, 0.45, 0.55, 0.6),
 #'   sebs = c(0.25, 0.2, 0.22, 0.27),
@@ -899,7 +910,6 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #'   method = 3, weight = 0, instrument = 1,
 #'   studylevel = 0, SE = 0, AR = 0, first_stage = 0
 #' )
-#' }
 #'
 #' @seealso \code{\link{maive}}
 #' @export
