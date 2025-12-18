@@ -35,8 +35,8 @@ test_that("first-stage F-test does not crash when Ns is constant (rank deficient
     Ns = rep(100, 6)
   )
 
-  # The first-stage regression sebs^2 ~ 1 + 1/Ns is rank-deficient here.
-  # MAIVE should not error; the diagnostic F-test should be NA.
+  # With constant Ns, the instrument (1/Ns) has no variation so IV is not identified.
+  # MAIVE should not error; it should fall back to instrument=0 and report F-test as "NA".
   result <- maive(
     dat = dat,
     method = 1,
@@ -48,7 +48,9 @@ test_that("first-stage F-test does not crash when Ns is constant (rank deficient
     first_stage = 0
   )
 
-  expect_true(is.na(result$`F-test`))
+  expect_identical(result$`F-test`, "NA")
+  expect_true(is.finite(as.numeric(result$beta)))
+  expect_true(is.finite(as.numeric(result$SE)))
 })
 
 test_that("Hausman statistic uses difference-in-estimators variance", {

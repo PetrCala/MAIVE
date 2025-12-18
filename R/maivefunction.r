@@ -47,6 +47,20 @@ maive_validate_inputs <- function(dat, method, weight, instrument, studylevel, S
     AR <- 0L
   }
 
+  # If Ns is constant, the instrument (1/Ns or log(Ns)) has no variation.
+  # That makes the first-stage rank-deficient and also makes the "instrumented"
+  # precision regressor constant, so second-stage slopes can be aliased and
+  # downstream vcov indexing can fail. In this case, IV is not identified, so
+  # disable instrumentation (and AR) up front and fall back to the non-IV fit.
+  if (instrument == 1L) {
+    Ns <- dat[[3]]
+    if (length(unique(Ns)) < 2L) {
+      warning("Ns has no variation; disabling variance instrumentation (instrument=0).")
+      instrument <- 0L
+      AR <- 0L
+    }
+  }
+
   list(
     dat = dat,
     method = method,
