@@ -2,6 +2,8 @@
 
 ## MAIVE 0.1.10
 
+CRAN release: 2025-12-08
+
 *Released: 2025-12-02*
 
 ### Internal
