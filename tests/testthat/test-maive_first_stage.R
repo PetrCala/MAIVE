@@ -28,6 +28,29 @@ test_that("log first stage applies smearing retransformation", {
   expect_equal(result$`F-test`, manual_F)
 })
 
+test_that("first-stage F-test does not crash when Ns is constant (rank deficient)", {
+  dat <- data.frame(
+    bs = c(0.4, 0.6, 0.55, 0.5, 0.52, 0.49),
+    sebs = c(0.2, 0.18, 0.22, 0.19, 0.21, 0.2),
+    Ns = rep(100, 6)
+  )
+
+  # The first-stage regression sebs^2 ~ 1 + 1/Ns is rank-deficient here.
+  # MAIVE should not error; the diagnostic F-test should be NA.
+  result <- maive(
+    dat = dat,
+    method = 1,
+    weight = 0,
+    instrument = 1,
+    studylevel = 0,
+    SE = 0,
+    AR = 0,
+    first_stage = 0
+  )
+
+  expect_true(is.na(result$`F-test`))
+})
+
 test_that("Hausman statistic uses difference-in-estimators variance", {
   dat <- data.frame(
     bs = c(0.4, 0.6, 0.55, 0.5, 0.52, 0.49),
