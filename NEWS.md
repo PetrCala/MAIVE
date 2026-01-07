@@ -1,3 +1,44 @@
+# MAIVE 0.2.0
+
+*Released: 2026-01-07*
+
+## New Features
+
+* Add the ottawa conference slides link to strategic locations around the package
+* Add an explicit citation file to the inst folder, update CLAUDE.md with instructions
+* Add the funnel plot vignette; add vignette preview
+
+
+## Bug Fixes
+
+* Failing tests
+* A couple of failing tests
+* Makefile targets, update docs
+* Add a missing funnel plot topic to pkgdown
+* Funnel plot documentation
+
+
+## Documentation
+
+* Update the introduction vignette to include info on the available column mapping
+
+
+## Internal
+
+* Re-generate R docs
+* Allow positional arguments in the main functions
+* Add empty rows removal
+* Add a validation module, update the main functions to utilize it
+* Regenerate r docs
+* Update references to WAIVE to highlight its more aggressive correction for phacking
+* Update outdated paper references (2024 -> 2025, nature communications)
+* Update the docs to feature links to easymeta.org
+* Clean up more unused special characters
+* Get rid of funnel_plot docstring special characters
+
+---
+
+
 # MAIVE 0.1.12
 
 *Released: 2026-01-07*
