@@ -3,7 +3,7 @@
 
 .PHONY: help install check test document build clean cran-check \
         update-docs coverage install-deps vignettes site preview-site \
-        lint style check-version version-patch version-minor version-major \
+        preview-vignette lint style check-version version-patch version-minor version-major \
         version-check
 
 # Default target - show help
@@ -27,6 +27,7 @@ help:
 	@echo "  make vignettes      Build vignettes"
 	@echo "  make site           Build pkgdown site"
 	@echo "  make preview-site   Preview pkgdown site in browser"
+	@echo "  make preview-vignette <name>   Render one vignette and open in browser"
 	@echo "  make update-docs    Update all documentation (document + site)"
 	@echo ""
 	@echo "Version Management (auto-commits, tags, and pushes):"
@@ -90,6 +91,22 @@ site:
 preview-site: site
 	@echo "[*] Opening site preview..."
 	@Rscript -e "pkgdown::preview_site()"
+
+# Render and preview a single vignette
+preview-vignette:
+	@vignette_name=$(word 2,$(MAKECMDGOALS)); \
+	if [ -z "$$vignette_name" ]; then \
+		echo "Usage: make preview-vignette <vignette-name-without-extension>"; \
+		exit 1; \
+	fi; \
+	base_name=$${vignette_name%.Rmd}; \
+	base_name=$${base_name%.rmd}; \
+	echo "[*] Rendering vignette '$$base_name'..."; \
+	VIGNETTE_NAME="$$base_name" Rscript -e "v <- Sys.getenv('VIGNETTE_NAME'); rmarkdown::render(sprintf('vignettes/%s.Rmd', v), output_dir = 'vignettes'); browseURL(sprintf('file://%s', normalizePath(sprintf('vignettes/%s.html', v))))"
+
+# absorb extra args after preview-vignette so make does not treat them as targets
+$(filter-out preview-vignette,$(MAKECMDGOALS)):
+	@:
 
 update-docs: document site
 	@echo "[OK] All documentation updated"
