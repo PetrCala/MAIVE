@@ -67,6 +67,23 @@ It should contain:
 }
 Default option for MAIVE: MAIVE-PET-PEESE, unweighted, instrumented, cluster SE, wild bootstrap, AR.
 }
+\section{Data Requirements}{
+
+\code{dat} must be a data frame with at least 4 observations and the following columns:
+\itemize{
+  \item \code{bs}: Effect size estimates (numeric)
+  \item \code{sebs}: Standard errors (numeric, positive values)
+  \item \code{Ns}: Sample sizes (numeric, positive values)
+  \item \code{study_id}: (optional) Study identifiers for clustering
+}
+
+When \code{study_id} is provided, the number of observations must be at least
+the number of unique studies plus 3 (for degrees of freedom).
+
+As of version 0.2.0, these requirements are validated automatically and will
+trigger clear error messages if violated.
+}
+
 \examples{
 dat <- data.frame(
   bs = c(0.5, 0.45, 0.55, 0.6),
