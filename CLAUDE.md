@@ -100,8 +100,9 @@ and
 instrumental variable estimation. Both functions share a common pipeline
 via `maive_run_pipeline()`:
 
-1.  **Input Validation** (`maive_validate_inputs`): Validates and
-    normalizes all input parameters
+1.  **Input Validation** (`normalize_maive_options`): Validates and
+    normalizes all input parameters and resolves column mappings
+    (`estimate`, `se`, `n`, optional `study_id`)
 2.  **Data Preparation** (`maive_prepare_data`): Prepares study-level
     data, handles clustering and fixed effects through dummy matrix
     centering

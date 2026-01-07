@@ -108,7 +108,7 @@ Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0</cod
 <a class="anchor" aria-label="anchor" href="#core-function-maive"></a></h3>
 <p>The main exported functions are <code><a href="reference/maive.html">maive()</a></code> and <code><a href="reference/waive.html">waive()</a></code> (defined in R/maivefunction.r), which perform meta-analysis using instrumental variable estimation. Both functions share a common pipeline via <code>maive_run_pipeline()</code>:</p>
 <ol style="list-style-type: decimal"><li>
-<strong>Input Validation</strong> (<code>maive_validate_inputs</code>): Validates and normalizes all input parameters</li>
+<strong>Input Validation</strong> (<code>normalize_maive_options</code>): Validates and normalizes all input parameters and resolves column mappings (<code>estimate</code>, <code>se</code>, <code>n</code>, optional <code>study_id</code>)</li>
 <li>
 <strong>Data Preparation</strong> (<code>maive_prepare_data</code>): Prepares study-level data, handles clustering and fixed effects through dummy matrix centering</li>
 <li>

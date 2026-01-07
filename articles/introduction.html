@@ -140,48 +140,85 @@ standard errors in meta-regression models</li>
 <div class="section level2">
 <h2 id="data-structure">Data Structure<a class="anchor" aria-label="anchor" href="#data-structure"></a>
 </h2>
-<p>The <code><a href="../reference/maive.html">maive()</a></code> function expects a data frame with the
-following columns:</p>
+<p>The <code><a href="../reference/maive.html">maive()</a></code> function accepts either the default column
+names or custom mappings:</p>
 <table class="table">
 <colgroup>
 <col width="28%">
-<col width="25%">
-<col width="46%">
+<col width="18%">
+<col width="52%">
 </colgroup>
 <thead><tr class="header">
 <th>Column</th>
-<th>Label</th>
+<th>Default name</th>
 <th>Description</th>
 </tr></thead>
 <tbody>
 <tr class="odd">
-<td>1</td>
-<td>bs</td>
+<td>Estimate</td>
+<td><code>bs</code></td>
 <td>Primary estimates (effect sizes)</td>
 </tr>
 <tr class="even">
-<td>2</td>
-<td>sebs</td>
+<td>Std. Error</td>
+<td><code>sebs</code></td>
 <td>Standard errors (must be &gt; 0)</td>
 </tr>
 <tr class="odd">
-<td>3</td>
-<td>Ns</td>
+<td>Sample size</td>
+<td><code>Ns</code></td>
 <td>Sample sizes (must be &gt; 0)</td>
 </tr>
 <tr class="even">
-<td>4</td>
-<td>study_id</td>
-<td>Study identification (optional, for clustering/fixed effects)</td>
+<td>Study ID (optional)</td>
+<td><code>study_id</code></td>
+<td>Clustering/fixed effects identifier</td>
 </tr>
 </tbody>
 </table>
+<p><strong>Custom column names:</strong> You can map your own column
+names using:</p>
+<ul>
+<li>
+<code>estimate</code> for the estimate column</li>
+<li>
+<code>se</code> for the standard error column</li>
+<li>
+<code>n</code> for the sample size column</li>
+<li>
+<code>study_id</code> for study identifiers (optional)</li>
+</ul>
+<p>Example:</p>
+<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">custom_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
+<span>  my_est <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.55</span><span class="op">)</span>,</span>
+<span>  my_se  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.18</span>, <span class="fl">0.25</span>, <span class="fl">0.22</span><span class="op">)</span>,</span>
+<span>  my_n   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">120</span>, <span class="fl">95</span>, <span class="fl">110</span><span class="op">)</span>,</span>
+<span>  my_study <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
+<span>  dat <span class="op">=</span> <span class="va">custom_dat</span>,</span>
+<span>  estimate <span class="op">=</span> <span class="st">"my_est"</span>,</span>
+<span>  se <span class="op">=</span> <span class="st">"my_se"</span>,</span>
+<span>  n <span class="op">=</span> <span class="st">"my_n"</span>,</span>
+<span>  study_id <span class="op">=</span> <span class="st">"my_study"</span>,</span>
+<span>  method <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  weight <span class="op">=</span> <span class="fl">0</span>,</span>
+<span>  instrument <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>  studylevel <span class="op">=</span> <span class="fl">2</span>,</span>
+<span>  SE <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  AR <span class="op">=</span> <span class="fl">1</span></span>
+<span><span class="op">)</span></span></code></pre></div>
+<p>Validation rules still apply: required columns must be numeric,
+non-missing, finite, and there must be at least 4 observations after
+removing completely empty rows.</p>
 </div>
 <div class="section level2">
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>
 </h2>
 <p>Let’s create a simple example dataset:</p>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Simulated meta-analysis data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">n_studies</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
@@ -207,7 +244,7 @@ following columns:</p>
 <p>The default MAIVE estimator uses PET-PEESE with instrumented standard
 errors, no weights, cluster-robust standard errors, and wild
 bootstrap:</p>
-<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Run MAIVE with defaults</span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
@@ -263,7 +300,7 @@ errors</li>
 <div class="section level3">
 <h3 id="fat-pet-precision-effect-test">1. FAT-PET (Precision-Effect Test)<a class="anchor" aria-label="anchor" href="#fat-pet-precision-effect-test"></a>
 </h3>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_pet</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">1</span>,  <span class="co"># FAT-PET</span></span>
@@ -279,7 +316,7 @@ errors</li>
 <div class="section level3">
 <h3 id="peese-precision-effect-estimate-with-standard-error">2. PEESE (Precision-Effect Estimate with Standard Error)<a class="anchor" aria-label="anchor" href="#peese-precision-effect-estimate-with-standard-error"></a>
 </h3>
-<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_peese</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">2</span>,  <span class="co"># PEESE</span></span>
@@ -297,7 +334,7 @@ errors</li>
 </h3>
 <p>PET-PEESE uses PET if the PET estimate is not significantly different
 from zero, otherwise uses PEESE:</p>
-<div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_petpeese</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">3</span>,  <span class="co"># PET-PEESE (default)</span></span>
@@ -313,7 +350,7 @@ from zero, otherwise uses PEESE:</p>
 <div class="section level3">
 <h3 id="endogenous-kink-ek">4. Endogenous Kink (EK)<a class="anchor" aria-label="anchor" href="#endogenous-kink-ek"></a>
 </h3>
-<div class="sourceCode" id="cb8"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_ek</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">4</span>,  <span class="co"># EK</span></span>
@@ -335,7 +372,7 @@ from zero, otherwise uses PEESE:</p>
 </h3>
 <p>Unweighted regression, recommended when spurious precision is a
 concern:</p>
-<div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_noweight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -350,7 +387,7 @@ concern:</p>
 <h3 id="inverse-variance-weights">Inverse-Variance Weights<a class="anchor" aria-label="anchor" href="#inverse-variance-weights"></a>
 </h3>
 <p>Traditional meta-analysis weighting:</p>
-<div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_ivweight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -365,7 +402,7 @@ concern:</p>
 <h3 id="maive-adjusted-weights">MAIVE-Adjusted Weights<a class="anchor" aria-label="anchor" href="#maive-adjusted-weights"></a>
 </h3>
 <p>Uses instrumented standard errors for weighting:</p>
-<div class="sourceCode" id="cb11"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_maiveweight</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -382,7 +419,7 @@ concern:</p>
 </h2>
 <p>Control for study-level correlation when you have multiple estimates
 per study:</p>
-<div class="sourceCode" id="cb12"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># No study-level adjustment</span></span>
 <span><span class="va">result_none</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fl">3</span>, weight <span class="op">=</span> <span class="fl">0</span>, instrument <span class="op">=</span> <span class="fl">1</span>, </span>
 <span>                     studylevel <span class="op">=</span> <span class="fl">0</span>, SE <span class="op">=</span> <span class="fl">0</span>, AR <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -402,7 +439,7 @@ per study:</p>
 <div class="section level2">
 <h2 id="standard-error-options">Standard Error Options<a class="anchor" aria-label="anchor" href="#standard-error-options"></a>
 </h2>
-<div class="sourceCode" id="cb13"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># CR0 (Huber-White)</span></span>
 <span><span class="va">result_cr0</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fl">3</span>, weight <span class="op">=</span> <span class="fl">0</span>, instrument <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                    studylevel <span class="op">=</span> <span class="fl">2</span>, SE <span class="op">=</span> <span class="fl">0</span>, AR <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
@@ -427,7 +464,7 @@ per study:</p>
 <h3 id="levels-default">Levels (Default)<a class="anchor" aria-label="anchor" href="#levels-default"></a>
 </h3>
 <p>Regresses variance (sebs²) on constant and 1/Ns:</p>
-<div class="sourceCode" id="cb14"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_levels</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fl">3</span>, weight <span class="op">=</span> <span class="fl">0</span>, instrument <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                       studylevel <span class="op">=</span> <span class="fl">2</span>, SE <span class="op">=</span> <span class="fl">3</span>, AR <span class="op">=</span> <span class="fl">1</span>, first_stage <span class="op">=</span> <span class="fl">0</span><span class="op">)</span></span>
 <span></span>
@@ -437,7 +474,7 @@ per study:</p>
 <h3 id="log-specification">Log Specification<a class="anchor" aria-label="anchor" href="#log-specification"></a>
 </h3>
 <p>Log-linear regression with smearing retransformation:</p>
-<div class="sourceCode" id="cb15"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_log</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fl">3</span>, weight <span class="op">=</span> <span class="fl">0</span>, instrument <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                    studylevel <span class="op">=</span> <span class="fl">2</span>, SE <span class="op">=</span> <span class="fl">3</span>, AR <span class="op">=</span> <span class="fl">1</span>, first_stage <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span></span>
@@ -452,7 +489,7 @@ aggressive correction for p-hacking and spurious precision by combining
 variance instrumentation with exponential-decay downweighting of studies
 with spurious precision or extreme outliers:</p>
 <p>For technical details and methodology, see the <a href="https://meta-analysis.cz/waive_ottawa.pdf" class="external-link">WAIVE slides</a>.</p>
-<div class="sourceCode" id="cb16"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_waive</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/waive.html">waive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">3</span>,</span>
@@ -526,8 +563,8 @@ bias</li>
 <h2 id="references">References<a class="anchor" aria-label="anchor" href="#references"></a>
 </h2>
 <p>Irsova, Z., Bom, P.R.D., Havranek, T., &amp; Rachinger, H. (2025).
-Spurious precision in meta-analysis of observational research. Nature
-Communications, 16, 8454. <a href="https://doi.org/10.1038/s41467-025-63261-0" class="external-link uri">https://doi.org/10.1038/s41467-025-63261-0</a></p>
+Spurious precision in meta-analysis of observational research.
+<em>Nature Communications</em>, 16, 8454. <a href="https://doi.org/10.1038/s41467-025-63261-0" class="external-link">https://doi.org/10.1038/s41467-025-63261-0</a></p>
 <p>Keane, M., &amp; Neal, T. (2023). Instrument strength in IV
 estimation and inference: A guide to theory and practice. <em>Journal of
 Econometrics</em>, 235(2), 1625-1653.</p>

@@ -7,7 +7,20 @@ Petr Cala, and Heiko Rachinger.
 ## Usage
 
 ``` r
-maive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
+maive(
+  dat,
+  method,
+  weight,
+  instrument,
+  studylevel,
+  SE,
+  AR,
+  first_stage = 0L,
+  estimate = NULL,
+  se = NULL,
+  n = NULL,
+  study_id = NULL
+)
 ```
 
 ## Arguments
@@ -47,6 +60,22 @@ maive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 - first_stage:
 
   First-stage specification for the variance model: 0 levels, 1 log.
+
+- estimate:
+
+  Optional column name to use instead of 'bs'
+
+- se:
+
+  Optional column name to use instead of 'sebs'
+
+- n:
+
+  Optional column name to use instead of 'Ns'
+
+- study_id:
+
+  Optional column name for study identifiers
 
 ## Value
 

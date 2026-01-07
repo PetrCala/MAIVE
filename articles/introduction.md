@@ -73,14 +73,50 @@ library(MAIVE)
 
 The
 [`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-function expects a data frame with the following columns:
+function accepts either the default column names or custom mappings:
 
-| Column | Label    | Description                                                   |
-|--------|----------|---------------------------------------------------------------|
-| 1      | bs       | Primary estimates (effect sizes)                              |
-| 2      | sebs     | Standard errors (must be \> 0)                                |
-| 3      | Ns       | Sample sizes (must be \> 0)                                   |
-| 4      | study_id | Study identification (optional, for clustering/fixed effects) |
+| Column              | Default name | Description                         |
+|---------------------|--------------|-------------------------------------|
+| Estimate            | `bs`         | Primary estimates (effect sizes)    |
+| Std. Error          | `sebs`       | Standard errors (must be \> 0)      |
+| Sample size         | `Ns`         | Sample sizes (must be \> 0)         |
+| Study ID (optional) | `study_id`   | Clustering/fixed effects identifier |
+
+**Custom column names:** You can map your own column names using:
+
+- `estimate` for the estimate column
+- `se` for the standard error column
+- `n` for the sample size column
+- `study_id` for study identifiers (optional)
+
+Example:
+
+``` r
+custom_dat <- data.frame(
+  my_est = c(0.5, 0.6, 0.4, 0.55),
+  my_se  = c(0.2, 0.18, 0.25, 0.22),
+  my_n   = c(80, 120, 95, 110),
+  my_study = c("A", "A", "B", "C")
+)
+
+result <- maive(
+  dat = custom_dat,
+  estimate = "my_est",
+  se = "my_se",
+  n = "my_n",
+  study_id = "my_study",
+  method = 3,
+  weight = 0,
+  instrument = 1,
+  studylevel = 2,
+  SE = 3,
+  AR = 1
+)
+```
+
+Validation rules still apply: required columns must be numeric,
+non-missing, finite, and there must be at least 4 observations after
+removing completely empty rows.
 
 ## Basic Usage
 
@@ -407,8 +443,8 @@ Tests for publication bias using instrumented FAT:
 ## References
 
 Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025). Spurious
-precision in meta-analysis of observational research. Nature
-Communications, 16, 8454. <https://doi.org/10.1038/s41467-025-63261-0>
+precision in meta-analysis of observational research. *Nature
+Communications*, 16, 8454. <https://doi.org/10.1038/s41467-025-63261-0>
 
 Keane, M., & Neal, T. (2023). Instrument strength in IV estimation and
 inference: A guide to theory and practice. *Journal of Econometrics*,
