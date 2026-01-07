@@ -161,9 +161,9 @@ cat("WAIVE Estimate:", result_waive$Estimate, "\n")
 
 If you use MAIVE in your research, please cite:
 
-> Irsova, Z., Bom, P. R. D., Havranek, T., & Rachinger, H. (2024).
-> Spurious Precision in Meta-Analysis of Observational Research.
-> Available at: <https://meta-analysis.cz/maive/>
+> Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025).
+> Spurious precision in meta-analysis of observational research.
+> Nature Communications, 16, 8454. <https://doi.org/10.1038/s41467-025-63261-0>
 
 ## References
 
