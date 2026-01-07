@@ -113,7 +113,7 @@ The `maive()` function expects a data frame with:
 - `AR`: 0=no, 1=yes (default) - compute Anderson-Rubin CI (only for unweighted IV)
 - `first_stage`: 0=levels (default), 1=log - first-stage functional form
 
-**Note**: WAIVE is available as a standalone `waive()` function for robust downweighting of spurious precision and outliers.
+**Note**: WAIVE is available as a standalone `waive()` function that provides a more aggressive correction for p-hacking and spurious precision by downweighting both spuriously precise estimates and outliers.
 
 ### Study-Level Correlation
 

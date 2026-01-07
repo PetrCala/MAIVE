@@ -924,10 +924,12 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
   maive_run_pipeline(opts, prepared, instrumentation, w)
 }
 
-#' WAIVE: Weighted Adjusted Instrumental Variable Estimator
+#' WAIVE: More Aggressive Correction for P-Hacking and Spurious Precision
 #'
-#' WAIVE extends MAIVE by applying exponential-decay weights that downweight
-#' studies with spurious precision or extreme outlier behavior.
+#' WAIVE (Weighted Adjusted Instrumental Variable Estimator) provides a more
+#' aggressive correction for p-hacking and spurious precision by extending MAIVE
+#' with exponential-decay weights that downweight both spuriously precise
+#' estimates and extreme outliers.
 #'
 #' Guided, interactive workflow available at https://easymeta.org.
 #'
@@ -935,9 +937,11 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #' @return List with the same structure as \code{maive()}. See \code{?maive} for details.
 #'
 #' @details
-#' Computes robust downweighting based on first-stage residuals. Studies with
-#' negative residuals (spurious precision) or extreme residuals (outliers) receive
-#' reduced influence in the meta-analytic estimate.
+#' WAIVE combines variance instrumentation (as in MAIVE) with robust downweighting
+#' based on first-stage residuals. Studies with negative residuals (spurious
+#' precision) or extreme residuals (outliers) receive exponentially reduced
+#' influence in the meta-analytic estimate. This makes WAIVE more aggressive than
+#' standard MAIVE at correcting for p-hacking and handling outliers.
 #'
 #' @examples
 #' dat <- data.frame(

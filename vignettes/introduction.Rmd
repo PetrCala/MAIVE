@@ -323,9 +323,9 @@ result_log <- maive(data, method = 3, weight = 0, instrument = 1,
 cat("First-stage (log) F-test:", round(result_log$`F-test`, 3), "\n")
 ```
 
-## WAIVE: Robust Extension
+## WAIVE: More Aggressive Correction
 
-WAIVE (Weighted And Instrumented Variable Estimator) provides additional robustness by downweighting studies with spurious precision or extreme outliers:
+WAIVE (Weighted And Instrumented Variable Estimator) provides a more aggressive correction for p-hacking and spurious precision by combining variance instrumentation with exponential-decay downweighting of studies with spurious precision or extreme outliers:
 
 ```{r waive, eval = FALSE}
 result_waive <- waive(
@@ -343,9 +343,10 @@ cat("WAIVE SE:", round(result_waive$SE, 3), "\n")
 
 WAIVE is particularly useful when:
 
+- You need a more aggressive correction for p-hacking beyond standard MAIVE
 - You suspect extreme outliers in your data
 - Standard errors may be severely manipulated
-- You want automatic downweighting of problematic studies
+- You want automatic downweighting of both spuriously precise estimates and outliers
 
 ## Interpretation Guidelines
 

@@ -100,7 +100,7 @@ The `maive()` function expects a data frame with:
 - No weights (recommended when spurious precision is a concern)
 - Inverse-variance weights
 - MAIVE-adjusted weights (using instrumented SEs)
-- **WAIVE** weights (robust downweighting via `waive()` function)
+- **WAIVE** (more aggressive correction via `waive()` function - downweights spurious precision and outliers)
 
 ### Robust Inference
 
@@ -151,8 +151,8 @@ cat("MAIVE Estimate:", result$Estimate, "\n")
 cat("Standard Estimate:", result$StdEstimate, "\n")
 cat("Hausman Test:", result$Hausman, "\n")
 
-# Use WAIVE for robust estimation with outlier downweighting
-result_waive <- waive(data, method = 3, instrument = 1, 
+# Use WAIVE for more aggressive correction (downweights spurious precision + outliers)
+result_waive <- waive(data, method = 3, instrument = 1,
                       studylevel = 2, SE = 3, AR = 1)
 cat("WAIVE Estimate:", result_waive$Estimate, "\n")
 ```
