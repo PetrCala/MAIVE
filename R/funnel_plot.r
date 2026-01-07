@@ -1,7 +1,14 @@
 #' Funnel plot (base graphics)
 #'
-#' This file provides:\n#' - `get_funnel_plot()` as the **public** high-level entrypoint\n#' - internal helper functions to validate and map `(dat, result)` into plot inputs\n#' - an internal base-graphics engine that draws onto the current device\n#'
-#' The caller is responsible for device management (PNG/SVG/PDF), resolution and (if needed)\n#' base64 encoding.\n#'
+#' This file provides:
+#' - `get_funnel_plot()` as the **public** high-level entrypoint
+#' - internal helper functions to validate and map `(dat, result)` into plot inputs
+#' - an internal base-graphics engine that draws onto the current device
+#'
+#' The caller is responsible for device management (PNG/SVG/PDF), resolution and (if needed)
+#' base64 encoding.
+#'
+#' @name maive_funnel_plot_helpers
 #' @keywords internal
 NULL
 
