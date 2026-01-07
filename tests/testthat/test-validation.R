@@ -119,9 +119,12 @@ test_that("validate_maive_data rejects multiple non-positive standard errors", {
   )
 })
 
-test_that("validate_maive_data allows NA standard errors", {
+test_that("validate_maive_data rejects NA standard errors", {
   dat <- data.frame(bs = 1:4, sebs = c(0.1, NA, 0.3, 0.4), Ns = c(100, 200, 300, 400))
-  expect_silent(MAIVE:::validate_maive_data(dat))
+  expect_error(
+    MAIVE:::validate_maive_data(dat),
+    "must not contain missing values"
+  )
 })
 
 test_that("validate_maive_data rejects non-positive sample sizes", {
@@ -132,9 +135,12 @@ test_that("validate_maive_data rejects non-positive sample sizes", {
   )
 })
 
-test_that("validate_maive_data allows NA sample sizes", {
+test_that("validate_maive_data rejects NA sample sizes", {
   dat <- data.frame(bs = 1:4, sebs = c(0.1, 0.2, 0.3, 0.4), Ns = c(100, NA, 300, 400))
-  expect_silent(MAIVE:::validate_maive_data(dat))
+  expect_error(
+    MAIVE:::validate_maive_data(dat),
+    "must not contain missing values"
+  )
 })
 
 test_that("validate_maive_data checks study_id degrees of freedom", {
@@ -142,7 +148,7 @@ test_that("validate_maive_data checks study_id degrees of freedom", {
     bs = 1:5,
     sebs = rep(0.1, 5),
     Ns = rep(100, 5),
-    study_id = c(1, 1, 2, 3, 4)  # 4 unique studies, need 7+ rows
+    study_id = c(1, 1, 2, 3, 4) # 4 unique studies, need 7+ rows
   )
   expect_error(
     MAIVE:::validate_maive_data(dat),
@@ -155,15 +161,17 @@ test_that("validate_maive_data passes with sufficient study_id rows", {
     bs = 1:8,
     sebs = rep(0.1, 8),
     Ns = rep(100, 8),
-    study_id = c(1, 1, 2, 2, 3, 3, 4, 4)  # 4 unique studies, 8 rows (>= 4+3)
+    study_id = c(1, 1, 2, 2, 3, 3, 4, 4) # 4 unique studies, 8 rows (>= 4+3)
   )
   expect_silent(MAIVE:::validate_maive_data(dat))
 })
 
 test_that("validate_maive_parameters rejects invalid method", {
   expect_error(
-    MAIVE:::validate_maive_parameters(method = 99, weight = 1, instrument = 1,
-                                     studylevel = 0, SE = 0, AR = 0),
+    MAIVE:::validate_maive_parameters(
+      method = 99, weight = 1, instrument = 1,
+      studylevel = 0, SE = 0, AR = 0
+    ),
     "method.*must be.*PET.*PEESE.*EK"
   )
 })
@@ -171,16 +179,20 @@ test_that("validate_maive_parameters rejects invalid method", {
 test_that("validate_maive_parameters accepts valid method values", {
   for (method in 1:4) {
     expect_silent(
-      MAIVE:::validate_maive_parameters(method = method, weight = 1, instrument = 1,
-                                       studylevel = 0, SE = 0, AR = 0)
+      MAIVE:::validate_maive_parameters(
+        method = method, weight = 1, instrument = 1,
+        studylevel = 0, SE = 0, AR = 0
+      )
     )
   }
 })
 
 test_that("validate_maive_parameters rejects invalid weight", {
   expect_error(
-    MAIVE:::validate_maive_parameters(method = 1, weight = 99, instrument = 1,
-                                     studylevel = 0, SE = 0, AR = 0),
+    MAIVE:::validate_maive_parameters(
+      method = 1, weight = 99, instrument = 1,
+      studylevel = 0, SE = 0, AR = 0
+    ),
     "weight.*must be.*equal.*standard.*adjusted.*study"
   )
 })
@@ -188,40 +200,50 @@ test_that("validate_maive_parameters rejects invalid weight", {
 test_that("validate_maive_parameters accepts valid weight values", {
   for (weight in 0:3) {
     expect_silent(
-      MAIVE:::validate_maive_parameters(method = 1, weight = weight, instrument = 1,
-                                       studylevel = 0, SE = 0, AR = 0)
+      MAIVE:::validate_maive_parameters(
+        method = 1, weight = weight, instrument = 1,
+        studylevel = 0, SE = 0, AR = 0
+      )
     )
   }
 })
 
 test_that("validate_maive_parameters rejects invalid instrument", {
   expect_error(
-    MAIVE:::validate_maive_parameters(method = 1, weight = 1, instrument = 2,
-                                     studylevel = 0, SE = 0, AR = 0),
+    MAIVE:::validate_maive_parameters(
+      method = 1, weight = 1, instrument = 2,
+      studylevel = 0, SE = 0, AR = 0
+    ),
     "instrument.*must be 0 or 1"
   )
 })
 
 test_that("validate_maive_parameters rejects invalid studylevel", {
   expect_error(
-    MAIVE:::validate_maive_parameters(method = 1, weight = 1, instrument = 1,
-                                     studylevel = 99, SE = 0, AR = 0),
+    MAIVE:::validate_maive_parameters(
+      method = 1, weight = 1, instrument = 1,
+      studylevel = 99, SE = 0, AR = 0
+    ),
     "studylevel.*must be.*0.*1.*2.*3"
   )
 })
 
 test_that("validate_maive_parameters rejects invalid SE", {
   expect_error(
-    MAIVE:::validate_maive_parameters(method = 1, weight = 1, instrument = 1,
-                                     studylevel = 0, SE = 99, AR = 0),
+    MAIVE:::validate_maive_parameters(
+      method = 1, weight = 1, instrument = 1,
+      studylevel = 0, SE = 99, AR = 0
+    ),
     "SE.*must be.*0.*1.*2.*3"
   )
 })
 
 test_that("validate_maive_parameters rejects invalid AR", {
   expect_error(
-    MAIVE:::validate_maive_parameters(method = 1, weight = 1, instrument = 1,
-                                     studylevel = 0, SE = 0, AR = 2),
+    MAIVE:::validate_maive_parameters(
+      method = 1, weight = 1, instrument = 1,
+      studylevel = 0, SE = 0, AR = 2
+    ),
     "AR.*must be 0 or 1"
   )
 })
@@ -234,8 +256,10 @@ test_that("maive runs with valid data", {
     Ns = round(runif(20, 100, 500))
   )
 
-  result <- maive(dat, method = 3, weight = 1, instrument = 1,
-                  studylevel = 0, SE = 0, AR = 0)
+  result <- maive(dat,
+    method = 3, weight = 1, instrument = 1,
+    studylevel = 0, SE = 0, AR = 0
+  )
   expect_true(!is.null(result))
   expect_true(is.list(result))
 })
@@ -243,8 +267,10 @@ test_that("maive runs with valid data", {
 test_that("maive fails with insufficient data", {
   dat <- data.frame(bs = c(1, 2, 3), sebs = c(0.1, 0.2, 0.3), Ns = c(100, 200, 300))
   expect_error(
-    maive(dat, method = 3, weight = 1, instrument = 1,
-          studylevel = 0, SE = 0, AR = 0),
+    maive(dat,
+      method = 3, weight = 1, instrument = 1,
+      studylevel = 0, SE = 0, AR = 0
+    ),
     "at least 4 observations"
   )
 })
@@ -257,8 +283,10 @@ test_that("waive runs with valid data", {
     Ns = round(runif(20, 100, 500))
   )
 
-  result <- waive(dat, method = 3, weight = 0, instrument = 1,
-                  studylevel = 0, SE = 0, AR = 0)
+  result <- waive(dat,
+    method = 3, weight = 0, instrument = 1,
+    studylevel = 0, SE = 0, AR = 0
+  )
   expect_true(!is.null(result))
   expect_true(is.list(result))
 })
@@ -266,8 +294,10 @@ test_that("waive runs with valid data", {
 test_that("waive fails with insufficient data", {
   dat <- data.frame(bs = c(1, 2), sebs = c(0.1, 0.2), Ns = c(100, 200))
   expect_error(
-    waive(dat, method = 3, weight = 0, instrument = 1,
-          studylevel = 0, SE = 0, AR = 0),
+    waive(dat,
+      method = 3, weight = 0, instrument = 1,
+      studylevel = 0, SE = 0, AR = 0
+    ),
     "at least 4 observations"
   )
 })

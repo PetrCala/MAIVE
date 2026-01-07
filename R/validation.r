@@ -24,24 +24,7 @@ validate_maive_data <- function(dat) {
     )
   }
 
-  # Numeric types (strict validation, no silent coercion)
-  for (col in required_cols) {
-    if (!is.numeric(dat[[col]])) {
-      cli::cli_abort(
-        sprintf("Column '%s' must be numeric. Convert your data before calling MAIVE.", col),
-        call. = FALSE
-      )
-    }
-    non_missing <- !is.na(dat[[col]])
-    if (any(!is.finite(dat[[col]][non_missing]))) {
-      cli::cli_abort(
-        sprintf("Column '%s' must contain finite values only.", col),
-        call. = FALSE
-      )
-    }
-  }
-
-  # Remove empty rows (automatic cleaning) - do this before checking row count
+  # Remove empty rows
   original_nrow <- nrow(dat)
   dat <- dat[rowSums(is.na(dat)) != ncol(dat), ]
   if (nrow(dat) < original_nrow) {
@@ -52,6 +35,28 @@ validate_maive_data <- function(dat) {
         if (original_nrow - nrow(dat) == 1) "" else "s"
       )
     )
+  }
+
+  # Numeric types (strict validation, no silent coercion) after removing empty rows
+  for (col in required_cols) {
+    if (!is.numeric(dat[[col]])) {
+      cli::cli_abort(
+        sprintf("Column '%s' must be numeric. Convert your data before calling MAIVE.", col),
+        call. = FALSE
+      )
+    }
+    if (any(is.na(dat[[col]]))) {
+      cli::cli_abort(
+        sprintf("Column '%s' must not contain missing values.", col),
+        call. = FALSE
+      )
+    }
+    if (any(!is.finite(dat[[col]]))) {
+      cli::cli_abort(
+        sprintf("Column '%s' must contain finite values only.", col),
+        call. = FALSE
+      )
+    }
   }
 
   # Minimum rows after cleaning (scientific requirement for reliable estimation)
