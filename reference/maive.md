@@ -100,6 +100,8 @@ maive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 
 ## Details
 
+Guided, interactive workflow available at https://easymeta.org.
+
 Data `dat` can be imported from an Excel file via:
 `dat <- read_excel("inputdata.xlsx")` or from a csv file via:
 `dat <- read.csv("inputdata.csv")` It should contain:

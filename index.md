@@ -101,9 +101,10 @@ function expects a data frame with:
 - No weights (recommended when spurious precision is a concern)
 - Inverse-variance weights
 - MAIVE-adjusted weights (using instrumented SEs)
-- **WAIVE** weights (robust downweighting via
+- **WAIVE** (more aggressive correction via
   [`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
-  function)
+  function - downweights spurious precision and outliers) -
+  [Details](https://meta-analysis.cz/waive_ottawa.pdf)
 
 ### Robust Inference
 
@@ -132,6 +133,7 @@ The function returns:
   [`?maive`](https://meta-analysis-es.github.io/maive/reference/maive.md)
   and
   [`?waive`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+- **Guided interactive workflow**: <https://easymeta.org>
 - **Development Workflow**: `.github/DEVELOPMENT-WORKFLOW.md`
 - **CRAN Submission**: `.github/CRAN-SUBMISSION.md`
 - **Project Page**: <https://meta-analysis.cz/maive/>
@@ -157,8 +159,8 @@ cat("MAIVE Estimate:", result$Estimate, "\n")
 cat("Standard Estimate:", result$StdEstimate, "\n")
 cat("Hausman Test:", result$Hausman, "\n")
 
-# Use WAIVE for robust estimation with outlier downweighting
-result_waive <- waive(data, method = 3, instrument = 1, 
+# Use WAIVE for more aggressive correction (downweights spurious precision + outliers)
+result_waive <- waive(data, method = 3, instrument = 1,
                       studylevel = 2, SE = 3, AR = 1)
 cat("WAIVE Estimate:", result_waive$Estimate, "\n")
 ```
@@ -167,9 +169,9 @@ cat("WAIVE Estimate:", result_waive$Estimate, "\n")
 
 If you use MAIVE in your research, please cite:
 
-> Irsova, Z., Bom, P. R. D., Havranek, T., & Rachinger, H. (2024).
-> Spurious Precision in Meta-Analysis of Observational Research.
-> Available at: <https://meta-analysis.cz/maive/>
+> Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025).
+> Spurious precision in meta-analysis of observational research. Nature
+> Communications, 16, 8454. <https://doi.org/10.1038/s41467-025-63261-0>
 
 ## References
 

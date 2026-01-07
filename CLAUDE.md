@@ -15,6 +15,29 @@ bias-correction methods.
 **Project Page**: <https://meta-analysis.cz/maive/> **GitHub**:
 meta-analysis-es/maive
 
+## Citation
+
+**CRITICAL**: The Nature Communications (2025) paper is the canonical
+reference for MAIVE and must be cited everywhere users see references to
+the package or method.
+
+**Official Citation**:
+
+``` text
+Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025).
+Spurious precision in meta-analysis of observational research.
+Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0
+```
+
+**When updating references**:
+
+- Always use the Nature Communications (2025) paper as the primary
+  reference
+- Update both `DESCRIPTION` file (Description field) and `inst/CITATION`
+  file
+- Ensure documentation, vignettes, and README files reference this paper
+- Never reference working papers or preprints as the primary citation
+
 ## Development Commands
 
 ### Package Installation
@@ -130,7 +153,9 @@ function expects a data frame with:
 
 **Note**: WAIVE is available as a standalone
 [`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
-function for robust downweighting of spurious precision and outliers.
+function that provides a more aggressive correction for p-hacking and
+spurious precision by downweighting both spuriously precise estimates
+and outliers.
 
 ### Study-Level Correlation
 

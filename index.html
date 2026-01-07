@@ -24,7 +24,7 @@
 
     <a class="navbar-brand me-2" href="index.html">MAIVE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -191,7 +191,8 @@ by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger</p>
 <li>Inverse-variance weights</li>
 <li>MAIVE-adjusted weights (using instrumented SEs)</li>
 <li>
-<strong>WAIVE</strong> weights (robust downweighting via <code><a href="reference/waive.html">waive()</a></code> function)</li>
+<strong>WAIVE</strong> (more aggressive correction via <code><a href="reference/waive.html">waive()</a></code> function - downweights spurious precision and outliers) - <a href="https://meta-analysis.cz/waive_ottawa.pdf" class="external-link">Details</a>
+</li>
 </ul>
 </div>
 <div class="section level3">
@@ -230,6 +231,9 @@ by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger</p>
 <strong>Function Reference</strong>: <code><a href="reference/maive.html">?maive</a></code> and <code><a href="reference/waive.html">?waive</a></code>
 </li>
 <li>
+<strong>Guided interactive workflow</strong>: <a href="https://easymeta.org" class="external-link uri">https://easymeta.org</a>
+</li>
+<li>
 <strong>Development Workflow</strong>: <code>.github/DEVELOPMENT-WORKFLOW.md</code>
 </li>
 <li>
@@ -262,8 +266,8 @@ by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger</p>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Standard Estimate:"</span>, <span class="va">result</span><span class="op">$</span><span class="va">StdEstimate</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Hausman Test:"</span>, <span class="va">result</span><span class="op">$</span><span class="va">Hausman</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span></span>
-<span><span class="co"># Use WAIVE for robust estimation with outlier downweighting</span></span>
-<span><span class="va">result_waive</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/waive.html">waive</a></span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fl">3</span>, instrument <span class="op">=</span> <span class="fl">1</span>, </span>
+<span><span class="co"># Use WAIVE for more aggressive correction (downweights spurious precision + outliers)</span></span>
+<span><span class="va">result_waive</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/waive.html">waive</a></span><span class="op">(</span><span class="va">data</span>, method <span class="op">=</span> <span class="fl">3</span>, instrument <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>                      studylevel <span class="op">=</span> <span class="fl">2</span>, SE <span class="op">=</span> <span class="fl">3</span>, AR <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"WAIVE Estimate:"</span>, <span class="va">result_waive</span><span class="op">$</span><span class="va">Estimate</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
@@ -272,7 +276,7 @@ by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger</p>
 </h2>
 <p>If you use MAIVE in your research, please cite:</p>
 <blockquote>
-<p>Irsova, Z., Bom, P. R. D., Havranek, T., &amp; Rachinger, H. (2024). Spurious Precision in Meta-Analysis of Observational Research. Available at: <a href="https://meta-analysis.cz/maive/" class="external-link uri">https://meta-analysis.cz/maive/</a></p>
+<p>Irsova, Z., Bom, P.R.D., Havranek, T., &amp; Rachinger, H. (2025). Spurious precision in meta-analysis of observational research. Nature Communications, 16, 8454. <a href="https://doi.org/10.1038/s41467-025-63261-0" class="external-link uri">https://doi.org/10.1038/s41467-025-63261-0</a></p>
 </blockquote>
 </div>
 <div class="section level2">

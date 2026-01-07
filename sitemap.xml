@@ -5,6 +5,7 @@
 <url><loc>https://meta-analysis-es.github.io/maive/DEVELOPMENT-WORKFLOW.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/LICENSE-text.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/MAKEFILE-USAGE.html</loc></url>
+<url><loc>https://meta-analysis-es.github.io/maive/articles/funnel-plot.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/articles/index.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/articles/introduction.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/authors.html</loc></url>
@@ -13,8 +14,10 @@
 <url><loc>https://meta-analysis-es.github.io/maive/reference/MAIVE-package.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/reference/compute_AR_CI_optimized.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/reference/compute_AR_CI_slope_only.html</loc></url>
+<url><loc>https://meta-analysis-es.github.io/maive/reference/get_funnel_plot.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/reference/index.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/reference/maive.html</loc></url>
+<url><loc>https://meta-analysis-es.github.io/maive/reference/maive_funnel_plot_helpers.html</loc></url>
 <url><loc>https://meta-analysis-es.github.io/maive/reference/waive.html</loc></url>
 </urlset>
 

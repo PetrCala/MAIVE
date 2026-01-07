@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="index.html">MAIVE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.11</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.1.12</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,10 +45,23 @@
 <p><strong>Project Page</strong>: <a href="https://meta-analysis.cz/maive/" class="external-link uri">https://meta-analysis.cz/maive/</a> <strong>GitHub</strong>: meta-analysis-es/maive</p>
 </div>
 <div class="section level2">
+<h2 id="citation">Citation<a class="anchor" aria-label="anchor" href="#citation"></a></h2>
+<p><strong>CRITICAL</strong>: The Nature Communications (2025) paper is the canonical reference for MAIVE and must be cited everywhere users see references to the package or method.</p>
+<p><strong>Official Citation</strong>:</p>
+<pre class="text"><code>Irsova, Z., Bom, P.R.D., Havranek, T., &amp; Rachinger, H. (2025).
+Spurious precision in meta-analysis of observational research.
+Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0</code></pre>
+<p><strong>When updating references</strong>:</p>
+<ul><li>Always use the Nature Communications (2025) paper as the primary reference</li>
+<li>Update both <code>DESCRIPTION</code> file (Description field) and <code>inst/CITATION</code> file</li>
+<li>Ensure documentation, vignettes, and README files reference this paper</li>
+<li>Never reference working papers or preprints as the primary citation</li>
+</ul></div>
+<div class="section level2">
 <h2 id="development-commands">Development Commands<a class="anchor" aria-label="anchor" href="#development-commands"></a></h2>
 <div class="section level3">
 <h3 id="package-installation">Package Installation<a class="anchor" aria-label="anchor" href="#package-installation"></a></h3>
-<div class="sourceCode" id="cb1"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Install from GitHub</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://remotes.r-lib.org/reference/install_github.html" class="external-link">install_github</a></span><span class="op">(</span><span class="st">"meta-analysis-es/maive"</span><span class="op">)</span></span>
 <span></span>
@@ -60,19 +73,19 @@
 </div>
 <div class="section level3">
 <h3 id="running-tests">Running Tests<a class="anchor" aria-label="anchor" href="#running-tests"></a></h3>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a><span class="co"># Run all tests</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>pkgload<span class="sc">::</span><span class="fu">load_all</span>()</span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_dir</span>(<span class="st">"tests/testthat"</span>)</span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a></span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a><span class="co"># Or from command line</span></span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a>Rscript <span class="sc">-</span>e <span class="st">'pkgload::load_all(); testthat::test_dir("tests/testthat")'</span></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a></span>
-<span id="cb2-8"><a href="#cb2-8" tabindex="-1"></a><span class="co"># Run single test file</span></span>
-<span id="cb2-9"><a href="#cb2-9" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_file</span>(<span class="st">"tests/testthat/test-maive_first_stage.R"</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a><span class="co"># Run all tests</span></span>
+<span id="cb3-2"><a href="#cb3-2" tabindex="-1"></a>pkgload<span class="sc">::</span><span class="fu">load_all</span>()</span>
+<span id="cb3-3"><a href="#cb3-3" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_dir</span>(<span class="st">"tests/testthat"</span>)</span>
+<span id="cb3-4"><a href="#cb3-4" tabindex="-1"></a></span>
+<span id="cb3-5"><a href="#cb3-5" tabindex="-1"></a><span class="co"># Or from command line</span></span>
+<span id="cb3-6"><a href="#cb3-6" tabindex="-1"></a>Rscript <span class="sc">-</span>e <span class="st">'pkgload::load_all(); testthat::test_dir("tests/testthat")'</span></span>
+<span id="cb3-7"><a href="#cb3-7" tabindex="-1"></a></span>
+<span id="cb3-8"><a href="#cb3-8" tabindex="-1"></a><span class="co"># Run single test file</span></span>
+<span id="cb3-9"><a href="#cb3-9" tabindex="-1"></a>testthat<span class="sc">::</span><span class="fu">test_file</span>(<span class="st">"tests/testthat/test-maive_first_stage.R"</span>)</span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="building-documentation">Building Documentation<a class="anchor" aria-label="anchor" href="#building-documentation"></a></h3>
-<div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Generate documentation from roxygen comments</span></span>
 <span><span class="fu">devtools</span><span class="fu">::</span><span class="fu"><a href="https://devtools.r-lib.org/reference/document.html" class="external-link">document</a></span><span class="op">(</span><span class="op">)</span></span>
 <span></span>
@@ -81,10 +94,10 @@
 </div>
 <div class="section level3">
 <h3 id="releasing-to-cran">Releasing to CRAN<a class="anchor" aria-label="anchor" href="#releasing-to-cran"></a></h3>
-<div class="sourceCode" id="cb4"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a><span class="co"># Ensure clean working directory, then bump version (auto-commits, tags, pushes)</span></span>
-<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a><span class="fu">make</span> version-patch   <span class="co"># 0.1.4 -&gt; 0.1.5 (bug fixes)</span></span>
-<span id="cb4-3"><a href="#cb4-3" tabindex="-1"></a><span class="fu">make</span> version-minor   <span class="co"># 0.1.4 -&gt; 0.2.0 (new features)</span></span>
-<span id="cb4-4"><a href="#cb4-4" tabindex="-1"></a><span class="fu">make</span> version-major   <span class="co"># 0.1.4 -&gt; 1.0.0 (breaking changes)</span></span></code></pre></div>
+<div class="sourceCode" id="cb5"><pre class="sourceCode bash"><code class="sourceCode bash"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Ensure clean working directory, then bump version (auto-commits, tags, pushes)</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a><span class="fu">make</span> version-patch   <span class="co"># 0.1.4 -&gt; 0.1.5 (bug fixes)</span></span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="fu">make</span> version-minor   <span class="co"># 0.1.4 -&gt; 0.2.0 (new features)</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">make</span> version-major   <span class="co"># 0.1.4 -&gt; 1.0.0 (breaking changes)</span></span></code></pre></div>
 <p>The tag push triggers the CRAN submission workflow automatically.</p>
 </div>
 </div>
@@ -138,7 +151,7 @@
 <code>AR</code>: 0=no, 1=yes (default) - compute Anderson-Rubin CI (only for unweighted IV)</li>
 <li>
 <code>first_stage</code>: 0=levels (default), 1=log - first-stage functional form</li>
-</ul><p><strong>Note</strong>: WAIVE is available as a standalone <code><a href="reference/waive.html">waive()</a></code> function for robust downweighting of spurious precision and outliers.</p>
+</ul><p><strong>Note</strong>: WAIVE is available as a standalone <code><a href="reference/waive.html">waive()</a></code> function that provides a more aggressive correction for p-hacking and spurious precision by downweighting both spuriously precise estimates and outliers.</p>
 </div>
 <div class="section level3">
 <h3 id="study-level-correlation">Study-Level Correlation<a class="anchor" aria-label="anchor" href="#study-level-correlation"></a></h3>

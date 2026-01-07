@@ -20,16 +20,19 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/meta-analysis-es/maive/blob/main/DESCRIPTION)
+[`inst/CITATION`](https://github.com/meta-analysis-es/maive/blob/main/inst/CITATION)
 
-Irsova Z, Bom P, Havranek T, Rachinger H, Cala P (2025). *MAIVE: Meta
-Analysis Instrumental Variable Estimator*. R package version 0.1.11,
-<https://meta-analysis.cz/maive/>.
+Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025). Spurious
+precision in meta-analysis of observational research. Nature
+Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0
 
-    @Manual{,
-      title = {MAIVE: Meta Analysis Instrumental Variable Estimator},
-      author = {Zuzana Irsova and Pedro R. D. Bom and Tomas Havranek and Heiko Rachinger and Petr Cala},
+    @Article{,
+      title = {Spurious precision in meta-analysis of observational research},
+      author = {Zuzana Irsova and Pedro R. D. Bom and Tomas Havranek and Heiko Rachinger},
+      journal = {Nature Communications},
       year = {2025},
-      note = {R package version 0.1.11},
-      url = {https://meta-analysis.cz/maive/},
+      volume = {16},
+      pages = {8454},
+      doi = {10.1038/s41467-025-63261-0},
+      url = {https://doi.org/10.1038/s41467-025-63261-0},
     }

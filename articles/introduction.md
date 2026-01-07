@@ -10,6 +10,8 @@ in observational research, precision must be estimated and is vulnerable
 to manipulation through practices like p-hacking to achieve statistical
 significance.
 
+For a guided, interactive workflow, visit <https://easymeta.org>.
+
 This manipulation can invalidate:
 
 - Inverse-variance weighting schemes
@@ -338,11 +340,15 @@ result_log <- maive(data, method = 3, weight = 0, instrument = 1,
 cat("First-stage (log) F-test:", round(result_log$`F-test`, 3), "\n")
 ```
 
-## WAIVE: Robust Extension
+## WAIVE: More Aggressive Correction
 
-WAIVE (Weighted And Instrumented Variable Estimator) provides additional
-robustness by downweighting studies with spurious precision or extreme
-outliers:
+WAIVE (Weighted And Instrumented Variable Estimator) provides a more
+aggressive correction for p-hacking and spurious precision by combining
+variance instrumentation with exponential-decay downweighting of studies
+with spurious precision or extreme outliers:
+
+For technical details and methodology, see the [WAIVE
+slides](https://meta-analysis.cz/waive_ottawa.pdf).
 
 ``` r
 result_waive <- waive(
@@ -360,9 +366,12 @@ cat("WAIVE SE:", round(result_waive$SE, 3), "\n")
 
 WAIVE is particularly useful when:
 
+- You need a more aggressive correction for p-hacking beyond standard
+  MAIVE
 - You suspect extreme outliers in your data
 - Standard errors may be severely manipulated
-- You want automatic downweighting of problematic studies
+- You want automatic downweighting of both spuriously precise estimates
+  and outliers
 
 ## Interpretation Guidelines
 
@@ -397,9 +406,9 @@ Tests for publication bias using instrumented FAT:
 
 ## References
 
-Irsova, Z., Bom, P. R. D., Havranek, T., & Rachinger, H. (2024).
-Spurious Precision in Meta-Analysis of Observational Research. Available
-at: <https://meta-analysis.cz/maive/>
+Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025). Spurious
+precision in meta-analysis of observational research. Nature
+Communications, 16, 8454. <https://doi.org/10.1038/s41467-025-63261-0>
 
 Keane, M., & Neal, T. (2023). Instrument strength in IV estimation and
 inference: A guide to theory and practice. *Journal of Econometrics*,
