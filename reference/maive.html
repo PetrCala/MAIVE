@@ -58,7 +58,8 @@ Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.</p>
 <span>  estimate <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  se <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  n <span class="op">=</span> <span class="cn">NULL</span>,</span>
-<span>  study_id <span class="op">=</span> <span class="cn">NULL</span></span>
+<span>  study_id <span class="op">=</span> <span class="cn">NULL</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">123</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
 
@@ -114,6 +115,11 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.</p></dd>
 
 <dt id="arg-study-id">study_id<a class="anchor" aria-label="anchor" href="#arg-study-id"></a></dt>
 <dd><p>Optional column name for study identifiers</p></dd>
+
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>Seed for the wild bootstrap when SE = 3. Use NULL to avoid setting a seed
+(results depend on the current RNG state). Default is 123 for historical reproducibility.</p></dd>
 
 </dl></div>
     <div class="section level2">

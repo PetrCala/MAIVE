@@ -19,7 +19,8 @@ maive(
   estimate = NULL,
   se = NULL,
   n = NULL,
-  study_id = NULL
+  study_id = NULL,
+  seed = 123
 )
 ```
 
@@ -76,6 +77,12 @@ maive(
 - study_id:
 
   Optional column name for study identifiers
+
+- seed:
+
+  Seed for the wild bootstrap when SE = 3. Use NULL to avoid setting a
+  seed (results depend on the current RNG state). Default is 123 for
+  historical reproducibility.
 
 ## Value
 
