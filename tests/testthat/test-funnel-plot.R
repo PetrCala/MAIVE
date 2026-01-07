@@ -24,7 +24,7 @@ test_that("get_funnel_plot draws to a graphics device (smoke test)", {
 })
 
 test_that("get_funnel_plot validates required inputs", {
-  dat_ok <- data.frame(bs = c(0.1, 0.2), sebs = c(0.1, 0.2), Ns = c(10, 20))
+  dat_ok <- data.frame(bs = c(0.1, 0.2, 0.15, 0.12), sebs = c(0.1, 0.2, 0.18, 0.16), Ns = c(10, 20, 15, 18))
   result_ok <- maive(dat_ok,
     method = 1, weight = 0, instrument = 0,
     studylevel = 0, SE = 0, AR = 0, first_stage = 0

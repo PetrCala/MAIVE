@@ -32,7 +32,8 @@ validate_maive_data <- function(dat) {
         call. = FALSE
       )
     }
-    if (any(!is.finite(dat[[col]]))) {
+    non_missing <- !is.na(dat[[col]])
+    if (any(!is.finite(dat[[col]][non_missing]))) {
       cli::cli_abort(
         sprintf("Column '%s' must contain finite values only.", col),
         call. = FALSE
