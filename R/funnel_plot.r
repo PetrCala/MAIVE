@@ -845,18 +845,18 @@ maive_funnel_plot_engine <- function(
 #' Draw a funnel plot (base graphics)
 #'
 #' High-level wrapper that accepts the original input data and the result returned by
-#' \code{maive()} / \code{waive()}, prepares the necessary vectors/metadata, and draws
-#' the funnel plot on the currently active graphics device.
+#' `maive()` / `waive()`, prepares the necessary vectors/metadata, and draws the funnel plot
+#' on the currently active graphics device.
 #'
 #' Device management (PNG/SVG/PDF, resolution, base64 encoding) is intentionally left
 #' to the caller.
 #'
-#' @param dat Data frame containing at least numeric columns \code{bs} (effect sizes)
-#'   and \code{sebs} (standard errors).
-#' @param result Result list returned by \code{maive()} or \code{waive()}.
-#' @param instrument Optional indicator (0/1). If \code{NULL}, inferred from \code{result}.
-#' @param model_type Label used for plot text/legend (e.g., \code{\"MAIVE\"} or \code{\"WAIVE\"}).
-#' @return Invisibly returns \code{NULL}.
+#' @param dat Data frame containing at least numeric columns `bs` (effect sizes)
+#'   and `sebs` (standard errors).
+#' @param result Result list returned by `maive()` or `waive()`.
+#' @param instrument Optional indicator (0/1). If `NULL`, inferred from `result`.
+#' @param model_type Label used for plot text/legend (e.g., `"MAIVE"` or `"WAIVE"`).
+#' @return Invisibly returns `NULL`.
 #' @export
 get_funnel_plot <- function(dat, result, instrument = NULL, model_type = "MAIVE") {
   maive_funnel_validate_result(result)

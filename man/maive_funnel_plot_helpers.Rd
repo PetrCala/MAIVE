@@ -4,13 +4,13 @@
 \alias{maive_funnel_plot_helpers}
 \title{Funnel plot (base graphics)}
 \description{
-This file provides:
-- `get_funnel_plot()` as the **public** high-level entrypoint
-- internal helper functions to validate and map `(dat, result)` into plot inputs
+Components provided:
+- `get_funnel_plot()` as the public high-level entrypoint
+- internal helpers to validate and map `(dat, result)` into plot inputs
 - an internal base-graphics engine that draws onto the current device
 }
 \details{
-The caller is responsible for device management (PNG/SVG/PDF), resolution and (if needed)
-base64 encoding.
+Device management (PNG/SVG/PDF), resolution, and any base64 encoding are the caller's
+responsibility.
 }
 \keyword{internal}

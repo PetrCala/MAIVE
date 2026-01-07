@@ -7,22 +7,22 @@
 get_funnel_plot(dat, result, instrument = NULL, model_type = "MAIVE")
 }
 \arguments{
-\item{dat}{Data frame containing at least numeric columns \code{bs} (effect sizes)
-and \code{sebs} (standard errors).}
+\item{dat}{Data frame containing at least numeric columns `bs` (effect sizes)
+and `sebs` (standard errors).}
 
-\item{result}{Result list returned by \code{maive()} or \code{waive()}.}
+\item{result}{Result list returned by `maive()` or `waive()`.}
 
-\item{instrument}{Optional indicator (0/1). If \code{NULL}, inferred from \code{result}.}
+\item{instrument}{Optional indicator (0/1). If `NULL`, inferred from `result`.}
 
-\item{model_type}{Label used for plot text/legend (e.g., \code{\"MAIVE\"} or \code{\"WAIVE\"}).}
+\item{model_type}{Label used for plot text/legend (e.g., `"MAIVE"` or `"WAIVE"`).}
 }
 \value{
-Invisibly returns \code{NULL}.
+Invisibly returns `NULL`.
 }
 \description{
 High-level wrapper that accepts the original input data and the result returned by
-\code{maive()} / \code{waive()}, prepares the necessary vectors/metadata, and draws
-the funnel plot on the currently active graphics device.
+`maive()` / `waive()`, prepares the necessary vectors/metadata, and draws the funnel plot
+on the currently active graphics device.
 }
 \details{
 Device management (PNG/SVG/PDF, resolution, base64 encoding) is intentionally left
