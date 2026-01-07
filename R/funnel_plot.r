@@ -1,12 +1,12 @@
 #' Funnel plot (base graphics)
 #'
-#' This file provides:
-#' - `get_funnel_plot()` as the **public** high-level entrypoint
-#' - internal helper functions to validate and map `(dat, result)` into plot inputs
+#' Components provided:
+#' - `get_funnel_plot()` as the public high-level entrypoint
+#' - internal helpers to validate and map `(dat, result)` into plot inputs
 #' - an internal base-graphics engine that draws onto the current device
 #'
-#' The caller is responsible for device management (PNG/SVG/PDF), resolution and (if needed)
-#' base64 encoding.
+#' Device management (PNG/SVG/PDF), resolution, and any base64 encoding are the caller's
+#' responsibility.
 #'
 #' @name maive_funnel_plot_helpers
 #' @keywords internal
@@ -14,14 +14,14 @@ NULL
 
 #' Minimum point size scale for WAIVE-adjusted points
 #'
-#' Used when downweighting adjusted funnel points (scaled between this value and 1.0).\n#'
+#' Used when downweighting adjusted funnel points (scaled between this value and 1.0).
 #' @keywords internal
 #' @noRd
 MAIVE_ADJUSTED_POINT_MIN_SCALE <- 0.1
 
 #' Default visual options for the funnel plot
 #'
-#' @return A list of plotting options.\n#'
+#' @return A list of plotting options.
 #' @keywords internal
 #' @noRd
 maive_funnel_plot_opts <- function() {
@@ -56,8 +56,9 @@ maive_funnel_plot_opts <- function() {
 
 #' Compute x-axis padding for funnel plot limits
 #'
-#' Dynamically sets padding so the right side is wider (to reduce legend overlap).\n#'
-#' @param effect Numeric vector of effects.\n#' @return List with `lower` and `upper` x-axis limits.\n#'
+#' Dynamically sets padding so the right side is wider (to reduce legend overlap).
+#' @param effect Numeric vector of effects.
+#' @return List with `lower` and `upper` x-axis limits.
 #' @keywords internal
 #' @noRd
 maive_funnel_padding <- function(effect) {
@@ -91,7 +92,9 @@ maive_funnel_padding <- function(effect) {
 
 #' Format axis labels with adaptive decimals
 #'
-#' @param ticks Numeric vector of tick positions.\n#' @param digits Maximum decimals.\n#' @return Character vector of tick labels.\n#'
+#' @param ticks Numeric vector of tick positions.
+#' @param digits Maximum decimals.
+#' @return Character vector of tick labels.
 #' @keywords internal
 #' @noRd
 maive_funnel_format_axis_labels <- function(ticks, digits = 3) {
@@ -122,7 +125,8 @@ maive_funnel_format_axis_labels <- function(ticks, digits = 3) {
 
 #' First non-NULL value helper
 #'
-#' @param ... Values to scan.\n#' @return First non-NULL value, or NULL.\n#'
+#' @param ... Values to scan.
+#' @return First non-NULL value, or NULL.
 #' @keywords internal
 #' @noRd
 maive_funnel_first_non_null <- function(...) {
@@ -137,8 +141,11 @@ maive_funnel_first_non_null <- function(...) {
 
 #' Normalize slope metadata structure for plotting
 #'
-#' Accepts either a structured slope list or legacy pieces (`slope_coef`, `is_quadratic_fit`).\n#'
-#' @param primary Structured slope metadata list.\n#' @param fallback_coef Legacy slope coefficient.\n#' @param fallback_summary Legacy slope summary (logical or list).\n#' @return Normalized slope metadata list.\n#'
+#' Accepts either a structured slope list or legacy pieces (`slope_coef`, `is_quadratic_fit`).
+#' @param primary Structured slope metadata list.
+#' @param fallback_coef Legacy slope coefficient.
+#' @param fallback_summary Legacy slope summary (logical or list).
+#' @return Normalized slope metadata list.
 #' @keywords internal
 #' @noRd
 maive_funnel_normalize_slope <- function(primary, fallback_coef, fallback_summary) {
@@ -191,7 +198,8 @@ maive_funnel_normalize_slope <- function(primary, fallback_coef, fallback_summar
 
 #' Validate and extract core effect/SE vectors from `dat`
 #'
-#' @param dat Data frame containing numeric columns `bs` and `sebs`.\n#' @return List with `effect` and `se` vectors.\n#'
+#' @param dat Data frame containing numeric columns `bs` and `sebs`.
+#' @return List with `effect` and `se` vectors.
 #' @keywords internal
 #' @noRd
 maive_funnel_validate_dat <- function(dat) {
@@ -227,7 +235,8 @@ maive_funnel_validate_dat <- function(dat) {
 
 #' Validate MAIVE result object contains required fields
 #'
-#' @param result List returned by `maive()` or `waive()`.\n#' @return Invisibly TRUE.\n#'
+#' @param result List returned by `maive()` or `waive()`.
+#' @return Invisibly TRUE.
 #' @keywords internal
 #' @noRd
 maive_funnel_validate_result <- function(result) {
@@ -245,7 +254,8 @@ maive_funnel_validate_result <- function(result) {
 
 #' Normalize model type label
 #'
-#' @param model_type Character label.\n#' @return Upper-cased model label (defaults to \"MAIVE\").\n#'
+#' @param model_type Character label.
+#' @return Upper-cased model label (defaults to "MAIVE").
 #' @keywords internal
 #' @noRd
 maive_funnel_normalize_model_type <- function(model_type) {
@@ -257,7 +267,9 @@ maive_funnel_normalize_model_type <- function(model_type) {
 
 #' Normalize instrumentation flag
 #'
-#' @param instrument Optional indicator (0/1).\n#' @param result MAIVE result (used for inference when `instrument` is NULL).\n#' @return Integer 0 or 1.\n#'
+#' @param instrument Optional indicator (0/1).
+#' @param result MAIVE result (used for inference when `instrument` is NULL).
+#' @return Integer 0 or 1.
 #' @keywords internal
 #' @noRd
 maive_funnel_normalize_instrument <- function(instrument, result) {
@@ -286,7 +298,10 @@ maive_funnel_normalize_instrument <- function(instrument, result) {
 
 #' Extract adjusted standard errors for plotting
 #'
-#' @param result MAIVE result.\n#' @param instrument Integer 0/1.\n#' @param n_points Expected vector length.\n#' @return Numeric vector or NULL.\n#'
+#' @param result MAIVE result.
+#' @param instrument Integer 0/1.
+#' @param n_points Expected vector length.
+#' @return Numeric vector or NULL.
 #' @keywords internal
 #' @noRd
 maive_funnel_extract_adjusted_se <- function(result, instrument, n_points) {
@@ -308,7 +323,11 @@ maive_funnel_extract_adjusted_se <- function(result, instrument, n_points) {
 
 #' Extract WAIVE point weights for adjusted-point sizing
 #'
-#' @param result MAIVE/WAIVE result.\n#' @param model_type Normalized model type.\n#' @param instrument Integer 0/1.\n#' @param n_points Expected vector length.\n#' @return Numeric vector or NULL.\n#'
+#' @param result MAIVE/WAIVE result.
+#' @param model_type Normalized model type.
+#' @param instrument Integer 0/1.
+#' @param n_points Expected vector length.
+#' @return Numeric vector or NULL.
 #' @keywords internal
 #' @noRd
 maive_funnel_extract_adjusted_weights <- function(result, model_type, instrument, n_points) {
@@ -330,7 +349,8 @@ maive_funnel_extract_adjusted_weights <- function(result, model_type, instrument
 
 #' Extract slope metadata from MAIVE result
 #'
-#' @param result MAIVE result.\n#' @return Slope metadata list compatible with the plot engine.\n#'
+#' @param result MAIVE result.
+#' @return Slope metadata list compatible with the plot engine.
 #' @keywords internal
 #' @noRd
 maive_funnel_extract_slope <- function(result) {
