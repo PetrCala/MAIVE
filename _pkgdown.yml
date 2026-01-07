@@ -48,6 +48,7 @@ reference:
   contents:
   - maive
   - waive
+  - get_funnel_plot
 
 - title: Internal Functions
   desc: >
