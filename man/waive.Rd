@@ -37,6 +37,8 @@ estimates and extreme outliers.
 \details{
 Guided, interactive workflow available at https://easymeta.org.
 
+For technical details on WAIVE methodology, see: \url{https://meta-analysis.cz/waive_ottawa.pdf}
+
 
 WAIVE combines variance instrumentation (as in MAIVE) with robust downweighting
 based on first-stage residuals. Studies with negative residuals (spurious

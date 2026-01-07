@@ -105,8 +105,11 @@ preview-vignette:
 	VIGNETTE_NAME="$$base_name" Rscript -e "v <- Sys.getenv('VIGNETTE_NAME'); rmarkdown::render(sprintf('vignettes/%s.Rmd', v), output_dir = 'vignettes'); browseURL(sprintf('file://%s', normalizePath(sprintf('vignettes/%s.html', v))))"
 
 # absorb extra args after preview-vignette so make does not treat them as targets
+# This pattern only triggers if preview-vignette is in MAKECMDGOALS
+ifneq ($(filter preview-vignette,$(MAKECMDGOALS)),)
 $(filter-out preview-vignette,$(MAKECMDGOALS)):
 	@:
+endif
 
 update-docs: document site
 	@echo "[OK] All documentation updated"
