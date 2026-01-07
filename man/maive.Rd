@@ -16,7 +16,8 @@ maive(
   estimate = NULL,
   se = NULL,
   n = NULL,
-  study_id = NULL
+  study_id = NULL,
+  seed = 123
 )
 }
 \arguments{
@@ -45,6 +46,9 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
 \item{n}{Optional column name to use instead of 'Ns'}
 
 \item{study_id}{Optional column name for study identifiers}
+
+\item{seed}{Seed for the wild bootstrap when SE = 3. Use NULL to avoid setting a seed
+(results depend on the current RNG state). Default is 123 for historical reproducibility.}
 }
 \value{
 \itemize{

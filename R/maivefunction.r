@@ -731,8 +731,23 @@ maive_analyze <- function(dat,
                           se = NULL,
                           n = NULL,
                           study_id = NULL,
+                          seed = 123,
                           weight_mode = c("maive", "waive")) {
   weight_mode <- match.arg(weight_mode)
+  normalize_seed <- function(seed) {
+    if (is.null(seed)) {
+      return(NA_integer_)
+    }
+    if (length(seed) != 1L || is.na(seed) || !is.numeric(seed) || !is.finite(seed)) {
+      cli::cli_abort("Parameter 'seed' must be a single finite numeric value or NULL.", call. = FALSE)
+    }
+    as.integer(seed)
+  }
+
+  old_bootstrap_seed <- getOption("MAIVE.bootstrap.seed", NULL)
+  on.exit(options(MAIVE.bootstrap.seed = old_bootstrap_seed), add = TRUE)
+  options(MAIVE.bootstrap.seed = normalize_seed(seed))
+
   opts <- normalize_maive_options(
     dat = dat,
     method = method,
@@ -794,6 +809,8 @@ maive_analyze <- function(dat,
 #' @param se Optional column name to use instead of 'sebs'
 #' @param n Optional column name to use instead of 'Ns'
 #' @param study_id Optional column name for study identifiers
+#' @param seed Seed for the wild bootstrap when SE = 3. Use NULL to avoid setting a seed
+#'   (results depend on the current RNG state). Default is 123 for historical reproducibility.
 #'
 #' @details Data \code{dat} can be imported from an Excel file via:
 #' \code{dat <- read_excel("inputdata.xlsx")} or from a csv file via: \code{dat <- read.csv("inputdata.csv")}
@@ -853,7 +870,8 @@ maive <- function(dat,
                   estimate = NULL,
                   se = NULL,
                   n = NULL,
-                  study_id = NULL) {
+                  study_id = NULL,
+                  seed = 123) {
   maive_analyze(
     dat = dat,
     method = method,
@@ -867,6 +885,7 @@ maive <- function(dat,
     se = se,
     n = n,
     study_id = study_id,
+    seed = seed,
     weight_mode = "maive"
   )
 }
@@ -916,7 +935,8 @@ waive <- function(dat,
                   estimate = NULL,
                   se = NULL,
                   n = NULL,
-                  study_id = NULL) {
+                  study_id = NULL,
+                  seed = 123) {
   maive_analyze(
     dat = dat,
     method = method,
@@ -930,6 +950,7 @@ waive <- function(dat,
     se = se,
     n = n,
     study_id = study_id,
+    seed = seed,
     weight_mode = "waive"
   )
 }
