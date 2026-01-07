@@ -1,5 +1,15 @@
 # Changelog
 
+## MAIVE 0.2.2
+
+*Released: 2026-01-07*
+
+### Internal
+
+- Update the ar calculation to build the weighted residual correctly
+
+------------------------------------------------------------------------
+
 ## MAIVE 0.2.1
 
 *Released: 2026-01-07*
