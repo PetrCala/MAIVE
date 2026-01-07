@@ -8,7 +8,11 @@
 #' @return Cleaned data frame (invisible) with empty rows removed
 #' @keywords internal
 #' @noRd
-validate_maive_data <- function(dat) {
+validate_maive_data <- function(dat,
+                                estimate = NULL,
+                                se = NULL,
+                                n = NULL,
+                                study_id = NULL) {
   # Data frame type check
   if (!is.data.frame(dat)) {
     cli::cli_abort("Input 'dat' must be a data frame.", call. = FALSE)
@@ -124,6 +128,95 @@ validate_maive_data <- function(dat) {
   invisible(dat)
 }
 
+#' Resolve column mappings for MAIVE inputs
+#'
+#' Allows users to specify custom column names for estimate, SE, Ns, and study_id.
+#' Falls back to defaults (bs, sebs, Ns, study_id positional) when mappings are
+#' not provided. Performs presence, numeric, non-missing, and finite validation.
+#'
+#' @keywords internal
+#' @noRd
+resolve_maive_columns <- function(dat, estimate = NULL, se = NULL, n = NULL, study_id = NULL) { # nolint: object_name_linter.
+  col_for <- function(arg, default_name) {
+    if (is.null(arg) || is.na(arg) || identical(arg, "")) {
+      return(default_name)
+    }
+    as.character(arg)
+  }
+
+  est_col <- col_for(estimate, "bs")
+  se_col <- col_for(se, "sebs")
+  n_col <- col_for(n, "Ns")
+
+  required <- c(est_col, se_col, n_col)
+  missing <- setdiff(required, names(dat))
+  if (length(missing) > 0) {
+    cli::cli_abort(
+      sprintf("Missing required columns: %s", paste(missing, collapse = ", ")),
+      call. = FALSE
+    )
+  }
+
+  check_vector <- function(vec, name) {
+    if (!is.numeric(vec)) {
+      cli::cli_abort(sprintf("Column '%s' must be numeric.", name), call. = FALSE)
+    }
+    if (any(is.na(vec))) {
+      cli::cli_abort(sprintf("Column '%s' must not contain missing values.", name), call. = FALSE)
+    }
+    if (any(!is.finite(vec))) {
+      cli::cli_abort(sprintf("Column '%s' must contain finite values only.", name), call. = FALSE)
+    }
+  }
+
+  bs <- dat[[est_col]]
+  sebs <- dat[[se_col]]
+  Ns <- dat[[n_col]]
+
+  check_vector(bs, est_col)
+  check_vector(sebs, se_col)
+  check_vector(Ns, n_col)
+
+  # Study ID handling: use mapped name if provided; otherwise fallback to positional 4th col if present
+  if (!is.null(study_id) && !identical(study_id, "")) {
+    study_col <- as.character(study_id)
+    if (!study_col %in% names(dat)) {
+      cli::cli_abort(sprintf("Column '%s' (study_id) is missing.", study_col), call. = FALSE)
+    }
+    studyid <- dat[[study_col]]
+  } else if (ncol(dat) >= 4) {
+    studyid <- dat[[4]]
+  } else {
+    studyid <- NULL
+  }
+
+  # Validate study_id if present
+  if (!is.null(studyid)) {
+    if (any(is.na(studyid))) {
+      cli::cli_abort("Column 'study_id' must not contain missing values.", call. = FALSE)
+    }
+    if (!is.atomic(studyid)) {
+      cli::cli_abort("Column 'study_id' must be a vector.", call. = FALSE)
+    }
+    if (length(studyid) != length(bs)) {
+      cli::cli_abort("Column 'study_id' must have the same length as the estimates.", call. = FALSE)
+    }
+  }
+
+  # Rebuild a clean data.frame with standardized names for downstream use
+  cleaned <- data.frame(
+    bs = bs,
+    sebs = sebs,
+    Ns = Ns,
+    stringsAsFactors = FALSE
+  )
+  if (!is.null(studyid)) {
+    cleaned$study_id <- studyid
+  }
+
+  list(dat = cleaned)
+}
+
 #' Validate MAIVE Parameter Values
 #'
 #' Internal function that validates parameter values are within expected ranges.
@@ -180,7 +273,11 @@ validate_maive_parameters <- function(method, weight, instrument, studylevel, SE
 #' AR/instrument guardrails, and returns a normalized option list for downstream
 #' pipeline use. Relies on existing data/parameter validators.
 #'
-#' @param dat Data frame with required columns: bs, sebs, Ns (study_id optional)
+#' @param dat Data frame with required columns: bs, sebs, Ns (or mapped), study_id optional
+#' @param estimate Optional column name to use instead of 'bs'
+#' @param se Optional column name to use instead of 'sebs'
+#' @param n Optional column name to use instead of 'Ns'
+#' @param study_id Optional column name for study identifiers (defaults to 4th col if absent)
 #' @param method Method choice (1=PET, 2=PEESE, 3=PET-PEESE, 4=EK)
 #' @param weight Weighting scheme (0=equal, 1=standard, 2=adjusted, 3=study)
 #' @param instrument Variance instrumentation (0=disabled, 1=enabled)
@@ -191,7 +288,18 @@ validate_maive_parameters <- function(method, weight, instrument, studylevel, SE
 #' @return List of normalized options and derived metadata
 #' @keywords internal
 #' @noRd
-normalize_maive_options <- function(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L) {
+normalize_maive_options <- function(dat,
+                                    method,
+                                    weight,
+                                    instrument,
+                                    studylevel,
+                                    SE,
+                                    AR,
+                                    first_stage = 0L,
+                                    estimate = NULL,
+                                    se = NULL,
+                                    n = NULL,
+                                    study_id = NULL) {
   dat <- as.data.frame(dat)
   dat <- validate_maive_data(dat)
 
@@ -255,6 +363,9 @@ normalize_maive_options <- function(dat, method, weight, instrument, studylevel,
   first_stage_type <- c("levels", "log")[first_stage + 1L]
 
   validate_maive_parameters(method, weight, instrument, studylevel, SE, AR)
+
+  resolved <- resolve_maive_columns(dat, estimate = estimate, se = se, n = n, study_id = study_id)
+  dat <- resolved$dat
 
   list(
     dat = dat,

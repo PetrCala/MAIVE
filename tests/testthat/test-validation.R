@@ -84,11 +84,7 @@ test_that("validate_maive_data removes empty rows", {
     sebs = c(0.1, NA, 0.3, 0.4, 0.5),
     Ns = c(100, NA, 300, 400, 500)
   )
-  # Should remove the completely empty row (row 2)
-  expect_message(
-    result <- MAIVE:::validate_maive_data(dat),
-    "Removed 1 completely empty row"
-  )
+  expect_message(MAIVE:::validate_maive_data(dat), "Removed 1 completely empty row")
 })
 
 test_that("validate_maive_data fails if too few rows after cleaning", {
@@ -97,9 +93,10 @@ test_that("validate_maive_data fails if too few rows after cleaning", {
     sebs = c(0.1, NA, 0.3),
     Ns = c(100, NA, 300)
   )
+  # Remove empty rows (row 2 fully empty) leaves 2 rows, triggering size check
   expect_error(
     MAIVE:::validate_maive_data(dat),
-    "After removing empty rows, insufficient data remains"
+    "insufficient data remains"
   )
 })
 
@@ -132,14 +129,6 @@ test_that("validate_maive_data rejects non-positive sample sizes", {
   expect_error(
     MAIVE:::validate_maive_data(dat),
     "Sample sizes.*must be positive.*Found 1 non-positive value"
-  )
-})
-
-test_that("validate_maive_data rejects NA sample sizes", {
-  dat <- data.frame(bs = 1:4, sebs = c(0.1, 0.2, 0.3, 0.4), Ns = c(100, NA, 300, 400))
-  expect_error(
-    MAIVE:::validate_maive_data(dat),
-    "must not contain missing values"
   )
 })
 

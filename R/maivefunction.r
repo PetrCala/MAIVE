@@ -719,9 +719,34 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
 }
 
 #' @keywords internal
-maive_analyze <- function(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L, weight_mode = c("maive", "waive")) {
+maive_analyze <- function(dat,
+                          method,
+                          weight,
+                          instrument,
+                          studylevel,
+                          SE,
+                          AR,
+                          first_stage = 0L,
+                          estimate = NULL,
+                          se = NULL,
+                          n = NULL,
+                          study_id = NULL,
+                          weight_mode = c("maive", "waive")) {
   weight_mode <- match.arg(weight_mode)
-  opts <- normalize_maive_options(dat, method, weight, instrument, studylevel, SE, AR, first_stage) # nolint: object_usage_linter.
+  opts <- normalize_maive_options(
+    dat = dat,
+    method = method,
+    weight = weight,
+    instrument = instrument,
+    studylevel = studylevel,
+    SE = SE,
+    AR = AR,
+    first_stage = first_stage,
+    estimate = estimate,
+    se = se,
+    n = n,
+    study_id = study_id
+  ) # nolint: object_usage_linter.
   prepared <- maive_prepare_data(opts$dat, opts$studylevel)
   instrumentation <- maive_compute_variance_instrumentation(
     prepared$sebs,
@@ -765,6 +790,10 @@ maive_analyze <- function(dat, method, weight, instrument, studylevel, SE, AR, f
 #' @param AR Anderson Rubin corrected CI for weak instruments (available for unweighted and MAIVE-adjusted weight versions of
 #' PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.
 #' @param first_stage First-stage specification for the variance model: 0 levels, 1 log.
+#' @param estimate Optional column name to use instead of 'bs'
+#' @param se Optional column name to use instead of 'sebs'
+#' @param n Optional column name to use instead of 'Ns'
+#' @param study_id Optional column name for study identifiers
 #'
 #' @details Data \code{dat} can be imported from an Excel file via:
 #' \code{dat <- read_excel("inputdata.xlsx")} or from a csv file via: \code{dat <- read.csv("inputdata.csv")}
@@ -813,8 +842,33 @@ maive_analyze <- function(dat, method, weight, instrument, studylevel, SE, AR, f
 #' )
 #'
 #' @export
-maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L) {
-  maive_analyze(dat, method, weight, instrument, studylevel, SE, AR, first_stage, weight_mode = "maive")
+maive <- function(dat,
+                  method,
+                  weight,
+                  instrument,
+                  studylevel,
+                  SE,
+                  AR,
+                  first_stage = 0L,
+                  estimate = NULL,
+                  se = NULL,
+                  n = NULL,
+                  study_id = NULL) {
+  maive_analyze(
+    dat = dat,
+    method = method,
+    weight = weight,
+    instrument = instrument,
+    studylevel = studylevel,
+    SE = SE,
+    AR = AR,
+    first_stage = first_stage,
+    estimate = estimate,
+    se = se,
+    n = n,
+    study_id = study_id,
+    weight_mode = "maive"
+  )
 }
 
 #' WAIVE: More Aggressive Correction for P-Hacking and Spurious Precision
@@ -851,6 +905,31 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #' )
 #'
 #' @export
-waive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L) {
-  maive_analyze(dat, method, weight, instrument, studylevel, SE, AR, first_stage, weight_mode = "waive")
+waive <- function(dat,
+                  method,
+                  weight,
+                  instrument,
+                  studylevel,
+                  SE,
+                  AR,
+                  first_stage = 0L,
+                  estimate = NULL,
+                  se = NULL,
+                  n = NULL,
+                  study_id = NULL) {
+  maive_analyze(
+    dat = dat,
+    method = method,
+    weight = weight,
+    instrument = instrument,
+    studylevel = studylevel,
+    SE = SE,
+    AR = AR,
+    first_stage = first_stage,
+    estimate = estimate,
+    se = se,
+    n = n,
+    study_id = study_id,
+    weight_mode = "waive"
+  )
 }
