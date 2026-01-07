@@ -1,3 +1,19 @@
+# MAIVE 0.1.12
+
+*Released: 2026-01-07*
+
+## Bug Fixes
+
+* Failing tests with a gt operator
+
+
+## Internal
+
+* Add an explicit function for generating a funnel plot
+
+---
+
+
 # MAIVE 0.1.11
 
 *Released: 2025-12-18*
