@@ -933,6 +933,8 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #'
 #' Guided, interactive workflow available at https://easymeta.org.
 #'
+#' For technical details on WAIVE methodology, see: \url{https://meta-analysis.cz/waive_ottawa.pdf}
+#'
 #' @inheritParams maive
 #' @return List with the same structure as \code{maive()}. See \code{?maive} for details.
 #'

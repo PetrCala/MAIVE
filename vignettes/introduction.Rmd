@@ -327,6 +327,8 @@ cat("First-stage (log) F-test:", round(result_log$`F-test`, 3), "\n")
 
 WAIVE (Weighted And Instrumented Variable Estimator) provides a more aggressive correction for p-hacking and spurious precision by combining variance instrumentation with exponential-decay downweighting of studies with spurious precision or extreme outliers:
 
+For technical details and methodology, see the [WAIVE slides](https://meta-analysis.cz/waive_ottawa.pdf).
+
 ```{r waive, eval = FALSE}
 result_waive <- waive(
   dat = data,

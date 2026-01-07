@@ -100,7 +100,7 @@ The `maive()` function expects a data frame with:
 - No weights (recommended when spurious precision is a concern)
 - Inverse-variance weights
 - MAIVE-adjusted weights (using instrumented SEs)
-- **WAIVE** (more aggressive correction via `waive()` function - downweights spurious precision and outliers)
+- **WAIVE** (more aggressive correction via `waive()` function - downweights spurious precision and outliers) - [Details](https://meta-analysis.cz/waive_ottawa.pdf)
 
 ### Robust Inference
 
