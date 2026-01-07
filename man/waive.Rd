@@ -4,7 +4,20 @@
 \alias{waive}
 \title{WAIVE: More Aggressive Correction for P-Hacking and Spurious Precision}
 \usage{
-waive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
+waive(
+  dat,
+  method,
+  weight,
+  instrument,
+  studylevel,
+  SE,
+  AR,
+  first_stage = 0L,
+  estimate = NULL,
+  se = NULL,
+  n = NULL,
+  study_id = NULL
+)
 }
 \arguments{
 \item{dat}{Data frame with columns bs, sebs, Ns, study_id (optional).}
@@ -24,6 +37,14 @@ waive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
 
 \item{first_stage}{First-stage specification for the variance model: 0 levels, 1 log.}
+
+\item{estimate}{Optional column name to use instead of 'bs'}
+
+\item{se}{Optional column name to use instead of 'sebs'}
+
+\item{n}{Optional column name to use instead of 'Ns'}
+
+\item{study_id}{Optional column name for study identifiers}
 }
 \value{
 List with the same structure as \code{maive()}. See \code{?maive} for details.

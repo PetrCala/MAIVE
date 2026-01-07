@@ -4,7 +4,20 @@
 \alias{maive}
 \title{R code for MAIVE}
 \usage{
-maive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
+maive(
+  dat,
+  method,
+  weight,
+  instrument,
+  studylevel,
+  SE,
+  AR,
+  first_stage = 0L,
+  estimate = NULL,
+  se = NULL,
+  n = NULL,
+  study_id = NULL
+)
 }
 \arguments{
 \item{dat}{Data frame with columns bs, sebs, Ns, study_id (optional).}
@@ -24,6 +37,14 @@ maive(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L)
 PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
 
 \item{first_stage}{First-stage specification for the variance model: 0 levels, 1 log.}
+
+\item{estimate}{Optional column name to use instead of 'bs'}
+
+\item{se}{Optional column name to use instead of 'sebs'}
+
+\item{n}{Optional column name to use instead of 'Ns'}
+
+\item{study_id}{Optional column name for study identifiers}
 }
 \value{
 \itemize{
@@ -67,23 +88,6 @@ It should contain:
 }
 Default option for MAIVE: MAIVE-PET-PEESE, unweighted, instrumented, cluster SE, wild bootstrap, AR.
 }
-\section{Data Requirements}{
-
-\code{dat} must be a data frame with at least 4 observations and the following columns:
-\itemize{
-  \item \code{bs}: Effect size estimates (numeric)
-  \item \code{sebs}: Standard errors (numeric, positive values)
-  \item \code{Ns}: Sample sizes (numeric, positive values)
-  \item \code{study_id}: (optional) Study identifiers for clustering
-}
-
-When \code{study_id} is provided, the number of observations must be at least
-the number of unique studies plus 3 (for degrees of freedom).
-
-As of version 0.2.0, these requirements are validated automatically and will
-trigger clear error messages if violated.
-}
-
 \examples{
 dat <- data.frame(
   bs = c(0.5, 0.45, 0.55, 0.6),
