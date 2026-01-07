@@ -84,7 +84,7 @@ The tag push triggers the CRAN submission workflow automatically.
 
 The main exported functions are `maive()` and `waive()` (defined in R/maivefunction.r), which perform meta-analysis using instrumental variable estimation. Both functions share a common pipeline via `maive_run_pipeline()`:
 
-1. **Input Validation** (`maive_validate_inputs`): Validates and normalizes all input parameters
+1. **Input Validation** (`normalize_maive_options`): Validates and normalizes all input parameters
 2. **Data Preparation** (`maive_prepare_data`): Prepares study-level data, handles clustering and fixed effects through dummy matrix centering
 3. **Variance Instrumentation** (`maive_compute_variance_instrumentation`): First-stage regression of variances on inverse sample sizes, supporting both levels and log transformations
 4. **Weighting** (`maive_compute_weights`): Computes weights based on weighting scheme (none, inverse-variance, MAIVE-adjusted, or WAIVE)
