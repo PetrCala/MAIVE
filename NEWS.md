@@ -1,3 +1,14 @@
+# MAIVE 0.2.1
+
+*Released: 2026-01-07*
+
+## New Features
+
+* Add the option to set an RNG seed at the highest function level
+
+---
+
+
 # MAIVE 0.2.0
 
 *Released: 2026-01-07*
