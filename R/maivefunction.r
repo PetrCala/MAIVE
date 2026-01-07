@@ -854,6 +854,8 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
 #' R package for MAIVE: "Spurious Precision in Meta-Analysis of Observational Research" by
 #' Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.
 #'
+#' Guided, interactive workflow available at https://easymeta.org.
+#'
 #' @param dat Data frame with columns bs, sebs, Ns, study_id (optional).
 #' @param method 1 FAT-PET, 2 PEESE, 3 PET-PEESE, 4 EK.
 #' @param weight 0 no weights, 1 standard weights, 2 MAIVE adjusted weights, 3 study weights.
@@ -927,6 +929,8 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #' WAIVE extends MAIVE by applying exponential-decay weights that downweight
 #' studies with spurious precision or extreme outlier behavior.
 #'
+#' Guided, interactive workflow available at https://easymeta.org.
+#'
 #' @inheritParams maive
 #' @return List with the same structure as \code{maive()}. See \code{?maive} for details.
 #'
@@ -947,7 +951,6 @@ maive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_sta
 #'   studylevel = 0, SE = 0, AR = 0, first_stage = 0
 #' )
 #'
-#' @seealso \code{\link{maive}}
 #' @export
 waive <- function(dat, method, weight, instrument, studylevel, SE, AR, first_stage = 0L) {
   opts <- maive_validate_inputs(dat, method, weight, instrument, studylevel, SE, AR, first_stage)

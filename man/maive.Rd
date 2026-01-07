@@ -54,6 +54,8 @@ R package for MAIVE: "Spurious Precision in Meta-Analysis of Observational Resea
 Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.
 }
 \details{
+Guided, interactive workflow available at https://easymeta.org.
+
 Data \code{dat} can be imported from an Excel file via:
 \code{dat <- read_excel("inputdata.xlsx")} or from a csv file via: \code{dat <- read.csv("inputdata.csv")}
 It should contain:

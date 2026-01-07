@@ -51,5 +51,5 @@ result <- waive(dat,
 
 }
 \seealso{
-\code{\link{maive}}
+maive; guided interactive workflow: https://easymeta.org
 }

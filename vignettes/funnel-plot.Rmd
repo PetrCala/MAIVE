@@ -18,6 +18,8 @@ knitr::opts_chunk$set(
 
 `get_funnel_plot()` draws a base-graphics funnel plot using the original meta-analysis inputs and a fitted MAIVE/WAIVE result. Device management (e.g., `png()`, `svg()`, `pdf()`, base64 encoding) is left to you so you can embed the graphic wherever you need.
 
+For a guided, interactive workflow, visit <https://easymeta.org>.
+
 What it shows:
 
 - Confidence-region shading (90/95/99%) built from the simple mean
