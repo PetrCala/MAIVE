@@ -60,7 +60,7 @@ with exponential-decay weights that downweight both spuriously precise
 estimates and extreme outliers.
 }
 \details{
-Guided, interactive workflow available at https://easymeta.org.
+Guided, interactive workflow available at https://www.easymeta.org.
 
 For technical details on WAIVE methodology, see: \url{https://meta-analysis.cz/waive_ottawa.pdf}
 

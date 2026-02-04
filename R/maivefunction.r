@@ -822,7 +822,7 @@ maive_analyze <- function(dat,
 #' R package for MAIVE: "Spurious Precision in Meta-Analysis of Observational Research" by
 #' Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.
 #'
-#' Guided, interactive workflow available at https://easymeta.org.
+#' Guided, interactive workflow available at https://www.easymeta.org.
 #'
 #' @param dat Data frame with columns bs, sebs, Ns, study_id (optional).
 #' @param method 1 FAT-PET, 2 PEESE, 3 PET-PEESE, 4 EK.
@@ -926,7 +926,7 @@ maive <- function(dat,
 #' with exponential-decay weights that downweight both spuriously precise
 #' estimates and extreme outliers.
 #'
-#' Guided, interactive workflow available at https://easymeta.org.
+#' Guided, interactive workflow available at https://www.easymeta.org.
 #'
 #' For technical details on WAIVE methodology, see: \url{https://meta-analysis.cz/waive_ottawa.pdf}
 #'

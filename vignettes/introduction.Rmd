@@ -18,7 +18,7 @@ knitr::opts_chunk$set(
 
 MAIVE (Meta-Analysis Instrumental Variable Estimator) addresses a fundamental problem in meta-analysis of observational research: **spurious precision**. Traditional meta-analysis assigns more weight to studies with lower standard errors, assuming higher precision. However, in observational research, precision must be estimated and is vulnerable to manipulation through practices like p-hacking to achieve statistical significance.
 
-For a guided, interactive workflow, visit <https://easymeta.org>.
+For a guided, interactive workflow, visit <https://www.easymeta.org>.
 
 This manipulation can invalidate:
 
