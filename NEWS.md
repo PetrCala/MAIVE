@@ -1,3 +1,14 @@
+# MAIVE 0.2.4
+
+*Released: 2026-02-04*
+
+## Bug Fixes
+
+* Easymeta.org links
+
+---
+
+
 # MAIVE 0.2.3
 
 *Released: 2026-02-04*
