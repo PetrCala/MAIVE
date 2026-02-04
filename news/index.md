@@ -1,5 +1,15 @@
 # Changelog
 
+## MAIVE 0.2.3
+
+*Released: 2026-02-04*
+
+### Internal
+
+- Add warnings for weak instruments
+
+------------------------------------------------------------------------
+
 ## MAIVE 0.2.2
 
 *Released: 2026-01-07*
