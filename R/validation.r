@@ -332,6 +332,15 @@ normalize_maive_options <- function(dat,
 
     # Disable instrumentation (and AR) if Ns has no variation
     if (instrument == 1L) {
+      # Check minimum sample size for IV estimation
+      min_n_iv <- 10L
+      if (nrow(dat) < min_n_iv) {
+        cli::cli_warn(
+          "Sample size ({nrow(dat)}) is small for IV estimation. Results may be unreliable. Consider using instrument=0 for small samples.",
+          call. = FALSE
+        )
+      }
+
       Ns <- dat$Ns
       unique_Ns <- unique(stats::na.omit(Ns))
       if (length(unique_Ns) < 2L) {

@@ -231,6 +231,19 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     adjusted_variance = instrumentation$sebs2fit1
   )
 
+  # Determine instrument strength category
+  instrument_strength <- if (opts$instrument == 0L) {
+    "not_applicable"
+  } else if (!is.numeric(instrumentation$F_hac) || is.na(instrumentation$F_hac)) {
+    "unknown"
+  } else if (instrumentation$F_hac < 1) {
+    "very_weak"
+  } else if (instrumentation$F_hac < 10) {
+    "weak"
+  } else {
+    "strong"
+  }
+
   list(
     "beta" = round(beta, 3),
     "SE" = round(as.numeric(se_ma$se), 3),
@@ -252,7 +265,8 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     "petpeese_selected" = petpeese_selected,
     "peese_se2_coef" = peese_se2_coef,
     "peese_se2_se" = peese_se2_se,
-    "weights" = w
+    "weights" = w,
+    "instrument_strength" = instrument_strength
   )
 }
 
@@ -771,6 +785,21 @@ maive_analyze <- function(dat,
     opts$instrument,
     opts$first_stage_type
   )
+
+  # Check for weak instruments and warn user
+  if (opts$instrument == 1L && is.numeric(instrumentation$F_hac) && !is.na(instrumentation$F_hac)) {
+    if (instrumentation$F_hac < 1) {
+      cli::cli_warn(
+        "Very weak instrument detected (F-test = {instrumentation$F_hac}). Results may be unreliable. Consider using instrument=0 or checking data quality.",
+        call. = FALSE
+      )
+    } else if (instrumentation$F_hac < 10) {
+      cli::cli_warn(
+        "Weak instrument detected (F-test = {instrumentation$F_hac}). Results may be unreliable. Consider using Anderson-Rubin confidence intervals (AR=1).",
+        call. = FALSE
+      )
+    }
+  }
 
   base_w <- maive_compute_weights(opts$weight, prepared$sebs, instrumentation$sebs2fit1, prepared$studyid)
 
