@@ -10,7 +10,7 @@ inputs and a fitted MAIVE/WAIVE result. Device management (e.g.,
 [`pdf()`](https://rdrr.io/r/grDevices/pdf.html), base64 encoding) is
 left to you so you can embed the graphic wherever you need.
 
-For a guided, interactive workflow, visit <https://easymeta.org>.
+For a guided, interactive workflow, visit <https://www.easymeta.org>.
 
 What it shows:
 

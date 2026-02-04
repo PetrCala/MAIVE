@@ -136,7 +136,7 @@ maive(
 
 ## Details
 
-Guided, interactive workflow available at https://easymeta.org.
+Guided, interactive workflow available at https://www.easymeta.org.
 
 Data `dat` can be imported from an Excel file via:
 `dat <- read_excel("inputdata.xlsx")` or from a csv file via:

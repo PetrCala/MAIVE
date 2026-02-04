@@ -133,7 +133,7 @@ The function returns:
   [`?maive`](https://meta-analysis-es.github.io/maive/reference/maive.md)
   and
   [`?waive`](https://meta-analysis-es.github.io/maive/reference/waive.md)
-- **Guided interactive workflow**: <https://easymeta.org>
+- **Guided interactive workflow**: <https://www.easymeta.org>
 - **Development Workflow**: `.github/DEVELOPMENT-WORKFLOW.md`
 - **CRAN Submission**: `.github/CRAN-SUBMISSION.md`
 - **Project Page**: <https://meta-analysis.cz/maive/>

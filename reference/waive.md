@@ -95,7 +95,7 @@ for details.
 
 ## Details
 
-Guided, interactive workflow available at https://easymeta.org.
+Guided, interactive workflow available at https://www.easymeta.org.
 
 For technical details on WAIVE methodology, see:
 <https://meta-analysis.cz/waive_ottawa.pdf>

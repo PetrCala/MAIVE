@@ -10,7 +10,7 @@ in observational research, precision must be estimated and is vulnerable
 to manipulation through practices like p-hacking to achieve statistical
 significance.
 
-For a guided, interactive workflow, visit <https://easymeta.org>.
+For a guided, interactive workflow, visit <https://www.easymeta.org>.
 
 This manipulation can invalidate:
 
