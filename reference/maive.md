@@ -166,7 +166,11 @@ result <- maive(dat,
   method = 3, weight = 0, instrument = 1,
   studylevel = 0, SE = 0, AR = 0, first_stage = 0
 )
+#> Warning: Sample size (4) is small for IV estimation. Results may be unreliable. Consider
+#> using instrument=0 for small samples.
 #> Registered S3 method overwritten by 'clubSandwich':
 #>   method    from    
 #>   bread.mlm sandwich
+#> Warning: Very weak instrument detected (F-test = 0.002). Results may be unreliable.
+#> Consider using instrument=0 or checking data quality.
 ```
