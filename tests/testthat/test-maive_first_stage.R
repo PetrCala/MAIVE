@@ -24,7 +24,7 @@ test_that("log first stage applies smearing retransformation", {
 
   manual_vcov <- clubSandwich::vcovCR(log_model, cluster = seq_len(nrow(dat)), type = "CR0")
   slope <- coef(log_model)[2]
-  manual_F <- unname(round(slope^2 / manual_vcov[2, 2], 3))
+  manual_F <- unname(slope^2 / manual_vcov[2, 2])
   expect_equal(result$`F-test`, manual_F)
 })
 
@@ -96,7 +96,7 @@ test_that("Hausman statistic uses difference-in-estimators variance", {
   V_ols <- clubSandwich::vcovCR(cfg$std, cluster = prepared$g, type = opts$type_choice)
   var_diff <- V_iv[1, 1] - V_ols[1, 1]
   expected <- (coef(cfg$maive)[1] - coef(cfg$std)[1])^2 / var_diff
-  expected_value <- as.numeric(round(expected, 3))
+  expected_value <- as.numeric(expected)
 
   expect_equal(as.numeric(result$Hausman), expected_value)
 })
@@ -144,7 +144,7 @@ test_that("Hausman PET-PEESE uses MAIVE weights", {
   V_ols <- clubSandwich::vcovCR(hausman_cfg$std, cluster = prepared$g, type = opts$type_choice)
   var_diff <- V_iv[1, 1] - V_ols[1, 1]
   expected <- (coef(hausman_cfg$maive)[1] - coef(hausman_cfg$std)[1])^2 / var_diff
-  expected_value <- as.numeric(round(expected, 3))
+  expected_value <- as.numeric(expected)
 
   expect_equal(as.numeric(result$Hausman), expected_value)
 })

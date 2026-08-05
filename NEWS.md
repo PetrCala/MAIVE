@@ -1,3 +1,14 @@
+# MAIVE 0.2.5
+
+*Released: 2026-08-05*
+
+## Bug Fixes
+
+* Return unrounded estimates from maive() and waive(); values were previously rounded to 3 decimals, which distorted downstream z-ratios, p-values, and confidence intervals and could zero out small standard errors
+
+---
+
+
 # MAIVE 0.2.4
 
 *Released: 2026-02-04*
