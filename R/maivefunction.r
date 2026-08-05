@@ -75,7 +75,7 @@ maive_compute_variance_instrumentation <- function(sebs, Ns, g, type_choice, ins
     if (!has_slope_coef || !has_slope_vcov) {
       F_hac <- NA_real_
     } else {
-      F_hac <- unname(round(beta_slope^2 / V[slope_index, slope_index], 3))
+      F_hac <- unname(beta_slope^2 / V[slope_index, slope_index])
     }
   }
 
@@ -189,15 +189,15 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
   peese_is_final <- (opts$method == 2L) || (opts$method == 3L && isTRUE(selection$quadratic_decision))
   if (peese_is_final) {
     peese_se2_inf <- maive_infer_coef(fits$peese, 2L, opts$SE, prepared$dat, "g", opts$type_choice)
-    peese_se2_coef <- round(peese_se2_inf$b, 3)
-    peese_se2_se <- round(peese_se2_inf$se, 3)
+    peese_se2_coef <- peese_se2_inf$b
+    peese_se2_se <- peese_se2_inf$se
   } else {
     peese_se2_coef <- NA_real_
     peese_se2_se <- NA_real_
   }
 
   egger_inf <- maive_infer_coef(fits$fatpet, 2L, opts$SE, prepared$dat, "g", opts$type_choice)
-  egger_boot_ci <- round(egger_inf$ci, 3)
+  egger_boot_ci <- egger_inf$ci
   egger_ar_ci <- maive_compute_egger_ar_ci(
     opts,
     fits,
@@ -245,18 +245,18 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
   }
 
   list(
-    "beta" = round(beta, 3),
-    "SE" = round(as.numeric(se_ma$se), 3),
+    "beta" = beta,
+    "SE" = as.numeric(se_ma$se),
     "F-test" = instrumentation$F_hac,
-    "beta_standard" = round(beta0, 3),
-    "SE_standard" = round(as.numeric(se_std$se), 3),
-    "Hausman" = round(hausman, 3),
-    "Chi2" = round(chi2, 3),
+    "beta_standard" = beta0,
+    "SE_standard" = as.numeric(se_std$se),
+    "Hausman" = hausman,
+    "Chi2" = chi2,
     "SE_instrumented" = sqrt(instrumentation$sebs2fit1),
     "AR_CI" = ar_ci_res$b0_CI,
-    "pub bias p-value" = round(egger_inf$p, 3),
-    "egger_coef" = round(egger_inf$b, 3),
-    "egger_se" = round(egger_inf$se, 3),
+    "pub bias p-value" = egger_inf$p,
+    "egger_coef" = egger_inf$b,
+    "egger_se" = egger_inf$se,
     "egger_boot_ci" = egger_boot_ci,
     "egger_ar_ci" = egger_ar_ci,
     "is_quadratic_fit" = slope_summary,
@@ -596,7 +596,7 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
     names(ci_vals) <- c("lower", "upper")
     return(ci_vals)
   }
-  ci_vals <- round(ar_result$b1_CI, 3)
+  ci_vals <- ar_result$b1_CI
   names(ci_vals) <- c("lower", "upper")
   ci_vals
 }
@@ -605,24 +605,24 @@ maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_vari
 maive_slope_information <- function(method, fits, selection, ek) {
   method_str <- as.character(method)
   if (method_str == "1") {
-    return(list(type = "linear", coefficient = round(as.numeric(coef(fits$fatpet)[2]), 3), detail = NULL))
+    return(list(type = "linear", coefficient = as.numeric(coef(fits$fatpet)[2]), detail = NULL))
   }
   if (method_str == "2") {
-    return(list(type = "quadratic", coefficient = round(as.numeric(coef(fits$peese)[2]), 3), detail = NULL))
+    return(list(type = "quadratic", coefficient = as.numeric(coef(fits$peese)[2]), detail = NULL))
   }
   if (method_str == "3") {
     if (identical(selection$petpeese, fits$peese)) {
-      return(list(type = "quadratic", coefficient = round(as.numeric(coef(fits$peese)[2]), 3), detail = NULL))
+      return(list(type = "quadratic", coefficient = as.numeric(coef(fits$peese)[2]), detail = NULL))
     }
-    return(list(type = "linear", coefficient = round(as.numeric(coef(fits$fatpet)[2]), 3), detail = NULL))
+    return(list(type = "linear", coefficient = as.numeric(coef(fits$fatpet)[2]), detail = NULL))
   }
   if (method_str == "4") {
     if (is.null(ek$ekreg)) {
       return(list(type = "linear", coefficient = 0, detail = NULL))
     }
     if (ek$structure == "kink") {
-      kink_effect <- round(as.numeric(tail(coef(ek$ekreg), 1)), 3)
-      kink_location <- as.numeric(round(ek$a0, 3))
+      kink_effect <- as.numeric(tail(coef(ek$ekreg), 1))
+      kink_location <- as.numeric(ek$a0)
       detail <- list(kink_location = kink_location, kink_effect = kink_effect)
       return(list(
         type = "kinked",
@@ -631,7 +631,7 @@ maive_slope_information <- function(method, fits, selection, ek) {
       ))
     }
     if (ek$structure == "linear") {
-      slope <- round(as.numeric(tail(coef(ek$ekreg), 1)), 3)
+      slope <- as.numeric(tail(coef(ek$ekreg), 1))
       return(list(type = "linear", coefficient = slope, detail = NULL))
     }
     return(list(type = "linear", coefficient = 0, detail = NULL))
@@ -790,12 +790,12 @@ maive_analyze <- function(dat,
   if (opts$instrument == 1L && is.numeric(instrumentation$F_hac) && !is.na(instrumentation$F_hac)) {
     if (instrumentation$F_hac < 1) {
       cli::cli_warn(
-        "Very weak instrument detected (F-test = {instrumentation$F_hac}). Results may be unreliable. Consider using instrument=0 or checking data quality.",
+        "Very weak instrument detected (F-test = {round(instrumentation$F_hac, 3)}). Results may be unreliable. Consider using instrument=0 or checking data quality.",
         call. = FALSE
       )
     } else if (instrumentation$F_hac < 10) {
       cli::cli_warn(
-        "Weak instrument detected (F-test = {instrumentation$F_hac}). Results may be unreliable. Consider using Anderson-Rubin confidence intervals (AR=1).",
+        "Weak instrument detected (F-test = {round(instrumentation$F_hac, 3)}). Results may be unreliable. Consider using Anderson-Rubin confidence intervals (AR=1).",
         call. = FALSE
       )
     }

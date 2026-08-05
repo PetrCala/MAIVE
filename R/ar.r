@@ -176,8 +176,8 @@ compute_AR_CI_optimized <- function(model, adjust_fun, bs, sebs, invNs, g, type_
     warning("AR acceptance region is disjoint; returning conservative interval.")
   }
 
-  b0_CI <- round(c(min(b0_grid[b0_accept_idx]), max(b0_grid[b0_accept_idx])), 3)
-  b1_CI <- round(c(min(b1_grid[b1_accept_idx]), max(b1_grid[b1_accept_idx])), 3)
+  b0_CI <- c(min(b0_grid[b0_accept_idx]), max(b0_grid[b0_accept_idx]))
+  b1_CI <- c(min(b1_grid[b1_accept_idx]), max(b1_grid[b1_accept_idx]))
 
   list(b0_CI = b0_CI, b1_CI = b1_CI)
 }
@@ -362,6 +362,6 @@ compute_AR_CI_slope_only <- function(model, adjust_fun, bs, sebs, invNs, g, type
 
   list(
     b0_CI = b0_CI,
-    b1_CI = round(b1_CI, 3)
+    b1_CI = b1_CI
   )
 }
