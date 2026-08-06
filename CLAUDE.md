@@ -43,6 +43,7 @@ Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0
 ### Package Installation
 
 ``` r
+
 # Install from GitHub
 devtools::install_github("meta-analysis-es/maive")
 
@@ -70,6 +71,7 @@ testthat::test_file("tests/testthat/test-maive_first_stage.R")
 ### Building Documentation
 
 ``` r
+
 # Generate documentation from roxygen comments
 devtools::document()
 

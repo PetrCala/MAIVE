@@ -41,6 +41,7 @@ The code below is set to `eval = FALSE` to keep the vignette fast. Run
 it interactively to produce the plot.
 
 ``` r
+
 library(MAIVE)
 
 set.seed(123)
@@ -75,6 +76,7 @@ Device control is up to you; this pattern works for PNG. Replace
 as needed.
 
 ``` r
+
 png("maive-funnel.png", width = 1800, height = 1400, res = 200)
 get_funnel_plot(dat = dat, result = res, model_type = "MAIVE")
 dev.off()

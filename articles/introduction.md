@@ -57,6 +57,7 @@ This approach provides:
 ## Installation
 
 ``` r
+
 # Install from CRAN (once published)
 install.packages("MAIVE")
 
@@ -66,6 +67,7 @@ devtools::install_github("meta-analysis-es/maive")
 ```
 
 ``` r
+
 library(MAIVE)
 ```
 
@@ -92,6 +94,7 @@ function accepts either the default column names or custom mappings:
 Example:
 
 ``` r
+
 custom_dat <- data.frame(
   my_est = c(0.5, 0.6, 0.4, 0.55),
   my_se  = c(0.2, 0.18, 0.25, 0.22),
@@ -123,6 +126,7 @@ removing completely empty rows.
 Let’s create a simple example dataset:
 
 ``` r
+
 # Simulated meta-analysis data
 set.seed(123)
 n_studies <- 50
@@ -150,6 +154,7 @@ The default MAIVE estimator uses PET-PEESE with instrumented standard
 errors, no weights, cluster-robust standard errors, and wild bootstrap:
 
 ``` r
+
 # Run MAIVE with defaults
 result <- maive(
   dat = data,
@@ -193,6 +198,7 @@ MAIVE supports multiple meta-regression methods:
 ### 1. FAT-PET (Precision-Effect Test)
 
 ``` r
+
 result_pet <- maive(
   dat = data,
   method = 1,  # FAT-PET
@@ -209,6 +215,7 @@ cat("PET Estimate:", round(result_pet$Estimate, 3), "\n")
 ### 2. PEESE (Precision-Effect Estimate with Standard Error)
 
 ``` r
+
 result_peese <- maive(
   dat = data,
   method = 2,  # PEESE
@@ -228,6 +235,7 @@ PET-PEESE uses PET if the PET estimate is not significantly different
 from zero, otherwise uses PEESE:
 
 ``` r
+
 result_petpeese <- maive(
   dat = data,
   method = 3,  # PET-PEESE (default)
@@ -244,6 +252,7 @@ cat("PET-PEESE Estimate:", round(result_petpeese$Estimate, 3), "\n")
 ### 4. Endogenous Kink (EK)
 
 ``` r
+
 result_ek <- maive(
   dat = data,
   method = 4,  # EK
@@ -264,6 +273,7 @@ cat("EK Estimate:", round(result_ek$Estimate, 3), "\n")
 Unweighted regression, recommended when spurious precision is a concern:
 
 ``` r
+
 result_noweight <- maive(
   dat = data,
   method = 3,
@@ -280,6 +290,7 @@ result_noweight <- maive(
 Traditional meta-analysis weighting:
 
 ``` r
+
 result_ivweight <- maive(
   dat = data,
   method = 3,
@@ -296,6 +307,7 @@ result_ivweight <- maive(
 Uses instrumented standard errors for weighting:
 
 ``` r
+
 result_maiveweight <- maive(
   dat = data,
   method = 3,
@@ -313,6 +325,7 @@ Control for study-level correlation when you have multiple estimates per
 study:
 
 ``` r
+
 # No study-level adjustment
 result_none <- maive(data, method = 3, weight = 0, instrument = 1, 
                      studylevel = 0, SE = 0, AR = 1)
@@ -333,6 +346,7 @@ result_both <- maive(data, method = 3, weight = 0, instrument = 1,
 ## Standard Error Options
 
 ``` r
+
 # CR0 (Huber-White)
 result_cr0 <- maive(data, method = 3, weight = 0, instrument = 1,
                     studylevel = 2, SE = 0, AR = 1)
@@ -359,6 +373,7 @@ MAIVE allows two functional forms for the first-stage regression:
 Regresses variance (sebs²) on constant and 1/Ns:
 
 ``` r
+
 result_levels <- maive(data, method = 3, weight = 0, instrument = 1,
                        studylevel = 2, SE = 3, AR = 1, first_stage = 0)
 
@@ -370,6 +385,7 @@ cat("First-stage (levels) F-test:", round(result_levels$`F-test`, 3), "\n")
 Log-linear regression with smearing retransformation:
 
 ``` r
+
 result_log <- maive(data, method = 3, weight = 0, instrument = 1,
                     studylevel = 2, SE = 3, AR = 1, first_stage = 1)
 
@@ -387,6 +403,7 @@ For technical details and methodology, see the [WAIVE
 slides](https://meta-analysis.cz/waive_ottawa.pdf).
 
 ``` r
+
 result_waive <- waive(
   dat = data,
   method = 3,

@@ -53,11 +53,9 @@ Before each CRAN submission (initial or update), verify:
 
 `R CMD check --as-cran` passes with 0 errors, 0 warnings, 0 notes
 
-All tests pass:
-[`devtools::test()`](https://devtools.r-lib.org/reference/test.html)
+All tests pass: `devtools::test()`
 
-Package builds successfully:
-[`devtools::build()`](https://devtools.r-lib.org/reference/build.html)
+Package builds successfully: `devtools::build()`
 
 No non-ASCII characters unless properly declared
 
@@ -268,6 +266,7 @@ CRAN reviewers frequently request changes for:
 #### 1. Version Bump
 
 ``` r
+
 source("scripts/update-version.R")
 # Follow prompts to select version increment type
 ```
@@ -286,6 +285,7 @@ Update `NEWS.md` with:
 #### 3. Update Documentation
 
 ``` r
+
 # Update roxygen documentation
 devtools::document()
 
@@ -296,6 +296,7 @@ source("scripts/build-docs.R")
 #### 4. Run Checks
 
 ``` r
+
 source("scripts/check-cran.R")
 ```
 
@@ -317,6 +318,7 @@ Follow the same submission process as initial submission.
 Once published on CRAN:
 
 ``` r
+
 # Update README badges if needed
 # Update website
 pkgdown::build_site()
@@ -340,6 +342,7 @@ Comprehensive CRAN readiness checker.
 **Usage:**
 
 ``` r
+
 source("scripts/check-cran.R")
 ```
 
@@ -363,6 +366,7 @@ Interactive CRAN submission wizard.
 **Usage:**
 
 ``` r
+
 source("scripts/submit-cran.R")
 ```
 
@@ -384,6 +388,7 @@ Documentation builder and previewer.
 **Usage:**
 
 ``` r
+
 source("scripts/build-docs.R")
 ```
 
@@ -407,6 +412,7 @@ Version management utility.
 **Usage:**
 
 ``` r
+
 source("scripts/update-version.R")
 ```
 
@@ -525,9 +531,7 @@ source("scripts/update-version.R")
   - Large package size without justification
   - Unquoted URLs in DESCRIPTION
 
-**Check**: Run
-[`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
-to see specific notes
+**Check**: Run `devtools::check()` to see specific notes
 
 #### “Examples fail”
 
@@ -539,8 +543,7 @@ to see specific notes
 - Wrap examples requiring user input in `\dontrun{}`
 - Ensure all example data is available
 - Check for missing library calls (use `::` notation instead)
-- Test examples:
-  [`devtools::run_examples()`](https://devtools.r-lib.org/reference/run_examples.html)
+- Test examples: `devtools::run_examples()`
 
 #### “Tests fail in R CMD check but pass locally”
 
@@ -559,6 +562,7 @@ to see specific notes
 **Check**:
 
 ``` r
+
 devtools::check(cran = TRUE)  # Mimics CRAN checks locally
 ```
 
@@ -585,6 +589,7 @@ devtools::check(cran = TRUE)  # Mimics CRAN checks locally
 - Test on specific platform:
 
   ``` r
+
   rhub::rhub_check(platform = "windows-x86_64-devel")
   ```
 
@@ -604,6 +609,7 @@ devtools::check(cran = TRUE)  # Mimics CRAN checks locally
 **Solution**:
 
 ``` r
+
 devtools::check_win_devel()  # Test on Windows
 ```
 
@@ -618,8 +624,7 @@ devtools::check_win_devel()  # Test on Windows
 - Use roxygen2, don’t edit .Rd files directly
 - Check for unescaped special characters: `%`, `\`, `#`
 - Ensure all cross-references exist
-- Validate:
-  [`devtools::check_man()`](https://devtools.r-lib.org/reference/check_man.html)
+- Validate: `devtools::check_man()`
 
 #### “Vignette fails to build”
 
@@ -631,8 +636,7 @@ devtools::check_win_devel()  # Test on Windows
 - Use `eval=FALSE` for code that needs special setup
 - Don’t require internet connection
 - Keep vignettes small and fast
-- Test:
-  [`devtools::build_vignettes()`](https://devtools.r-lib.org/reference/build_vignettes.html)
+- Test: `devtools::build_vignettes()`
 
 ### GitHub Actions Issues
 

@@ -29,12 +29,14 @@ caused by spurious precision in meta-analysis.
 ### From CRAN (coming soon)
 
 ``` r
+
 install.packages("MAIVE")
 ```
 
 ### Development version
 
 ``` r
+
 install.packages("devtools")
 devtools::install_github("meta-analysis-es/maive")
 ```
@@ -42,12 +44,14 @@ devtools::install_github("meta-analysis-es/maive")
 ### Load package
 
 ``` r
+
 library(MAIVE)
 ```
 
 ## Quick Start
 
 ``` r
+
 # Prepare your data
 data <- data.frame(
   bs = c(...),        # Effect sizes
@@ -80,12 +84,12 @@ The
 [`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
 function expects a data frame with:
 
-| Column | Label      | Description                                                   |
-|--------|------------|---------------------------------------------------------------|
-| 1      | `bs`       | Primary estimates (effect sizes)                              |
-| 2      | `sebs`     | Standard errors (must be \> 0)                                |
-| 3      | `Ns`       | Sample sizes (must be \> 0)                                   |
-| 4      | `study_id` | Study identification (optional, for clustering/fixed effects) |
+| Column | Label | Description |
+|----|----|----|
+| 1 | `bs` | Primary estimates (effect sizes) |
+| 2 | `sebs` | Standard errors (must be \> 0) |
+| 3 | `Ns` | Sample sizes (must be \> 0) |
+| 4 | `study_id` | Study identification (optional, for clustering/fixed effects) |
 
 ## Key Features
 
@@ -141,6 +145,7 @@ The function returns:
 ## Example
 
 ``` r
+
 # Create example data
 set.seed(123)
 data <- data.frame(
