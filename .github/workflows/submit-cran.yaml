@@ -1,6 +1,11 @@
 # CRAN Submission Workflow
 # Triggered on version tag push (v*) or manual dispatch
 # Builds the package, runs checks, and submits to CRAN
+#
+# Releases are cut from PetrCala/MAIVE, and the upload needs no secret (the
+# maintainer address comes from DESCRIPTION). Any repository holding this file
+# would therefore submit on a v* tag push, so the submit job is pinned to the
+# release repository. Forks and mirrors still run the pre-submission checks.
 name: Submit to CRAN
 
 on:
@@ -160,6 +165,7 @@ jobs:
     needs: [getTagName, cran-checks]
     if: |
       needs.cran-checks.outputs.check_status == 'success' &&
+      github.repository == 'PetrCala/MAIVE' &&
       (github.event_name == 'push' || github.event.inputs.skip_cran_submit != 'true')
     name: Submit to CRAN
     steps:
