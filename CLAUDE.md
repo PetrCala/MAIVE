@@ -7,7 +7,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 MAIVE (Meta-Analysis Instrumental Variable Estimator) is an R package that implements instrumental variable approaches to limit bias caused by spurious precision in meta-analysis. The package addresses the problem where observational research precision can be manipulated through p-hacking, invalidating traditional inverse-variance weighting and bias-correction methods.
 
 **Project Page**: <https://meta-analysis.cz/maive/>
-**GitHub**: meta-analysis-es/maive
+**GitHub**: PetrCala/MAIVE
 
 ## Citation
 
@@ -34,7 +34,7 @@ Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0
 
 ```r
 # Install from GitHub
-devtools::install_github("meta-analysis-es/maive")
+devtools::install_github("PetrCala/MAIVE")
 
 # Install development dependencies
 devtools::install_dev_deps()

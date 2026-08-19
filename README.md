@@ -2,8 +2,8 @@
 
 <!-- badges: start -->
 [![CRAN status](https://www.r-pkg.org/badges/version/MAIVE)](https://CRAN.R-project.org/package=MAIVE)
-[![R-CMD-check](https://github.com/meta-analysis-es/maive/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/meta-analysis-es/maive/actions/workflows/R-CMD-check.yaml)
-[![Codecov test coverage](https://codecov.io/gh/meta-analysis-es/maive/branch/main/graph/badge.svg)](https://app.codecov.io/gh/meta-analysis-es/maive?branch=main)
+[![R-CMD-check](https://github.com/PetrCala/MAIVE/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/PetrCala/MAIVE/actions/workflows/R-CMD-check.yaml)
+[![Codecov test coverage](https://codecov.io/gh/PetrCala/MAIVE/branch/main/graph/badge.svg)](https://app.codecov.io/gh/PetrCala/MAIVE?branch=main)
 <!-- badges: end -->
 
 **Spurious Precision in Meta-Analysis of Observational Research**  
@@ -37,7 +37,7 @@ install.packages("MAIVE")
 
 ```r
 install.packages("devtools")
-devtools::install_github("meta-analysis-es/maive")
+devtools::install_github("PetrCala/MAIVE")
 ```
 
 ### Load package
@@ -173,9 +173,9 @@ Tipton, E. (2015). Small sample adjustments for robust variance estimation with 
 
 ## Contributing
 
-We welcome contributions! Please see our [GitHub repository](https://github.com/meta-analysis-es/maive) for:
+We welcome contributions! Please see our [GitHub repository](https://github.com/PetrCala/MAIVE) for:
 
-- Bug reports and feature requests (use [Issues](https://github.com/meta-analysis-es/maive/issues))
+- Bug reports and feature requests (use [Issues](https://github.com/PetrCala/MAIVE/issues))
 - Code contributions (submit Pull Requests)
 - Questions and discussions
 
