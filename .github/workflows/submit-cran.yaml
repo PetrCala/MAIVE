@@ -11,7 +11,10 @@ name: Submit to CRAN
 on:
   push:
     tags:
-      - "v*"
+      # Requires a digit after the "v", so a malformed tag cannot submit to
+      # CRAN. The repo already carries one such tag, a bare "v" left by a
+      # bump that computed an empty version, and plain "v*" would match it.
+      - "v[0-9]*"
   workflow_dispatch:
     inputs:
       confirmation:
