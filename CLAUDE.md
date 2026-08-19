@@ -176,11 +176,11 @@ Key test patterns:
 
 ## Dependencies
 
-Core dependencies:
+Core dependencies (see `Imports` in `DESCRIPTION`):
 
-- `stats`, `utils`: Base R functionality
+- `stats`: Base R functionality
+- `cli`: User-facing messages, warnings, and errors
 - `clubSandwich`: Cluster-robust variance estimation
-- `metafor`: Meta-analysis framework
 
 Development dependencies:
 

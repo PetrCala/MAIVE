@@ -27,7 +27,7 @@ MAIVE implements an **instrumental variable approach** to limit bias caused by s
 
 ## Installation
 
-### From CRAN (coming soon)
+### From CRAN
 
 ```r
 install.packages("MAIVE")
