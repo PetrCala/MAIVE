@@ -109,7 +109,7 @@ This single command:
 5. Pushes commit and tag to GitHub
 6. Triggers the CRAN submission workflow
 
-Monitor progress at: <https://github.com/meta-analysis-es/maive/actions>
+Monitor progress at: <https://github.com/PetrCala/MAIVE/actions>
 
 ### Method 2: Manual Workflow Trigger
 

@@ -1,4 +1,4 @@
-url: https://meta-analysis-es.github.io/maive/
+url: https://petrcala.github.io/MAIVE/
 template:
   bootstrap: 5
   bootswatch: flatly
@@ -29,7 +29,7 @@ navbar:
       href: news/index.html
     github:
       icon: fab fa-github
-      href: https://github.com/meta-analysis-es/maive
+      href: https://github.com/PetrCala/MAIVE
       aria-label: GitHub
 
 home:

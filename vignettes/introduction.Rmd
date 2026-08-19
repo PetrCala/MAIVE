@@ -61,7 +61,7 @@ install.packages("MAIVE")
 
 # Or install development version from GitHub
 install.packages("devtools")
-devtools::install_github("meta-analysis-es/maive")
+devtools::install_github("PetrCala/MAIVE")
 ```
 
 ```{r setup}
