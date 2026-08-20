@@ -13,7 +13,7 @@ p-hacking, invalidating traditional inverse-variance weighting and
 bias-correction methods.
 
 **Project Page**: <https://meta-analysis.cz/maive/> **GitHub**:
-meta-analysis-es/maive
+PetrCala/MAIVE
 
 ## Citation
 
@@ -45,7 +45,7 @@ Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0
 ``` r
 
 # Install from GitHub
-devtools::install_github("meta-analysis-es/maive")
+devtools::install_github("PetrCala/MAIVE")
 
 # Install development dependencies
 devtools::install_dev_deps()
@@ -95,9 +95,8 @@ The tag push triggers the CRAN submission workflow automatically.
 ### Core Function: `maive()`
 
 The main exported functions are
-[`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-and
-[`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+[`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) and
+[`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md)
 (defined in R/maivefunction.r), which perform meta-analysis using
 instrumental variable estimation. Both functions share a common pipeline
 via `maive_run_pipeline()`:
@@ -116,9 +115,8 @@ via `maive_run_pipeline()`:
     weighting scheme (none, inverse-variance, MAIVE-adjusted, or WAIVE)
 5.  **Shared Pipeline** (`maive_run_pipeline`): Common second-stage
     analysis used by both
-    [`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-    and
-    [`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+    [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) and
+    [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md)
 6.  **Model Fitting** (`maive_fit_models`): Fits PET (Precision-Effect
     Test), PEESE (Precision-Effect Estimate with Standard Error), and
     combined models
@@ -132,8 +130,7 @@ via `maive_run_pipeline()`:
 
 ### Data Structure
 
-The
-[`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
+The [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md)
 function expects a data frame with:
 
 - Column 1: `bs` - Primary estimates
@@ -155,7 +152,7 @@ function expects a data frame with:
 - `first_stage`: 0=levels (default), 1=log - first-stage functional form
 
 **Note**: WAIVE is available as a standalone
-[`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+[`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md)
 function that provides a more aggressive correction for p-hacking and
 spurious precision by downweighting both spuriously precise estimates
 and outliers.
@@ -235,15 +232,15 @@ Key test patterns:
 - All robust standard errors use the `clubSandwich` package with
   CR0/CR1/CR2 estimators
 - Infinite bounds in AR computation are handled by the optimization in
-  [`compute_AR_CI_optimized()`](https://meta-analysis-es.github.io/maive/reference/compute_AR_CI_optimized.md)
+  [`compute_AR_CI_optimized()`](https://petrcala.github.io/MAIVE/reference/compute_AR_CI_optimized.md)
 
 ## Dependencies
 
-Core dependencies:
+Core dependencies (see `Imports` in `DESCRIPTION`):
 
-- `stats`, `utils`: Base R functionality
+- `stats`: Base R functionality
+- `cli`: User-facing messages, warnings, and errors
 - `clubSandwich`: Cluster-robust variance estimation
-- `metafor`: Meta-analysis framework
 
 Development dependencies:
 

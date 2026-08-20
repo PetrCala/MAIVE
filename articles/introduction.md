@@ -63,7 +63,7 @@ install.packages("MAIVE")
 
 # Or install development version from GitHub
 install.packages("devtools")
-devtools::install_github("meta-analysis-es/maive")
+devtools::install_github("PetrCala/MAIVE")
 ```
 
 ``` r
@@ -73,8 +73,7 @@ library(MAIVE)
 
 ## Data Structure
 
-The
-[`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
+The [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md)
 function accepts either the default column names or custom mappings:
 
 | Column              | Default name | Description                         |
@@ -176,8 +175,7 @@ cat("First-stage F-test:", round(result$`F-test`, 3), "\n")
 
 ### Understanding the Output
 
-The
-[`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
+The [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md)
 function returns a list with the following key elements:
 
 - `Estimate`: MAIVE point estimate (corrected for spurious precision)
@@ -469,8 +467,8 @@ inference: A guide to theory and practice. *Journal of Econometrics*,
 
 ## See Also
 
-- [`?maive`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-  for detailed parameter documentation
-- [`?waive`](https://meta-analysis-es.github.io/maive/reference/waive.md)
-  for the robust WAIVE estimator
+- [`?maive`](https://petrcala.github.io/MAIVE/reference/maive.md) for
+  detailed parameter documentation
+- [`?waive`](https://petrcala.github.io/MAIVE/reference/waive.md) for
+  the robust WAIVE estimator
 - Project website: <https://meta-analysis.cz/maive/>

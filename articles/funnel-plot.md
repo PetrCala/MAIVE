@@ -2,7 +2,7 @@
 
 ## Overview
 
-[`get_funnel_plot()`](https://meta-analysis-es.github.io/maive/reference/get_funnel_plot.md)
+[`get_funnel_plot()`](https://petrcala.github.io/MAIVE/reference/get_funnel_plot.md)
 draws a base-graphics funnel plot using the original meta-analysis
 inputs and a fitted MAIVE/WAIVE result. Device management (e.g.,
 [`png()`](https://rdrr.io/r/grDevices/png.html),
@@ -27,9 +27,8 @@ What it shows:
 - `dat`: data frame with numeric `bs` (effect sizes) and `sebs`
   (standard errors, \> 0)
 - `result`: list returned by
-  [`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-  or
-  [`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+  [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) or
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md)
 - `instrument`: optional 0/1 to control whether adjusted SEs/weights are
   used; if `NULL`, inferred from `result`
 - `model_type`: label for plot text/legend (e.g., `"MAIVE"` or
@@ -110,9 +109,9 @@ dev.off()
 
 ## See also
 
-- [`vignette("introduction", package = "MAIVE")`](https://meta-analysis-es.github.io/maive/articles/introduction.md)
+- [`vignette("introduction", package = "MAIVE")`](https://petrcala.github.io/MAIVE/articles/introduction.md)
   for full estimator workflow
 - Function reference:
-  [`?get_funnel_plot`](https://meta-analysis-es.github.io/maive/reference/get_funnel_plot.md),
-  [`?maive`](https://meta-analysis-es.github.io/maive/reference/maive.md),
-  [`?waive`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+  [`?get_funnel_plot`](https://petrcala.github.io/MAIVE/reference/get_funnel_plot.md),
+  [`?maive`](https://petrcala.github.io/MAIVE/reference/maive.md),
+  [`?waive`](https://petrcala.github.io/MAIVE/reference/waive.md)

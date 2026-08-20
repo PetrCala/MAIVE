@@ -88,10 +88,9 @@ waive(
 ## Value
 
 List with the same structure as
-[`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md).
-See
-[`?maive`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-for details.
+[`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md). See
+[`?maive`](https://petrcala.github.io/MAIVE/reference/maive.md) for
+details.
 
 ## Details
 

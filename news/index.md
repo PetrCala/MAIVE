@@ -201,10 +201,10 @@ CRAN release: 2025-12-08
 - Implemented MAIVE (Meta-Analysis Instrumental Variable Estimator) for
   addressing spurious precision in meta-analysis
 - Core functions:
-  - [`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md):
+  - [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md):
     Main function implementing PET, PEESE, PET-PEESE, and Endogenous
     Kink (EK) methods
-  - [`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md):
+  - [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md):
     Robust extension with downweighting of spurious precision and
     outliers
 - Features:

@@ -26,7 +26,7 @@ caused by spurious precision in meta-analysis.
 
 ## Installation
 
-### From CRAN (coming soon)
+### From CRAN
 
 ``` r
 
@@ -38,7 +38,7 @@ install.packages("MAIVE")
 ``` r
 
 install.packages("devtools")
-devtools::install_github("meta-analysis-es/maive")
+devtools::install_github("PetrCala/MAIVE")
 ```
 
 ### Load package
@@ -80,8 +80,7 @@ print(result$`F-test`)    # First-stage F-test
 
 ## Data Structure
 
-The
-[`maive()`](https://meta-analysis-es.github.io/maive/reference/maive.md)
+The [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md)
 function expects a data frame with:
 
 | Column | Label | Description |
@@ -106,7 +105,7 @@ function expects a data frame with:
 - Inverse-variance weights
 - MAIVE-adjusted weights (using instrumented SEs)
 - **WAIVE** (more aggressive correction via
-  [`waive()`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md)
   function - downweights spurious precision and outliers) -
   [Details](https://meta-analysis.cz/waive_ottawa.pdf)
 
@@ -132,11 +131,10 @@ The function returns:
 ## Documentation
 
 - **Getting Started Guide**: See
-  [`vignette("introduction")`](https://meta-analysis-es.github.io/maive/articles/introduction.md)
+  [`vignette("introduction")`](https://petrcala.github.io/MAIVE/articles/introduction.md)
 - **Function Reference**:
-  [`?maive`](https://meta-analysis-es.github.io/maive/reference/maive.md)
-  and
-  [`?waive`](https://meta-analysis-es.github.io/maive/reference/waive.md)
+  [`?maive`](https://petrcala.github.io/MAIVE/reference/maive.md) and
+  [`?waive`](https://petrcala.github.io/MAIVE/reference/waive.md)
 - **Guided interactive workflow**: <https://www.easymeta.org>
 - **Development Workflow**: `.github/DEVELOPMENT-WORKFLOW.md`
 - **CRAN Submission**: `.github/CRAN-SUBMISSION.md`
@@ -191,18 +189,17 @@ estimation with cluster-correlated data. *Psychological Methods*, 20(3),
 ## Contributing
 
 We welcome contributions! Please see our [GitHub
-repository](https://github.com/meta-analysis-es/maive) for:
+repository](https://github.com/PetrCala/MAIVE) for:
 
 - Bug reports and feature requests (use
-  [Issues](https://github.com/meta-analysis-es/maive/issues))
+  [Issues](https://github.com/PetrCala/MAIVE/issues))
 - Code contributions (submit Pull Requests)
 - Questions and discussions
 
 ## License
 
-MIT License - see
-[LICENSE](https://meta-analysis-es.github.io/maive/LICENSE) file for
-details.
+MIT License - see [LICENSE](https://petrcala.github.io/MAIVE/LICENSE)
+file for details.
 
 ## Authors
 
