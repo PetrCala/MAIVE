@@ -53,9 +53,11 @@ Before each CRAN submission (initial or update), verify:
 
 `R CMD check --as-cran` passes with 0 errors, 0 warnings, 0 notes
 
-All tests pass: `devtools::test()`
+All tests pass:
+[`devtools::test()`](https://devtools.r-lib.org/reference/test.html)
 
-Package builds successfully: `devtools::build()`
+Package builds successfully:
+[`devtools::build()`](https://devtools.r-lib.org/reference/build.html)
 
 No non-ASCII characters unless properly declared
 
@@ -531,7 +533,9 @@ source("scripts/update-version.R")
   - Large package size without justification
   - Unquoted URLs in DESCRIPTION
 
-**Check**: Run `devtools::check()` to see specific notes
+**Check**: Run
+[`devtools::check()`](https://devtools.r-lib.org/reference/check.html)
+to see specific notes
 
 #### “Examples fail”
 
@@ -543,7 +547,8 @@ source("scripts/update-version.R")
 - Wrap examples requiring user input in `\dontrun{}`
 - Ensure all example data is available
 - Check for missing library calls (use `::` notation instead)
-- Test examples: `devtools::run_examples()`
+- Test examples:
+  [`devtools::run_examples()`](https://devtools.r-lib.org/reference/run_examples.html)
 
 #### “Tests fail in R CMD check but pass locally”
 
@@ -624,7 +629,8 @@ devtools::check_win_devel()  # Test on Windows
 - Use roxygen2, don’t edit .Rd files directly
 - Check for unescaped special characters: `%`, `\`, `#`
 - Ensure all cross-references exist
-- Validate: `devtools::check_man()`
+- Validate:
+  [`devtools::check_man()`](https://devtools.r-lib.org/reference/check_man.html)
 
 #### “Vignette fails to build”
 
@@ -636,7 +642,8 @@ devtools::check_win_devel()  # Test on Windows
 - Use `eval=FALSE` for code that needs special setup
 - Don’t require internet connection
 - Keep vignettes small and fast
-- Test: `devtools::build_vignettes()`
+- Test:
+  [`devtools::build_vignettes()`](https://devtools.r-lib.org/reference/build_vignettes.html)
 
 ### GitHub Actions Issues
 

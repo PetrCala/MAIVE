@@ -2,6 +2,8 @@
 
 ## MAIVE 0.2.5
 
+CRAN release: 2026-08-20
+
 *Released: 2026-08-05*
 
 ### Bug Fixes
