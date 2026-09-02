@@ -21,7 +21,9 @@ waive(
 )
 }
 \arguments{
-\item{dat}{Data frame with columns bs, sebs, Ns, study_id (optional).}
+\item{dat}{Data frame with columns bs, sebs, Ns, study_id (optional). Column
+names can be remapped with \code{estimate}, \code{se}, \code{n}, and
+\code{study_id}.}
 
 \item{method}{1 FAT-PET, 2 PEESE, 3 PET-PEESE, 4 EK.}
 
@@ -45,7 +47,12 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.}
 
 \item{n}{Optional column name to use instead of 'Ns'}
 
-\item{study_id}{Optional column name for study identifiers}
+\item{study_id}{Optional column name for study identifiers. When not supplied,
+a column named \code{study_id} is used if present; otherwise, if \code{dat}
+has four or more columns, the fourth column is used as the study identifier
+and a warning names the column. Any fourth column (a moderator, a year)
+would otherwise drive the study dummies and clustering at every
+\code{studylevel} other than 0, so name the column explicitly or drop it.}
 
 \item{seed}{Seed for the wild bootstrap when SE = 3. Use NULL to avoid setting a seed
 (results depend on the current RNG state). Default is 123 for historical reproducibility.}

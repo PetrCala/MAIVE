@@ -86,6 +86,13 @@ The `maive()` function expects a data frame with:
 | 3 | `Ns` | Sample sizes (must be > 0) |
 | 4 | `study_id` | Study identification (optional, for clustering/fixed effects) |
 
+Other column names can be mapped with the `estimate`, `se`, `n`, and `study_id`
+arguments. A column named `study_id` is used as the study identifier wherever it
+sits. If there is no such column and no `study_id` argument, the fourth column is
+used with a warning that names it, so a moderator or year kept in column four
+does not silently drive the study dummies and clustering. With a study identifier,
+the data needs at least the number of unique studies plus three rows.
+
 ## Key Features
 
 ### Methods

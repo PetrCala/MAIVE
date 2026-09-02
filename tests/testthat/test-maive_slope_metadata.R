@@ -51,3 +51,41 @@ test_that("EK with kink exposes kink metadata", {
   expect_true(all(c("kink_effect", "kink_location") %in% names(ek_kink_res$slope_coef)))
   expect_false(is.null(ek_kink_res$is_quadratic_fit$slope_detail))
 })
+
+test_that("ek_structure is returned and identifies an intercept-only EK fit", {
+  ek_intercept_dat <- data.frame(
+    bs = c(1.00, 1.02, 0.98, 1.01, 0.99, 1.03),
+    sebs = c(0.010, 0.012, 0.011, 0.009, 0.013, 0.010),
+    Ns = c(1000, 800, 900, 1200, 700, 1100)
+  )
+
+  res <- suppressWarnings(run_maive(ek_intercept_dat, method = 4))
+
+  expect_true("ek_structure" %in% names(res))
+  expect_equal(res$ek_structure, "intercept")
+  # slope_type alone cannot tell this case apart from an ordinary linear fit
+  expect_equal(res$is_quadratic_fit$slope_type, "linear")
+  expect_equal(res$slope_coef, 0)
+})
+
+test_that("ek_structure reports linear and kink fits and NA for other methods", {
+  ek_linear_dat <- data.frame(
+    bs = c(0.1, 0.12, 0.11, 0.09, 0.13),
+    sebs = c(0.4, 0.42, 0.41, 0.39, 0.43),
+    Ns = c(150, 160, 170, 180, 190)
+  )
+  ek_kink_dat <- data.frame(
+    bs = c(2.218944, 3.470763, 2.522442, 3.707544, 3.851168, 1.613891),
+    sebs = c(0.2584316, 0.3677257, 0.2654305, 0.2369844, 0.38705, 0.2360002),
+    Ns = c(74, 118, 106, 58, 75, 56)
+  )
+
+  expect_equal(suppressWarnings(run_maive(ek_linear_dat, method = 4))$ek_structure, "linear")
+  expect_equal(suppressWarnings(run_maive(ek_kink_dat, method = 4))$ek_structure, "kink")
+
+  for (method in 1:3) {
+    res <- suppressWarnings(run_maive(ek_kink_dat, method = method))
+    expect_true("ek_structure" %in% names(res))
+    expect_true(is.na(res$ek_structure))
+  }
+})

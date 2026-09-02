@@ -1,6 +1,13 @@
 #' @keywords internal
 maive_build_dummy_matrix <- function(values) {
   f <- factor(values)
+  if (nlevels(f) < 2L) {
+    # A single study (or no study) carries no between-study contrast, so there is
+    # no dummy to build. Returning a zero-column matrix lets the pipeline proceed
+    # without study dummies; if clustering is requested, clubSandwich reports
+    # its own readable error about needing more than one cluster.
+    return(matrix(numeric(0), nrow = length(values), ncol = 0L))
+  }
   mm <- stats::model.matrix(~ f - 1)
   colnames(mm) <- paste0("studyid.", levels(f))
   rownames(mm) <- NULL
@@ -212,13 +219,20 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     stop("Failed to identify models for the selected method.")
   }
 
-  beta <- unname(coef(hausman_cfg$maive)[1])
-  beta0 <- unname(coef(hausman_cfg$std)[1])
+  beta <- unname(coef(cfg$maive)[1])
+  # beta_standard and SE_standard must come from the same conventional fit
+  # (cfg$std). The Hausman statistic keeps using the auxiliary pair, which at
+  # method = 3 refits the standard model with MAIVE's own weights.
+  beta0 <- unname(coef(cfg$std)[1])
+  beta_hausman <- unname(coef(hausman_cfg$maive)[1])
+  beta0_hausman <- unname(coef(hausman_cfg$std)[1])
 
   se_ma <- maive_get_intercept_se(cfg$maive, opts$SE, prepared$dat, "g", opts$type_choice)
   se_std <- maive_get_intercept_se(cfg$std, opts$SE, prepared$dat, "g", opts$type_choice)
 
-  hausman <- maive_compute_hausman(beta, beta0, hausman_cfg$maive, hausman_cfg$std, prepared$g, opts$type_choice)
+  hausman <- maive_compute_hausman(
+    beta_hausman, beta0_hausman, hausman_cfg$maive, hausman_cfg$std, prepared$g, opts$type_choice
+  )
   chi2 <- qchisq(p = 0.05, df = 1, lower.tail = FALSE)
 
   ar_ci_res <- maive_compute_ar_ci(
@@ -230,6 +244,9 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     opts$type_choice,
     adjusted_variance = instrumentation$sebs2fit1
   )
+
+  # EK model structure (method == 4 only): "kink", "linear", or "intercept"
+  ek_structure <- if (opts$method == 4L) ek$structure else NA_character_
 
   # Determine instrument strength category
   instrument_strength <- if (opts$instrument == 0L) {
@@ -260,6 +277,7 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w) {
     "egger_boot_ci" = egger_boot_ci,
     "egger_ar_ci" = egger_ar_ci,
     "is_quadratic_fit" = slope_summary,
+    "ek_structure" = ek_structure,
     "boot_result" = se_ma$boot_result,
     "slope_coef" = slope_info$coefficient,
     "petpeese_selected" = petpeese_selected,
@@ -470,7 +488,8 @@ maive_infer_coef <- function(model, coef_index, SE, data, cluster_var, type_choi
       model = model,
       data = data,
       cluster_var = cluster_var,
-      B = 999
+      B = 999,
+      seed = getOption("MAIVE.bootstrap.seed", 123L)
     )
     if (is.null(boot$boot_se)) {
       stop("Bootstrap helper must return boot_se.")
@@ -824,7 +843,9 @@ maive_analyze <- function(dat,
 #'
 #' Guided, interactive workflow available at https://www.easymeta.org.
 #'
-#' @param dat Data frame with columns bs, sebs, Ns, study_id (optional).
+#' @param dat Data frame with columns bs, sebs, Ns, study_id (optional). Column
+#'   names can be remapped with \code{estimate}, \code{se}, \code{n}, and
+#'   \code{study_id}.
 #' @param method 1 FAT-PET, 2 PEESE, 3 PET-PEESE, 4 EK.
 #' @param weight 0 no weights, 1 standard weights, 2 MAIVE adjusted weights, 3 study weights.
 #' @param instrument 1 yes, 0 no.
@@ -837,7 +858,12 @@ maive_analyze <- function(dat,
 #' @param estimate Optional column name to use instead of 'bs'
 #' @param se Optional column name to use instead of 'sebs'
 #' @param n Optional column name to use instead of 'Ns'
-#' @param study_id Optional column name for study identifiers
+#' @param study_id Optional column name for study identifiers. When not supplied,
+#'   a column named \code{study_id} is used if present; otherwise, if \code{dat}
+#'   has four or more columns, the fourth column is used as the study identifier
+#'   and a warning names the column. Any fourth column (a moderator, a year)
+#'   would otherwise drive the study dummies and clustering at every
+#'   \code{studylevel} other than 0, so name the column explicitly or drop it.
 #' @param seed Seed for the wild bootstrap when SE = 3. Use NULL to avoid setting a seed
 #'   (results depend on the current RNG state). Default is 123 for historical reproducibility.
 #'
@@ -856,8 +882,9 @@ maive_analyze <- function(dat,
 #'   \item beta: MAIVE meta-estimate
 #'   \item SE: MAIVE standard error
 #'   \item F-test: heteroskedastic robust F-test of the first step instrumented SEs
-#'   \item beta_standard: point estimate from the method chosen
-#'   \item SE_standard: standard error from the method chosen
+#'   \item beta_standard: point estimate from the conventional (non-instrumented,
+#'     inverse-variance weighted) fit of the method chosen
+#'   \item SE_standard: standard error from the same conventional fit as beta_standard
 #'   \item Hausman: Hausman type test: comparison between MAIVE and standard version
 #'   \item Chi2: 5% critical value for Hausman test
 #'   \item SE_instrumented: instrumented standard errors
@@ -868,6 +895,8 @@ maive_analyze <- function(dat,
 #'   \item egger_boot_ci: Confidence interval for the Egger coefficient using the selected resampling scheme
 #'   \item egger_ar_ci: Anderson-Rubin confidence interval for the Egger coefficient (when available)
 #'   \item is_quadratic_fit: Details on quadratic selection and slope behaviour
+#'   \item ek_structure: Structure of the fitted EK model when method=4: "kink",
+#'     "linear", or "intercept" (intercept-only degenerate fit); NA for other methods
 #'   \item boot_result: Boot result
 #'   \item slope_coef: Slope coefficient
 #'   \item petpeese_selected: Which model (PET or PEESE) was selected when method=3 (NA otherwise)

@@ -1,6 +1,10 @@
 #' @keywords internal
 manual_wild_cluster_boot_se <- function(model, data, cluster_var, B = 500, seed = 123) {
-  set.seed(seed)
+  # seed = NULL (or NA) leaves the RNG state untouched so draws follow the
+  # caller's current stream; any other value fixes the Rademacher draws.
+  if (!is.null(seed) && !is.na(seed)) {
+    set.seed(seed)
+  }
 
   # Extract residuals and fitted values
   resids <- residuals(model)
