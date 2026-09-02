@@ -1,3 +1,27 @@
+# MAIVE 0.2.6
+
+*Unreleased*
+
+## Bug Fixes
+
+* Custom column arguments now work: `estimate`, `se`, `n`, and `study_id` are resolved before the data frame is validated, so the documented custom column example in the vignette runs (it previously failed with "Missing required columns: bs, sebs, Ns"). Completely empty rows are still dropped before resolution.
+* The `seed` argument now reaches the wild bootstrap (`SE = 3`). Previously the helper always used seed 123, so different seeds gave identical bootstrap confidence intervals and `seed = NULL` did not use the current RNG state. The reported SE under `SE = 3` is the CR1 cluster-robust SE and is unchanged; only the bootstrap confidence intervals (for example `egger_boot_ci`) depend on the seed, and a non-default seed now changes them.
+* A study identifier with a single level no longer fails with the raw "contrasts can be applied only to factors with 2 or more levels" error. The dummy matrix is empty in that case, so `studylevel = 0` and `1` run, and `studylevel = 2` and `3` surface clubSandwich's own message that clustering needs more than one cluster. Results on multi-study data are unchanged.
+* `beta_standard` at `method = 3` (PET-PEESE) now comes from the same conventional fit as `SE_standard`. It was previously read from the auxiliary PET-PEESE model that uses MAIVE's own weights, so the returned pair mixed two regressions and `beta_standard` moved with `weight` while `SE_standard` did not. This is a deliberate change to the reported value at `method = 3`; methods 1, 2, and 4 are unaffected, and the Hausman statistic still uses the auxiliary pair and is unchanged.
+
+## New Features
+
+* `maive()` and `waive()` return `ek_structure` ("kink", "linear", or "intercept") for `method = 4`, so an intercept-only degenerate EK fit is identifiable directly rather than inferred from a zero slope coefficient. It is `NA` for other methods.
+* When no `study_id` argument is given and no column is named `study_id`, using the fourth column as the study identifier now emits a warning naming the column. Pass `study_id = "<column>"` to confirm the mapping, or drop the column if it is not a study identifier. A column named `study_id` is used regardless of its position.
+
+## Documentation
+
+* The vignette's custom column example is evaluated at build time with a fixture that satisfies the degrees of freedom rule (at least the number of unique studies plus three rows).
+* `maive()` documents the `study_id` fallback and the origin of `beta_standard` and `SE_standard`.
+
+---
+
+
 # MAIVE 0.2.5
 
 *Released: 2026-08-05*

@@ -8,11 +8,7 @@
 #' @return Cleaned data frame (invisible) with empty rows removed
 #' @keywords internal
 #' @noRd
-validate_maive_data <- function(dat,
-                                estimate = NULL,
-                                se = NULL,
-                                n = NULL,
-                                study_id = NULL) {
+validate_maive_data <- function(dat) {
   # Data frame type check
   if (!is.data.frame(dat)) {
     cli::cli_abort("Input 'dat' must be a data frame.", call. = FALSE)
@@ -30,16 +26,7 @@ validate_maive_data <- function(dat,
 
   # Remove empty rows
   original_nrow <- nrow(dat)
-  dat <- dat[rowSums(is.na(dat)) != ncol(dat), ]
-  if (nrow(dat) < original_nrow) {
-    cli::cli_alert_info(
-      sprintf(
-        "Removed %d completely empty row%s",
-        original_nrow - nrow(dat),
-        if (original_nrow - nrow(dat) == 1) "" else "s"
-      )
-    )
-  }
+  dat <- maive_drop_empty_rows(dat)
 
   # Numeric types (strict validation, no silent coercion) after removing empty rows
   for (col in required_cols) {
@@ -128,11 +115,42 @@ validate_maive_data <- function(dat,
   invisible(dat)
 }
 
+#' Drop completely empty rows from a data frame
+#'
+#' Rows where every column is NA carry no information and are removed before
+#' column resolution, which rejects missing values in the mapped columns.
+#'
+#' @param dat Data frame
+#' @return Data frame without completely empty rows (row names reset)
+#' @keywords internal
+#' @noRd
+maive_drop_empty_rows <- function(dat) {
+  if (ncol(dat) == 0L || nrow(dat) == 0L) {
+    return(dat)
+  }
+  empty <- rowSums(is.na(dat)) == ncol(dat)
+  n_removed <- sum(empty)
+  if (n_removed > 0L) {
+    dat <- dat[!empty, , drop = FALSE]
+    rownames(dat) <- NULL
+    cli::cli_alert_info(
+      sprintf(
+        "Removed %d completely empty row%s",
+        n_removed,
+        if (n_removed == 1L) "" else "s"
+      )
+    )
+  }
+  dat
+}
+
 #' Resolve column mappings for MAIVE inputs
 #'
 #' Allows users to specify custom column names for estimate, SE, Ns, and study_id.
-#' Falls back to defaults (bs, sebs, Ns, study_id positional) when mappings are
-#' not provided. Performs presence, numeric, non-missing, and finite validation.
+#' Falls back to the default names (bs, sebs, Ns, study_id) when mappings are
+#' not provided. When no study_id mapping is given and no column is named
+#' study_id, the fourth column is used positionally with a warning naming the
+#' column. Performs presence, numeric, non-missing, and finite validation.
 #'
 #' @keywords internal
 #' @noRd
@@ -177,14 +195,25 @@ resolve_maive_columns <- function(dat, estimate = NULL, se = NULL, n = NULL, stu
   check_vector(sebs, se_col)
   check_vector(Ns, n_col)
 
-  # Study ID handling: use mapped name if provided; otherwise fallback to positional 4th col if present
+  # Study ID handling: use the mapped name if provided; otherwise a column named
+  # study_id; otherwise fall back to the positional 4th column with a warning.
   if (!is.null(study_id) && !identical(study_id, "")) {
     study_col <- as.character(study_id)
     if (!study_col %in% names(dat)) {
       cli::cli_abort(sprintf("Column '%s' (study_id) is missing.", study_col), call. = FALSE)
     }
     studyid <- dat[[study_col]]
+  } else if ("study_id" %in% names(dat)) {
+    studyid <- dat[["study_id"]]
   } else if (ncol(dat) >= 4) {
+    fallback_col <- names(dat)[4]
+    cli::cli_warn(
+      c(
+        "No 'study_id' column found; using the fourth column ('{fallback_col}') as the study identifier.",
+        "i" = "Pass study_id = \"{fallback_col}\" to confirm, or drop the column if it is not a study identifier."
+      ),
+      call. = FALSE
+    )
     studyid <- dat[[4]]
   } else {
     studyid <- NULL
@@ -277,7 +306,8 @@ validate_maive_parameters <- function(method, weight, instrument, studylevel, SE
 #' @param estimate Optional column name to use instead of 'bs'
 #' @param se Optional column name to use instead of 'sebs'
 #' @param n Optional column name to use instead of 'Ns'
-#' @param study_id Optional column name for study identifiers (defaults to 4th col if absent)
+#' @param study_id Optional column name for study identifiers (a column named
+#'   study_id is used when absent; otherwise the 4th column, with a warning)
 #' @param method Method choice (1=PET, 2=PEESE, 3=PET-PEESE, 4=EK)
 #' @param weight Weighting scheme (0=equal, 1=standard, 2=adjusted, 3=study)
 #' @param instrument Variance instrumentation (0=disabled, 1=enabled)
@@ -301,7 +331,12 @@ normalize_maive_options <- function(dat,
                                     n = NULL,
                                     study_id = NULL) {
   dat <- as.data.frame(dat)
-  dat <- validate_maive_data(dat)
+  # Resolve custom column names first, then validate the resolved frame.
+  # Completely empty rows are dropped before resolution because resolution
+  # rejects missing values in the mapped columns rather than cleaning them.
+  dat <- maive_drop_empty_rows(dat)
+  resolved <- resolve_maive_columns(dat, estimate = estimate, se = se, n = n, study_id = study_id)
+  dat <- validate_maive_data(resolved$dat)
 
   scalar_int <- function(value, name) {
     if (length(value) != 1L || is.na(value)) {
@@ -373,9 +408,6 @@ normalize_maive_options <- function(dat,
 
   validate_maive_parameters(method, weight, instrument, studylevel, SE, AR)
 
-  resolved <- resolve_maive_columns(dat, estimate = estimate, se = se, n = n, study_id = study_id)
-  dat <- resolved$dat
-
   list(
     dat = dat,
     method = method,
@@ -402,8 +434,8 @@ maive_prepare_data <- function(dat, studylevel) {
   cluster <- studylevel %/% 2L
   dummy <- studylevel %% 2L
 
-  if (ncol(dat) >= 4) {
-    studyid <- dat[[4]]
+  if ("study_id" %in% names(dat)) {
+    studyid <- dat[["study_id"]]
   } else {
     studyid <- seq_len(M)
     dummy <- 0L
