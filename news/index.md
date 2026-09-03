@@ -2,7 +2,7 @@
 
 ## MAIVE 0.2.6
 
-*Unreleased*
+*Released: 2026-09-03*
 
 ### Bug Fixes
 
