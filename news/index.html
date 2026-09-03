@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">MAIVE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.2.6</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.3.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -37,10 +37,10 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.2.7" id="maive-027">MAIVE 0.2.7<a class="anchor" aria-label="anchor" href="#maive-027"></a></h2>
-<p><em>Unreleased</em></p>
+<h2 class="pkg-version" data-toc-text="0.3.0" id="maive-030">MAIVE 0.3.0<a class="anchor" aria-label="anchor" href="#maive-030"></a></h2>
+<p><em>Released: 2026-09-03</em></p>
 <div class="section level3">
-<h3 id="new-features-0-2-7">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-7"></a></h3>
+<h3 id="new-features-0-3-0">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-3-0"></a></h3>
 <ul><li>
 <code><a href="../reference/maive_from_metafor.html">maive_from_metafor()</a></code> converts a metafor <code>escalc</code> data frame or an <code>rma.uni</code> fit into the data frame <code><a href="../reference/maive.html">maive()</a></code> and <code><a href="../reference/waive.html">waive()</a></code> expect. It takes the standard error as <code>sqrt(vi)</code>, so metafor’s sampling variance cannot land in the <code>sebs</code> slot by mistake (which silently shifts the estimate), and it resolves sample sizes from <code>ni</code>, the <code>ni</code> column, the <code>ni</code> attribute <code>escalc()</code> stamps on the effect sizes, or <code>n1i + n2i</code>, never from the variance. <code>rma.uni</code> rows are taken through the fit’s <code>subset</code> and missing-value masks so effects, variances, sample sizes, and study identifiers stay aligned. <code>rma.mv</code>, <code>rma.glmm</code>, and other <code>rma</code> subclasses are refused with a message. metafor is a suggested dependency only.</li>
 </ul><hr></div>

@@ -1,8 +1,8 @@
 # Changelog
 
-## MAIVE 0.2.7
+## MAIVE 0.3.0
 
-*Unreleased*
+*Released: 2026-09-03*
 
 ### New Features
 
