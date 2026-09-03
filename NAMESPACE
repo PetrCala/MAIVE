@@ -2,6 +2,7 @@
 
 export(get_funnel_plot)
 export(maive)
+export(maive_from_metafor)
 export(waive)
 importFrom(stats,ave)
 importFrom(stats,coef)

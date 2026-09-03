@@ -19,6 +19,20 @@ if [ ! -f "$NEWS_FILE" ]; then
     exit 1
 fi
 
+# A hand-written entry for the upcoming release may sit under a provisional
+# version heading (for example 0.2.7 when the bump turns out to be minor).
+# If the newest entry is still "*Unreleased*", rename its heading to $VERSION
+# so the date stamp below lands on it instead of leaving it orphaned.
+FIRST_HEADING=$(grep -m1 "^# MAIVE " "$NEWS_FILE" | sed 's/^# MAIVE //')
+if [ -n "$FIRST_HEADING" ] && [ "$FIRST_HEADING" != "$VERSION" ] && \
+   awk '/^# MAIVE /{h++} h==1 && /^\*Unreleased\*/{found=1} END{exit !found}' "$NEWS_FILE"; then
+    awk -v old="$FIRST_HEADING" -v new="$VERSION" '
+        !done && $0 == "# MAIVE " old { $0 = "# MAIVE " new; done = 1 }
+        { print }
+    ' "$NEWS_FILE" > "$NEWS_FILE.tmp" && mv "$NEWS_FILE.tmp" "$NEWS_FILE"
+    echo "[OK] Renamed the unreleased $FIRST_HEADING entry in $NEWS_FILE to $VERSION"
+fi
+
 # Check if version already exists in NEWS.md. A hand-written entry may carry an
 # "*Unreleased*" placeholder instead of a date; stamp today's date into it.
 if grep -q "^# MAIVE $VERSION" "$NEWS_FILE"; then
