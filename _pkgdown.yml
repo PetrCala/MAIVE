@@ -48,6 +48,7 @@ reference:
   contents:
   - maive
   - waive
+  - maive_from_metafor
   - get_funnel_plot
 
 - title: Internal Functions
@@ -55,6 +56,7 @@ reference:
     Internal helper functions (not typically called directly by users)
   contents:
   - starts_with("maive_")
+  - -maive_from_metafor
 
 authors:
   Zuzana Irsova:

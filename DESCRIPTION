@@ -46,6 +46,7 @@ Suggests:
     testthat,
     knitr,
     rmarkdown,
-    varhandle
+    varhandle,
+    metafor
 VignetteBuilder: knitr
 LazyData: true
