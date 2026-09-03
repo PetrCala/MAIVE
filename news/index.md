@@ -1,5 +1,28 @@
 # Changelog
 
+## MAIVE 0.2.7
+
+*Unreleased*
+
+### New Features
+
+- [`maive_from_metafor()`](https://petrcala.github.io/MAIVE/reference/maive_from_metafor.md)
+  converts a metafor `escalc` data frame or an `rma.uni` fit into the
+  data frame
+  [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) and
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md)
+  expect. It takes the standard error as `sqrt(vi)`, so metafor’s
+  sampling variance cannot land in the `sebs` slot by mistake (which
+  silently shifts the estimate), and it resolves sample sizes from `ni`,
+  the `ni` column, the `ni` attribute `escalc()` stamps on the effect
+  sizes, or `n1i + n2i`, never from the variance. `rma.uni` rows are
+  taken through the fit’s `subset` and missing-value masks so effects,
+  variances, sample sizes, and study identifiers stay aligned. `rma.mv`,
+  `rma.glmm`, and other `rma` subclasses are refused with a message.
+  metafor is a suggested dependency only.
+
+------------------------------------------------------------------------
+
 ## MAIVE 0.2.6
 
 *Released: 2026-09-03*

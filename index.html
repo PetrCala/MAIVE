@@ -166,6 +166,17 @@ by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger</p>
 </tbody>
 </table>
 <p>Other column names can be mapped with the <code>estimate</code>, <code>se</code>, <code>n</code>, and <code>study_id</code> arguments. A column named <code>study_id</code> is used as the study identifier wherever it sits. If there is no such column and no <code>study_id</code> argument, the fourth column is used with a warning that names it, so a moderator or year kept in column four does not silently drive the study dummies and clustering. With a study identifier, the data needs at least the number of unique studies plus three rows.</p>
+<div class="section level3">
+<h3 id="using-metafor-objects">Using metafor objects<a class="anchor" aria-label="anchor" href="#using-metafor-objects"></a>
+</h3>
+<p>If your effect sizes already live in a metafor <code>escalc()</code> data frame or an <code>rma()</code> fit, convert them with <code><a href="reference/maive_from_metafor.html">maive_from_metafor()</a></code> rather than rebuilding the frame by hand. It takes <code>sqrt(vi)</code> as the standard error (pasting metafor’s variance into <code>sebs</code> raises no error but shifts the estimate) and reads sample sizes from the object, never from the variance:</p>
+<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">dat</span> <span class="op">&lt;-</span> <span class="fu">metafor</span><span class="fu">::</span><span class="fu"><a href="https://wviechtb.github.io/metafor/reference/escalc.html" class="external-link">escalc</a></span><span class="op">(</span>measure <span class="op">=</span> <span class="st">"SMD"</span>, m1i <span class="op">=</span> <span class="va">...</span>, sd1i <span class="op">=</span> <span class="va">...</span>, n1i <span class="op">=</span> <span class="va">...</span>,</span>
+<span>                       m2i <span class="op">=</span> <span class="va">...</span>, sd2i <span class="op">=</span> <span class="va">...</span>, n2i <span class="op">=</span> <span class="va">...</span><span class="op">)</span></span>
+<span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="reference/maive.html">maive</a></span><span class="op">(</span><span class="fu"><a href="reference/maive_from_metafor.html">maive_from_metafor</a></span><span class="op">(</span><span class="va">dat</span><span class="op">)</span>, method <span class="op">=</span> <span class="fl">3</span>, weight <span class="op">=</span> <span class="fl">0</span>, instrument <span class="op">=</span> <span class="fl">1</span>,</span>
+<span>                studylevel <span class="op">=</span> <span class="fl">0</span>, SE <span class="op">=</span> <span class="fl">3</span>, AR <span class="op">=</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+<p>Rows of an <code>rma.uni</code> fit are taken through the fit’s <code>subset</code> and missing-value masks, so a <code>study_id</code> vector for the original data stays aligned. <code>rma.mv</code> and <code>rma.glmm</code> fits are refused rather than flattened.</p>
+</div>
 </div>
 <div class="section level2">
 <h2 id="key-features">Key Features<a class="anchor" aria-label="anchor" href="#key-features"></a>
@@ -248,7 +259,7 @@ by Zuzana Irsova, Pedro R. D. Bom, Tomas Havranek, and Heiko Rachinger</p>
 <div class="section level2">
 <h2 id="example">Example<a class="anchor" aria-label="anchor" href="#example"></a>
 </h2>
-<div class="sourceCode" id="cb5"><pre class="downlit sourceCode r">
+<div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="co"># Create example data</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
 <span><span class="va">Ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">100</span><span class="op">:</span><span class="fl">1000</span>, <span class="fl">50</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>

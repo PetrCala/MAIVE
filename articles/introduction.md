@@ -136,6 +136,41 @@ moderator or a year rather than a study identifier, drop it or name the
 correct column explicitly, because the identifier drives the study
 dummies and clustering at every `studylevel` other than 0.
 
+**Coming from metafor:** if your effect sizes are already in a
+[`metafor::escalc()`](https://wviechtb.github.io/metafor/reference/escalc.html)
+data frame or an `rma()` fit,
+[`maive_from_metafor()`](https://petrcala.github.io/MAIVE/reference/maive_from_metafor.md)
+builds this data frame for you. It uses `sqrt(vi)` as the standard error
+and takes the sample sizes from the object (`ni`, the `ni` attribute
+that `escalc()` records, or `n1i + n2i`), never inferring them from the
+variance. Rows of an `rma.uni` fit pass through the fit’s `subset` and
+missing-value masks, so a `study_id` vector for the original data stays
+aligned.
+
+``` r
+
+smd <- metafor::escalc(
+  measure = "SMD",
+  m1i = c(2.1, 2.5, 1.9, 2.4, 2.2, 2.6, 2.3, 2.0),
+  sd1i = c(1.0, 1.2, 0.9, 1.1, 1.0, 1.3, 1.1, 1.0),
+  n1i = c(40, 50, 30, 45, 60, 35, 55, 48),
+  m2i = c(1.8, 2.0, 1.7, 2.1, 1.9, 2.2, 2.0, 1.8),
+  sd2i = c(1.0, 1.1, 1.0, 1.0, 1.1, 1.2, 1.0, 1.1),
+  n2i = c(42, 55, 33, 48, 58, 37, 52, 50)
+)
+
+maive_from_metafor(smd)
+#>          bs      sebs  Ns
+#> 1 0.2971772 0.2221442  82
+#> 2 0.4321116 0.1976638 105
+#> 3 0.2071041 0.2529363  63
+#> 4 0.2834756 0.2085368  93
+#> 5 0.2837736 0.1850656 118
+#> 6 0.3166657 0.2372653  72
+#> 7 0.2829629 0.1943881 107
+#> 8 0.1885831 0.2025211  98
+```
+
 ## Basic Usage
 
 Let’s create a simple example dataset:

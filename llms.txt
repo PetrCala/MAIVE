@@ -98,6 +98,28 @@ it, so a moderator or year kept in column four does not silently drive
 the study dummies and clustering. With a study identifier, the data
 needs at least the number of unique studies plus three rows.
 
+### Using metafor objects
+
+If your effect sizes already live in a metafor `escalc()` data frame or
+an `rma()` fit, convert them with
+[`maive_from_metafor()`](https://petrcala.github.io/MAIVE/reference/maive_from_metafor.md)
+rather than rebuilding the frame by hand. It takes `sqrt(vi)` as the
+standard error (pasting metafor’s variance into `sebs` raises no error
+but shifts the estimate) and reads sample sizes from the object, never
+from the variance:
+
+``` r
+
+dat <- metafor::escalc(measure = "SMD", m1i = ..., sd1i = ..., n1i = ...,
+                       m2i = ..., sd2i = ..., n2i = ...)
+result <- maive(maive_from_metafor(dat), method = 3, weight = 0, instrument = 1,
+                studylevel = 0, SE = 3, AR = 1)
+```
+
+Rows of an `rma.uni` fit are taken through the fit’s `subset` and
+missing-value masks, so a `study_id` vector for the original data stays
+aligned. `rma.mv` and `rma.glmm` fits are refused rather than flattened.
+
 ## Key Features
 
 ### Methods
@@ -234,6 +256,8 @@ Core functions for performing meta-analysis with instrumental variables
   code for MAIVE
 - [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md) :
   WAIVE: More Aggressive Correction for P-Hacking and Spurious Precision
+- [`maive_from_metafor()`](https://petrcala.github.io/MAIVE/reference/maive_from_metafor.md)
+  : Convert metafor objects into MAIVE input data
 - [`get_funnel_plot()`](https://petrcala.github.io/MAIVE/reference/get_funnel_plot.md)
   : Draw a funnel plot (base graphics)
 
