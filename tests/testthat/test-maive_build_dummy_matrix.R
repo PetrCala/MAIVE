@@ -81,7 +81,10 @@ test_that("euro results match the 0.2.5 reference at all four studylevels", {
   ref$studylevel <- as.integer(ref$studylevel)
   ref$method <- as.integer(ref$method)
 
-  as_ref_string <- function(v) if (is.numeric(v)) sprintf("%.17g", v) else as.character(v)
+  # The reference was written with 17 significant digits and is bit-identical
+  # to this code on the machine that produced it. Across BLAS builds the last
+  # two or three digits move, so compare numerically with a tight tolerance.
+  ref_tolerance <- 1e-8
 
   for (studylevel in 0:3) {
     for (method in 1:4) {
@@ -100,8 +103,10 @@ test_that("euro results match the 0.2.5 reference at all four studylevels", {
         label <- sprintf("studylevel %d, method %d, %s", studylevel, method, field)
         if (is.na(expected)) {
           expect_true(is.na(got), label = label)
+        } else if (is.numeric(got)) {
+          expect_equal(got, as.numeric(expected), tolerance = ref_tolerance, label = label)
         } else {
-          expect_identical(as_ref_string(got), expected, label = label)
+          expect_identical(as.character(got), expected, label = label)
         }
       }
     }
