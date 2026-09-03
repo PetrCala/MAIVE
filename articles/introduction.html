@@ -236,25 +236,27 @@ dummies and clustering at every <code>studylevel</code> other than
 </h2>
 <p>Let’s create a simple example dataset:</p>
 <div class="sourceCode" id="cb4"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="co"># Simulated meta-analysis data</span></span>
+<code class="sourceCode R"><span><span class="co"># Simulated meta-analysis data: 50 estimates from 10 studies, with reported</span></span>
+<span><span class="co"># precision driven by sample size (as the first stage assumes)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></span><span class="op">(</span><span class="fl">123</span><span class="op">)</span></span>
-<span><span class="va">n_studies</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span><span class="va">n_estimates</span> <span class="op">&lt;-</span> <span class="fl">50</span></span>
+<span><span class="va">Ns</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">100</span><span class="op">:</span><span class="fl">1000</span>, <span class="va">n_estimates</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  bs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_studies</span>, mean <span class="op">=</span> <span class="fl">0.3</span>, sd <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span>
-<span>  sebs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_studies</span>, min <span class="op">=</span> <span class="fl">0.05</span>, max <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span>,</span>
-<span>  Ns <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html" class="external-link">sample</a></span><span class="op">(</span><span class="fl">100</span><span class="op">:</span><span class="fl">1000</span>, <span class="va">n_studies</span>, replace <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>,</span>
+<span>  bs <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html" class="external-link">rnorm</a></span><span class="op">(</span><span class="va">n_estimates</span>, mean <span class="op">=</span> <span class="fl">0.3</span>, sd <span class="op">=</span> <span class="fl">0.2</span><span class="op">)</span>,</span>
+<span>  sebs <span class="op">=</span> <span class="fl">2</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html" class="external-link">sqrt</a></span><span class="op">(</span><span class="va">Ns</span><span class="op">)</span> <span class="op">*</span> <span class="fu"><a href="https://rdrr.io/r/stats/Uniform.html" class="external-link">runif</a></span><span class="op">(</span><span class="va">n_estimates</span>, min <span class="op">=</span> <span class="fl">0.8</span>, max <span class="op">=</span> <span class="fl">1.2</span><span class="op">)</span>,</span>
+<span>  Ns <span class="op">=</span> <span class="va">Ns</span>,</span>
 <span>  study_id <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/rep.html" class="external-link">rep</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span>, each <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html" class="external-link">head</a></span><span class="op">(</span><span class="va">data</span><span class="op">)</span></span>
-<span><span class="co">#&gt;          bs      sebs  Ns study_id</span></span>
-<span><span class="co">#&gt; 1 0.1879049 0.1999972 342        1</span></span>
-<span><span class="co">#&gt; 2 0.2539645 0.1332059 961        1</span></span>
-<span><span class="co">#&gt; 3 0.6117417 0.1721533 946        1</span></span>
-<span><span class="co">#&gt; 4 0.3141017 0.2886185 891        1</span></span>
-<span><span class="co">#&gt; 5 0.3258575 0.1707256 212        1</span></span>
-<span><span class="co">#&gt; 6 0.6430130 0.2725876 718        2</span></span></code></pre></div>
+<span><span class="co">#&gt;          bs       sebs  Ns study_id</span></span>
+<span><span class="co">#&gt; 1 0.2409857 0.09350867 514        1</span></span>
+<span><span class="co">#&gt; 2 0.4790251 0.08013701 562        1</span></span>
+<span><span class="co">#&gt; 3 0.4756267 0.11301618 278        1</span></span>
+<span><span class="co">#&gt; 4 0.4643162 0.08107801 625        1</span></span>
+<span><span class="co">#&gt; 5 0.4377281 0.12785564 294        1</span></span>
+<span><span class="co">#&gt; 6 0.4107835 0.05867782 917        2</span></span></code></pre></div>
 <div class="section level3">
 <h3 id="default-maive-estimation">Default MAIVE Estimation<a class="anchor" aria-label="anchor" href="#default-maive-estimation"></a>
 </h3>
@@ -274,26 +276,31 @@ bootstrap:</p>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="co"># View key results</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"MAIVE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">Estimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"MAIVE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; MAIVE Estimate: 0.335</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"MAIVE SE:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">SE</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Standard Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">StdEstimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; MAIVE SE: 0.05</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Standard Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">beta_standard</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Standard Estimate: 0.348</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"Hausman Test:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">Hausman</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"First-stage F-test:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">`F-test`</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="co">#&gt; Hausman Test: 0.001</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"First-stage F-test:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">`F-test`</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="co">#&gt; First-stage F-test: 373.181</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="understanding-the-output">Understanding the Output<a class="anchor" aria-label="anchor" href="#understanding-the-output"></a>
 </h3>
 <p>The <code><a href="../reference/maive.html">maive()</a></code> function returns a list with the following
-key elements:</p>
+key elements (see <code><a href="../reference/maive.html">?maive</a></code> for the full list):</p>
 <ul>
 <li>
-<code>Estimate</code>: MAIVE point estimate (corrected for spurious
+<code>beta</code>: MAIVE point estimate (corrected for spurious
 precision)</li>
 <li>
 <code>SE</code>: MAIVE standard error</li>
 <li>
-<code>StdEstimate</code>: Standard (non-IV) estimate for
-comparison</li>
+<code>beta_standard</code>, <code>SE_standard</code>: Conventional
+(non-IV) estimate and standard error for comparison</li>
 <li>
 <code>Hausman</code>: Hausman-type test comparing IV vs OLS
 estimates (high value suggests spurious precision)</li>
@@ -303,10 +310,18 @@ estimates (high value suggests spurious precision)</li>
 <code>AR_CI</code>: Anderson-Rubin confidence interval (robust to
 weak instruments)</li>
 <li>
-<code>pbias_pval</code>: p-value for publication bias test</li>
+<code>pub bias p-value</code>: p-value for the publication bias test
+based on the instrumented FAT</li>
 <li>
 <code>SE_instrumented</code>: Vector of instrumented standard
 errors</li>
+<li>
+<code>petpeese_selected</code>: Which of PET and PEESE was selected
+when <code>method = 3</code>
+</li>
+<li>
+<code>ek_structure</code>: Structure of the EK fit when
+<code>method = 4</code> (“kink”, “linear”, or “intercept”)</li>
 </ul>
 </div>
 </div>
@@ -328,7 +343,7 @@ errors</li>
 <span>  AR <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PET Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_pet</span><span class="op">$</span><span class="va">Estimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PET Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_pet</span><span class="op">$</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="peese-precision-effect-estimate-with-standard-error">2. PEESE (Precision-Effect Estimate with Standard Error)<a class="anchor" aria-label="anchor" href="#peese-precision-effect-estimate-with-standard-error"></a>
@@ -344,7 +359,7 @@ errors</li>
 <span>  AR <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PEESE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_peese</span><span class="op">$</span><span class="va">Estimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PEESE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_peese</span><span class="op">$</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="pet-peese-conditional-method">3. PET-PEESE (Conditional Method)<a class="anchor" aria-label="anchor" href="#pet-peese-conditional-method"></a>
@@ -362,7 +377,7 @@ from zero, otherwise uses PEESE:</p>
 <span>  AR <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PET-PEESE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_petpeese</span><span class="op">$</span><span class="va">Estimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"PET-PEESE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_petpeese</span><span class="op">$</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
 <div class="section level3">
 <h3 id="endogenous-kink-ek">4. Endogenous Kink (EK)<a class="anchor" aria-label="anchor" href="#endogenous-kink-ek"></a>
@@ -378,7 +393,7 @@ from zero, otherwise uses PEESE:</p>
 <span>  AR <span class="op">=</span> <span class="fl">0</span>  <span class="co"># AR not available for EK</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"EK Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_ek</span><span class="op">$</span><span class="va">Estimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"EK Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_ek</span><span class="op">$</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 </div>
 </div>
 <div class="section level2">
@@ -501,22 +516,23 @@ per study:</p>
 <div class="section level2">
 <h2 id="waive-more-aggressive-correction">WAIVE: More Aggressive Correction<a class="anchor" aria-label="anchor" href="#waive-more-aggressive-correction"></a>
 </h2>
-<p>WAIVE (Weighted And Instrumented Variable Estimator) provides a more
-aggressive correction for p-hacking and spurious precision by combining
-variance instrumentation with exponential-decay downweighting of studies
-with spurious precision or extreme outliers:</p>
+<p>WAIVE (Weighted Adjusted Instrumental Variable Estimator) provides a
+more aggressive correction for p-hacking and spurious precision by
+combining variance instrumentation with exponential-decay downweighting
+of studies with spurious precision or extreme outliers:</p>
 <p>For technical details and methodology, see the <a href="https://meta-analysis.cz/waive_ottawa.pdf" class="external-link">WAIVE slides</a>.</p>
 <div class="sourceCode" id="cb17"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result_waive</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/waive.html">waive</a></span><span class="op">(</span></span>
 <span>  dat <span class="op">=</span> <span class="va">data</span>,</span>
 <span>  method <span class="op">=</span> <span class="fl">3</span>,</span>
+<span>  weight <span class="op">=</span> <span class="fl">0</span>,</span>
 <span>  instrument <span class="op">=</span> <span class="fl">1</span>,</span>
 <span>  studylevel <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  SE <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  AR <span class="op">=</span> <span class="fl">1</span></span>
 <span><span class="op">)</span></span>
 <span></span>
-<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"WAIVE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_waive</span><span class="op">$</span><span class="va">Estimate</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"WAIVE Estimate:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_waive</span><span class="op">$</span><span class="va">beta</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/cat.html" class="external-link">cat</a></span><span class="op">(</span><span class="st">"WAIVE SE:"</span>, <span class="fu"><a href="https://rdrr.io/r/base/Round.html" class="external-link">round</a></span><span class="op">(</span><span class="va">result_waive</span><span class="op">$</span><span class="va">SE</span>, <span class="fl">3</span><span class="op">)</span>, <span class="st">"\n"</span><span class="op">)</span></span></code></pre></div>
 <p>WAIVE is particularly useful when:</p>
 <ul>

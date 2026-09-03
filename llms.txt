@@ -72,7 +72,7 @@ result <- maive(
 )
 
 # View results
-print(result$Estimate)    # MAIVE estimate
+print(result$beta)        # MAIVE estimate
 print(result$SE)          # Standard error
 print(result$Hausman)     # Hausman test
 print(result$`F-test`)    # First-stage F-test
@@ -154,10 +154,11 @@ The function returns:
 
 # Create example data
 set.seed(123)
+Ns <- sample(100:1000, 50, replace = TRUE)
 data <- data.frame(
   bs = rnorm(50, mean = 0.3, sd = 0.2),
-  sebs = runif(50, min = 0.05, max = 0.3),
-  Ns = sample(100:1000, 50, replace = TRUE),
+  sebs = 2 / sqrt(Ns) * runif(50, min = 0.8, max = 1.2),  # precision driven by sample size
+  Ns = Ns,
   study_id = rep(1:10, each = 5)
 )
 
@@ -166,14 +167,14 @@ result <- maive(data, method = 3, weight = 0, instrument = 1,
                 studylevel = 2, SE = 3, AR = 1)
 
 # Compare with standard estimate
-cat("MAIVE Estimate:", result$Estimate, "\n")
-cat("Standard Estimate:", result$StdEstimate, "\n")
+cat("MAIVE Estimate:", result$beta, "\n")
+cat("Standard Estimate:", result$beta_standard, "\n")
 cat("Hausman Test:", result$Hausman, "\n")
 
 # Use WAIVE for more aggressive correction (downweights spurious precision + outliers)
-result_waive <- waive(data, method = 3, instrument = 1,
+result_waive <- waive(data, method = 3, weight = 0, instrument = 1,
                       studylevel = 2, SE = 3, AR = 1)
-cat("WAIVE Estimate:", result_waive$Estimate, "\n")
+cat("WAIVE Estimate:", result_waive$beta, "\n")
 ```
 
 ## Citation

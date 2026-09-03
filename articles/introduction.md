@@ -142,25 +142,27 @@ Let’s create a simple example dataset:
 
 ``` r
 
-# Simulated meta-analysis data
+# Simulated meta-analysis data: 50 estimates from 10 studies, with reported
+# precision driven by sample size (as the first stage assumes)
 set.seed(123)
-n_studies <- 50
+n_estimates <- 50
+Ns <- sample(100:1000, n_estimates, replace = TRUE)
 
 data <- data.frame(
-  bs = rnorm(n_studies, mean = 0.3, sd = 0.2),
-  sebs = runif(n_studies, min = 0.05, max = 0.3),
-  Ns = sample(100:1000, n_studies, replace = TRUE),
+  bs = rnorm(n_estimates, mean = 0.3, sd = 0.2),
+  sebs = 2 / sqrt(Ns) * runif(n_estimates, min = 0.8, max = 1.2),
+  Ns = Ns,
   study_id = rep(1:10, each = 5)
 )
 
 head(data)
-#>          bs      sebs  Ns study_id
-#> 1 0.1879049 0.1999972 342        1
-#> 2 0.2539645 0.1332059 961        1
-#> 3 0.6117417 0.1721533 946        1
-#> 4 0.3141017 0.2886185 891        1
-#> 5 0.3258575 0.1707256 212        1
-#> 6 0.6430130 0.2725876 718        2
+#>          bs       sebs  Ns study_id
+#> 1 0.2409857 0.09350867 514        1
+#> 2 0.4790251 0.08013701 562        1
+#> 3 0.4756267 0.11301618 278        1
+#> 4 0.4643162 0.08107801 625        1
+#> 5 0.4377281 0.12785564 294        1
+#> 6 0.4107835 0.05867782 917        2
 ```
 
 ### Default MAIVE Estimation
@@ -182,28 +184,41 @@ result <- maive(
 )
 
 # View key results
-cat("MAIVE Estimate:", round(result$Estimate, 3), "\n")
+cat("MAIVE Estimate:", round(result$beta, 3), "\n")
+#> MAIVE Estimate: 0.335
 cat("MAIVE SE:", round(result$SE, 3), "\n")
-cat("Standard Estimate:", round(result$StdEstimate, 3), "\n")
+#> MAIVE SE: 0.05
+cat("Standard Estimate:", round(result$beta_standard, 3), "\n")
+#> Standard Estimate: 0.348
 cat("Hausman Test:", round(result$Hausman, 3), "\n")
+#> Hausman Test: 0.001
 cat("First-stage F-test:", round(result$`F-test`, 3), "\n")
+#> First-stage F-test: 373.181
 ```
 
 ### Understanding the Output
 
 The [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md)
-function returns a list with the following key elements:
+function returns a list with the following key elements (see
+[`?maive`](https://petrcala.github.io/MAIVE/reference/maive.md) for the
+full list):
 
-- `Estimate`: MAIVE point estimate (corrected for spurious precision)
+- `beta`: MAIVE point estimate (corrected for spurious precision)
 - `SE`: MAIVE standard error
-- `StdEstimate`: Standard (non-IV) estimate for comparison
+- `beta_standard`, `SE_standard`: Conventional (non-IV) estimate and
+  standard error for comparison
 - `Hausman`: Hausman-type test comparing IV vs OLS estimates (high value
   suggests spurious precision)
 - `F-test`: First-stage F-test of instrument strength
 - `AR_CI`: Anderson-Rubin confidence interval (robust to weak
   instruments)
-- `pbias_pval`: p-value for publication bias test
+- `pub bias p-value`: p-value for the publication bias test based on the
+  instrumented FAT
 - `SE_instrumented`: Vector of instrumented standard errors
+- `petpeese_selected`: Which of PET and PEESE was selected when
+  `method = 3`
+- `ek_structure`: Structure of the EK fit when `method = 4` (“kink”,
+  “linear”, or “intercept”)
 
 ## Method Options
 
@@ -223,7 +238,7 @@ result_pet <- maive(
   AR = 1
 )
 
-cat("PET Estimate:", round(result_pet$Estimate, 3), "\n")
+cat("PET Estimate:", round(result_pet$beta, 3), "\n")
 ```
 
 ### 2. PEESE (Precision-Effect Estimate with Standard Error)
@@ -240,7 +255,7 @@ result_peese <- maive(
   AR = 1
 )
 
-cat("PEESE Estimate:", round(result_peese$Estimate, 3), "\n")
+cat("PEESE Estimate:", round(result_peese$beta, 3), "\n")
 ```
 
 ### 3. PET-PEESE (Conditional Method)
@@ -260,7 +275,7 @@ result_petpeese <- maive(
   AR = 1
 )
 
-cat("PET-PEESE Estimate:", round(result_petpeese$Estimate, 3), "\n")
+cat("PET-PEESE Estimate:", round(result_petpeese$beta, 3), "\n")
 ```
 
 ### 4. Endogenous Kink (EK)
@@ -277,7 +292,7 @@ result_ek <- maive(
   AR = 0  # AR not available for EK
 )
 
-cat("EK Estimate:", round(result_ek$Estimate, 3), "\n")
+cat("EK Estimate:", round(result_ek$beta, 3), "\n")
 ```
 
 ## Weighting Schemes
@@ -408,10 +423,10 @@ cat("First-stage (log) F-test:", round(result_log$`F-test`, 3), "\n")
 
 ## WAIVE: More Aggressive Correction
 
-WAIVE (Weighted And Instrumented Variable Estimator) provides a more
-aggressive correction for p-hacking and spurious precision by combining
-variance instrumentation with exponential-decay downweighting of studies
-with spurious precision or extreme outliers:
+WAIVE (Weighted Adjusted Instrumental Variable Estimator) provides a
+more aggressive correction for p-hacking and spurious precision by
+combining variance instrumentation with exponential-decay downweighting
+of studies with spurious precision or extreme outliers:
 
 For technical details and methodology, see the [WAIVE
 slides](https://meta-analysis.cz/waive_ottawa.pdf).
@@ -421,13 +436,14 @@ slides](https://meta-analysis.cz/waive_ottawa.pdf).
 result_waive <- waive(
   dat = data,
   method = 3,
+  weight = 0,
   instrument = 1,
   studylevel = 2,
   SE = 3,
   AR = 1
 )
 
-cat("WAIVE Estimate:", round(result_waive$Estimate, 3), "\n")
+cat("WAIVE Estimate:", round(result_waive$beta, 3), "\n")
 cat("WAIVE SE:", round(result_waive$SE, 3), "\n")
 ```
 

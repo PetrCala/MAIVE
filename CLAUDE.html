@@ -184,9 +184,9 @@ Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0</cod
 <h3 id="output-structure">Output Structure<a class="anchor" aria-label="anchor" href="#output-structure"></a></h3>
 <p>Returns a named list with:</p>
 <ul><li>
-<code>Estimate</code>, <code>SE</code>: Main MAIVE point estimate and standard error</li>
+<code>beta</code>, <code>SE</code>: Main MAIVE point estimate and standard error</li>
 <li>
-<code>StdEstimate</code>, <code>StdSE</code>: Standard (non-IV) estimate for comparison</li>
+<code>beta_standard</code>, <code>SE_standard</code>: Conventional (non-IV) estimate and standard error from the same fit</li>
 <li>
 <code>Hausman</code>: Hausman-type test statistic comparing IV vs OLS intercepts</li>
 <li>
@@ -196,7 +196,9 @@ Nature Communications, 16, 8454. https://doi.org/10.1038/s41467-025-63261-0</cod
 <li>
 <code>SE_instrumented</code>: Instrumented standard errors vector</li>
 <li>
-<code>pbias_pval</code>: p-value for publication bias test based on instrumented FAT</li>
+<code>pub bias p-value</code>: p-value for publication bias test based on instrumented FAT</li>
+<li>
+<code>petpeese_selected</code>, <code>ek_structure</code>: model selection metadata for method 3 and method 4</li>
 </ul></div>
 </div>
 <div class="section level2">

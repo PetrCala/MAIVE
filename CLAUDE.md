@@ -196,15 +196,18 @@ predictions back to levels.
 
 Returns a named list with:
 
-- `Estimate`, `SE`: Main MAIVE point estimate and standard error
-- `StdEstimate`, `StdSE`: Standard (non-IV) estimate for comparison
+- `beta`, `SE`: Main MAIVE point estimate and standard error
+- `beta_standard`, `SE_standard`: Conventional (non-IV) estimate and
+  standard error from the same fit
 - `Hausman`: Hausman-type test statistic comparing IV vs OLS intercepts
 - `F-test`: First-stage F-test (if instrumenting)
 - `AR_CI`: Anderson-Rubin confidence interval (if AR=1 and conditions
   met)
 - `SE_instrumented`: Instrumented standard errors vector
-- `pbias_pval`: p-value for publication bias test based on instrumented
-  FAT
+- `pub bias p-value`: p-value for publication bias test based on
+  instrumented FAT
+- `petpeese_selected`, `ek_structure`: model selection metadata for
+  method 3 and method 4
 
 ## Testing
 
