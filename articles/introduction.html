@@ -191,10 +191,10 @@ names using:</p>
 <p>Example:</p>
 <div class="sourceCode" id="cb3"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">custom_dat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html" class="external-link">data.frame</a></span><span class="op">(</span></span>
-<span>  my_est <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.5</span>, <span class="fl">0.6</span>, <span class="fl">0.4</span>, <span class="fl">0.55</span><span class="op">)</span>,</span>
-<span>  my_se  <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.2</span>, <span class="fl">0.18</span>, <span class="fl">0.25</span>, <span class="fl">0.22</span><span class="op">)</span>,</span>
-<span>  my_n   <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">120</span>, <span class="fl">95</span>, <span class="fl">110</span><span class="op">)</span>,</span>
-<span>  my_study <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span><span class="op">)</span></span>
+<span>  my_est <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.50</span>, <span class="fl">0.60</span>, <span class="fl">0.40</span>, <span class="fl">0.55</span>, <span class="fl">0.45</span>, <span class="fl">0.52</span>, <span class="fl">0.48</span>, <span class="fl">0.58</span>, <span class="fl">0.42</span>, <span class="fl">0.50</span>, <span class="fl">0.47</span>, <span class="fl">0.56</span><span class="op">)</span>,</span>
+<span>  my_se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">0.20</span>, <span class="fl">0.18</span>, <span class="fl">0.25</span>, <span class="fl">0.22</span>, <span class="fl">0.24</span>, <span class="fl">0.19</span>, <span class="fl">0.23</span>, <span class="fl">0.17</span>, <span class="fl">0.26</span>, <span class="fl">0.21</span>, <span class="fl">0.24</span>, <span class="fl">0.18</span><span class="op">)</span>,</span>
+<span>  my_n <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="fl">80</span>, <span class="fl">120</span>, <span class="fl">95</span>, <span class="fl">110</span>, <span class="fl">90</span>, <span class="fl">130</span>, <span class="fl">100</span>, <span class="fl">140</span>, <span class="fl">85</span>, <span class="fl">105</span>, <span class="fl">88</span>, <span class="fl">125</span><span class="op">)</span>,</span>
+<span>  my_study <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html" class="external-link">c</a></span><span class="op">(</span><span class="st">"A"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"C"</span>, <span class="st">"D"</span>, <span class="st">"D"</span>, <span class="st">"A"</span>, <span class="st">"B"</span>, <span class="st">"C"</span>, <span class="st">"D"</span><span class="op">)</span></span>
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/maive.html">maive</a></span><span class="op">(</span></span>
@@ -209,10 +209,27 @@ names using:</p>
 <span>  studylevel <span class="op">=</span> <span class="fl">2</span>,</span>
 <span>  SE <span class="op">=</span> <span class="fl">3</span>,</span>
 <span>  AR <span class="op">=</span> <span class="fl">1</span></span>
-<span><span class="op">)</span></span></code></pre></div>
+<span><span class="op">)</span></span>
+<span><span class="co">#&gt; Registered S3 method overwritten by 'clubSandwich':</span></span>
+<span><span class="co">#&gt;   method    from    </span></span>
+<span><span class="co">#&gt;   bread.mlm sandwich</span></span>
+<span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">beta</span></span>
+<span><span class="co">#&gt; [1] 0.7628903</span></span></code></pre></div>
 <p>Validation rules still apply: required columns must be numeric,
 non-missing, finite, and there must be at least 4 observations after
-removing completely empty rows.</p>
+removing completely empty rows. With a study identifier, there must be
+at least as many rows as unique studies plus three (the fixture above
+has 12 rows for 4 studies).</p>
+<p><strong>Study identifier fallback:</strong> when
+<code>study_id</code> is not supplied, a column named
+<code>study_id</code> is used wherever it sits. If there is no such
+column and the data frame has four or more columns, the fourth column is
+used as the study identifier and a warning names it. If column four is a
+moderator or a year rather than a study identifier, drop it or name the
+correct column explicitly, because the identifier drives the study
+dummies and clustering at every <code>studylevel</code> other than
+0.</p>
 </div>
 <div class="section level2">
 <h2 id="basic-usage">Basic Usage<a class="anchor" aria-label="anchor" href="#basic-usage"></a>

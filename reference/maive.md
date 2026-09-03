@@ -28,7 +28,8 @@ maive(
 
 - dat:
 
-  Data frame with columns bs, sebs, Ns, study_id (optional).
+  Data frame with columns bs, sebs, Ns, study_id (optional). Column
+  names can be remapped with `estimate`, `se`, `n`, and `study_id`.
 
 - method:
 
@@ -76,7 +77,13 @@ maive(
 
 - study_id:
 
-  Optional column name for study identifiers
+  Optional column name for study identifiers. When not supplied, a
+  column named `study_id` is used if present; otherwise, if `dat` has
+  four or more columns, the fourth column is used as the study
+  identifier and a warning names the column. Any fourth column (a
+  moderator, a year) would otherwise drive the study dummies and
+  clustering at every `studylevel` other than 0, so name the column
+  explicitly or drop it.
 
 - seed:
 
@@ -93,9 +100,11 @@ maive(
 - F-test: heteroskedastic robust F-test of the first step instrumented
   SEs
 
-- beta_standard: point estimate from the method chosen
+- beta_standard: point estimate from the conventional (non-instrumented,
+  inverse-variance weighted) fit of the method chosen
 
-- SE_standard: standard error from the method chosen
+- SE_standard: standard error from the same conventional fit as
+  beta_standard
 
 - Hausman: Hausman type test: comparison between MAIVE and standard
   version
@@ -120,6 +129,10 @@ maive(
   coefficient (when available)
 
 - is_quadratic_fit: Details on quadratic selection and slope behaviour
+
+- ek_structure: Structure of the fitted EK model when method=4: "kink",
+  "linear", or "intercept" (intercept-only degenerate fit); NA for other
+  methods
 
 - boot_result: Boot result
 

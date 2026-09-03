@@ -95,10 +95,10 @@ Example:
 ``` r
 
 custom_dat <- data.frame(
-  my_est = c(0.5, 0.6, 0.4, 0.55),
-  my_se  = c(0.2, 0.18, 0.25, 0.22),
-  my_n   = c(80, 120, 95, 110),
-  my_study = c("A", "A", "B", "C")
+  my_est = c(0.50, 0.60, 0.40, 0.55, 0.45, 0.52, 0.48, 0.58, 0.42, 0.50, 0.47, 0.56),
+  my_se = c(0.20, 0.18, 0.25, 0.22, 0.24, 0.19, 0.23, 0.17, 0.26, 0.21, 0.24, 0.18),
+  my_n = c(80, 120, 95, 110, 90, 130, 100, 140, 85, 105, 88, 125),
+  my_study = c("A", "A", "B", "B", "C", "C", "D", "D", "A", "B", "C", "D")
 )
 
 result <- maive(
@@ -114,11 +114,27 @@ result <- maive(
   SE = 3,
   AR = 1
 )
+#> Registered S3 method overwritten by 'clubSandwich':
+#>   method    from    
+#>   bread.mlm sandwich
+
+result$beta
+#> [1] 0.7628903
 ```
 
 Validation rules still apply: required columns must be numeric,
 non-missing, finite, and there must be at least 4 observations after
-removing completely empty rows.
+removing completely empty rows. With a study identifier, there must be
+at least as many rows as unique studies plus three (the fixture above
+has 12 rows for 4 studies).
+
+**Study identifier fallback:** when `study_id` is not supplied, a column
+named `study_id` is used wherever it sits. If there is no such column
+and the data frame has four or more columns, the fourth column is used
+as the study identifier and a warning names it. If column four is a
+moderator or a year rather than a study identifier, drop it or name the
+correct column explicitly, because the identifier drives the study
+dummies and clustering at every `studylevel` other than 0.
 
 ## Basic Usage
 

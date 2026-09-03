@@ -68,7 +68,9 @@ Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.</p>
 
 
 <dl><dt id="arg-dat">dat<a class="anchor" aria-label="anchor" href="#arg-dat"></a></dt>
-<dd><p>Data frame with columns bs, sebs, Ns, study_id (optional).</p></dd>
+<dd><p>Data frame with columns bs, sebs, Ns, study_id (optional). Column
+names can be remapped with <code>estimate</code>, <code>se</code>, <code>n</code>, and
+<code>study_id</code>.</p></dd>
 
 
 <dt id="arg-method">method<a class="anchor" aria-label="anchor" href="#arg-method"></a></dt>
@@ -114,7 +116,12 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.</p></dd>
 
 
 <dt id="arg-study-id">study_id<a class="anchor" aria-label="anchor" href="#arg-study-id"></a></dt>
-<dd><p>Optional column name for study identifiers</p></dd>
+<dd><p>Optional column name for study identifiers. When not supplied,
+a column named <code>study_id</code> is used if present; otherwise, if <code>dat</code>
+has four or more columns, the fourth column is used as the study identifier
+and a warning names the column. Any fourth column (a moderator, a year)
+would otherwise drive the study dummies and clustering at every
+<code>studylevel</code> other than 0, so name the column explicitly or drop it.</p></dd>
 
 
 <dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
@@ -128,8 +135,9 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.</p></dd>
 <ul><li><p>beta: MAIVE meta-estimate</p></li>
 <li><p>SE: MAIVE standard error</p></li>
 <li><p>F-test: heteroskedastic robust F-test of the first step instrumented SEs</p></li>
-<li><p>beta_standard: point estimate from the method chosen</p></li>
-<li><p>SE_standard: standard error from the method chosen</p></li>
+<li><p>beta_standard: point estimate from the conventional (non-instrumented,
+    inverse-variance weighted) fit of the method chosen</p></li>
+<li><p>SE_standard: standard error from the same conventional fit as beta_standard</p></li>
 <li><p>Hausman: Hausman type test: comparison between MAIVE and standard version</p></li>
 <li><p>Chi2: 5<!-- % critical value for Hausman test --></p></li>
 <li><p>SE_instrumented: instrumented standard errors</p></li>
@@ -140,6 +148,8 @@ PET, PEESE, PET-PEESE, not available for fixed effects): 0 no, 1 yes.</p></dd>
 <li><p>egger_boot_ci: Confidence interval for the Egger coefficient using the selected resampling scheme</p></li>
 <li><p>egger_ar_ci: Anderson-Rubin confidence interval for the Egger coefficient (when available)</p></li>
 <li><p>is_quadratic_fit: Details on quadratic selection and slope behaviour</p></li>
+<li><p>ek_structure: Structure of the fitted EK model when method=4: "kink",
+    "linear", or "intercept" (intercept-only degenerate fit); NA for other methods</p></li>
 <li><p>boot_result: Boot result</p></li>
 <li><p>slope_coef: Slope coefficient</p></li>
 <li><p>petpeese_selected: Which model (PET or PEESE) was selected when method=3 (NA otherwise)</p></li>

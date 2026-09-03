@@ -37,6 +37,30 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="0.2.6" id="maive-026">MAIVE 0.2.6<a class="anchor" aria-label="anchor" href="#maive-026"></a></h2>
+<p><em>Unreleased</em></p>
+<div class="section level3">
+<h3 id="bug-fixes-0-2-6">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-0-2-6"></a></h3>
+<ul><li>Custom column arguments now work: <code>estimate</code>, <code>se</code>, <code>n</code>, and <code>study_id</code> are resolved before the data frame is validated, so the documented custom column example in the vignette runs (it previously failed with “Missing required columns: bs, sebs, Ns”). Completely empty rows are still dropped before resolution.</li>
+<li>The <code>seed</code> argument now reaches the wild bootstrap (<code>SE = 3</code>). Previously the helper always used seed 123, so different seeds gave identical bootstrap confidence intervals and <code>seed = NULL</code> did not use the current RNG state. The reported SE under <code>SE = 3</code> is the CR1 cluster-robust SE and is unchanged; only the bootstrap confidence intervals (for example <code>egger_boot_ci</code>) depend on the seed, and a non-default seed now changes them.</li>
+<li>A study identifier with a single level no longer fails with the raw “contrasts can be applied only to factors with 2 or more levels” error. The dummy matrix is empty in that case, so <code>studylevel = 0</code> and <code>1</code> run, and <code>studylevel = 2</code> and <code>3</code> surface clubSandwich’s own message that clustering needs more than one cluster. Results on multi-study data are unchanged.</li>
+<li>
+<code>beta_standard</code> at <code>method = 3</code> (PET-PEESE) now comes from the same conventional fit as <code>SE_standard</code>. It was previously read from the auxiliary PET-PEESE model that uses MAIVE’s own weights, so the returned pair mixed two regressions and <code>beta_standard</code> moved with <code>weight</code> while <code>SE_standard</code> did not. This is a deliberate change to the reported value at <code>method = 3</code>; methods 1, 2, and 4 are unaffected, and the Hausman statistic still uses the auxiliary pair and is unchanged.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="new-features-0-2-6">New Features<a class="anchor" aria-label="anchor" href="#new-features-0-2-6"></a></h3>
+<ul><li>
+<code><a href="../reference/maive.html">maive()</a></code> and <code><a href="../reference/waive.html">waive()</a></code> return <code>ek_structure</code> (“kink”, “linear”, or “intercept”) for <code>method = 4</code>, so an intercept-only degenerate EK fit is identifiable directly rather than inferred from a zero slope coefficient. It is <code>NA</code> for other methods.</li>
+<li>When no <code>study_id</code> argument is given and no column is named <code>study_id</code>, using the fourth column as the study identifier now emits a warning naming the column. Pass <code>study_id = "&lt;column&gt;"</code> to confirm the mapping, or drop the column if it is not a study identifier. A column named <code>study_id</code> is used regardless of its position.</li>
+</ul></div>
+<div class="section level3">
+<h3 id="documentation-0-2-6">Documentation<a class="anchor" aria-label="anchor" href="#documentation-0-2-6"></a></h3>
+<ul><li>The vignette’s custom column example is evaluated at build time with a fixture that satisfies the degrees of freedom rule (at least the number of unique studies plus three rows).</li>
+<li>
+<code><a href="../reference/maive.html">maive()</a></code> documents the <code>study_id</code> fallback and the origin of <code>beta_standard</code> and <code>SE_standard</code>.</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.2.5" id="maive-025">MAIVE 0.2.5<a class="anchor" aria-label="anchor" href="#maive-025"></a></h2><p class="text-muted">CRAN release: 2026-08-20</p>
 <p><em>Released: 2026-08-05</em></p>
 <div class="section level3">
