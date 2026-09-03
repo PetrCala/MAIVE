@@ -122,14 +122,16 @@ Validation rules still apply: required columns must be numeric, non-missing, fin
 Let's create a simple example dataset:
 
 ```{r example-data}
-# Simulated meta-analysis data
+# Simulated meta-analysis data: 50 estimates from 10 studies, with reported
+# precision driven by sample size (as the first stage assumes)
 set.seed(123)
-n_studies <- 50
+n_estimates <- 50
+Ns <- sample(100:1000, n_estimates, replace = TRUE)
 
 data <- data.frame(
-  bs = rnorm(n_studies, mean = 0.3, sd = 0.2),
-  sebs = runif(n_studies, min = 0.05, max = 0.3),
-  Ns = sample(100:1000, n_studies, replace = TRUE),
+  bs = rnorm(n_estimates, mean = 0.3, sd = 0.2),
+  sebs = 2 / sqrt(Ns) * runif(n_estimates, min = 0.8, max = 1.2),
+  Ns = Ns,
   study_id = rep(1:10, each = 5)
 )
 
@@ -140,7 +142,7 @@ head(data)
 
 The default MAIVE estimator uses PET-PEESE with instrumented standard errors, no weights, cluster-robust standard errors, and wild bootstrap:
 
-```{r default-maive, eval = FALSE}
+```{r default-maive}
 # Run MAIVE with defaults
 result <- maive(
   dat = data,
@@ -153,25 +155,27 @@ result <- maive(
 )
 
 # View key results
-cat("MAIVE Estimate:", round(result$Estimate, 3), "\n")
+cat("MAIVE Estimate:", round(result$beta, 3), "\n")
 cat("MAIVE SE:", round(result$SE, 3), "\n")
-cat("Standard Estimate:", round(result$StdEstimate, 3), "\n")
+cat("Standard Estimate:", round(result$beta_standard, 3), "\n")
 cat("Hausman Test:", round(result$Hausman, 3), "\n")
 cat("First-stage F-test:", round(result$`F-test`, 3), "\n")
 ```
 
 ### Understanding the Output
 
-The `maive()` function returns a list with the following key elements:
+The `maive()` function returns a list with the following key elements (see `?maive` for the full list):
 
-- `Estimate`: MAIVE point estimate (corrected for spurious precision)
+- `beta`: MAIVE point estimate (corrected for spurious precision)
 - `SE`: MAIVE standard error
-- `StdEstimate`: Standard (non-IV) estimate for comparison
+- `beta_standard`, `SE_standard`: Conventional (non-IV) estimate and standard error for comparison
 - `Hausman`: Hausman-type test comparing IV vs OLS estimates (high value suggests spurious precision)
 - `F-test`: First-stage F-test of instrument strength
 - `AR_CI`: Anderson-Rubin confidence interval (robust to weak instruments)
-- `pbias_pval`: p-value for publication bias test
+- `pub bias p-value`: p-value for the publication bias test based on the instrumented FAT
 - `SE_instrumented`: Vector of instrumented standard errors
+- `petpeese_selected`: Which of PET and PEESE was selected when `method = 3`
+- `ek_structure`: Structure of the EK fit when `method = 4` ("kink", "linear", or "intercept")
 
 ## Method Options
 
@@ -190,7 +194,7 @@ result_pet <- maive(
   AR = 1
 )
 
-cat("PET Estimate:", round(result_pet$Estimate, 3), "\n")
+cat("PET Estimate:", round(result_pet$beta, 3), "\n")
 ```
 
 ### 2. PEESE (Precision-Effect Estimate with Standard Error)
@@ -206,7 +210,7 @@ result_peese <- maive(
   AR = 1
 )
 
-cat("PEESE Estimate:", round(result_peese$Estimate, 3), "\n")
+cat("PEESE Estimate:", round(result_peese$beta, 3), "\n")
 ```
 
 ### 3. PET-PEESE (Conditional Method)
@@ -224,7 +228,7 @@ result_petpeese <- maive(
   AR = 1
 )
 
-cat("PET-PEESE Estimate:", round(result_petpeese$Estimate, 3), "\n")
+cat("PET-PEESE Estimate:", round(result_petpeese$beta, 3), "\n")
 ```
 
 ### 4. Endogenous Kink (EK)
@@ -240,7 +244,7 @@ result_ek <- maive(
   AR = 0  # AR not available for EK
 )
 
-cat("EK Estimate:", round(result_ek$Estimate, 3), "\n")
+cat("EK Estimate:", round(result_ek$beta, 3), "\n")
 ```
 
 ## Weighting Schemes
@@ -371,13 +375,14 @@ For technical details and methodology, see the [WAIVE slides](https://meta-analy
 result_waive <- waive(
   dat = data,
   method = 3,
+  weight = 0,
   instrument = 1,
   studylevel = 2,
   SE = 3,
   AR = 1
 )
 
-cat("WAIVE Estimate:", round(result_waive$Estimate, 3), "\n")
+cat("WAIVE Estimate:", round(result_waive$beta, 3), "\n")
 cat("WAIVE SE:", round(result_waive$SE, 3), "\n")
 ```
 

@@ -79,6 +79,6 @@ echo "  Version: $current -> $new"
 echo "  Tag:     v$new"
 echo ""
 echo "The tag push will trigger the CRAN submission workflow."
-echo "Monitor the workflow at: https://github.com/meta-analysis-es/maive/actions"
+echo "Monitor the workflow at: https://github.com/PetrCala/MAIVE/actions"
 echo ""
 

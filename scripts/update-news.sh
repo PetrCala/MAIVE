@@ -19,9 +19,20 @@ if [ ! -f "$NEWS_FILE" ]; then
     exit 1
 fi
 
-# Check if version already exists in NEWS.md
+# Check if version already exists in NEWS.md. A hand-written entry may carry an
+# "*Unreleased*" placeholder instead of a date; stamp today's date into it.
 if grep -q "^# MAIVE $VERSION" "$NEWS_FILE"; then
-    echo "[INFO] Version $VERSION already exists in $NEWS_FILE, skipping update"
+    DATE=$(date +%Y-%m-%d)
+    if grep -q "^\*Unreleased\*" "$NEWS_FILE"; then
+        # Replace only the first placeholder (the newest entry); portable across BSD and GNU
+        awk -v date="$DATE" '
+            !done && /^\*Unreleased\*/ { sub(/^\*Unreleased\*/, "*Released: " date "*"); done = 1 }
+            { print }
+        ' "$NEWS_FILE" > "$NEWS_FILE.tmp" && mv "$NEWS_FILE.tmp" "$NEWS_FILE"
+        echo "[OK] Stamped release date $DATE on the existing $VERSION entry in $NEWS_FILE"
+    else
+        echo "[INFO] Version $VERSION already exists in $NEWS_FILE, skipping update"
+    fi
     exit 0
 fi
 
