@@ -409,6 +409,7 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w, exclusion = N
     fits,
     prepared,
     instrumentation$instrument_for_ar,
+    w = w,
     adjusted_variance = instrumentation$sebs2fit1,
     f_stat = instrumentation$F_hac
   )
@@ -441,6 +442,7 @@ maive_run_pipeline <- function(opts, prepared, instrumentation, w, exclusion = N
     prepared,
     instrumentation$instrument_for_ar,
     opts$type_choice,
+    w = w,
     adjusted_variance = instrumentation$sebs2fit1
   )
 
@@ -775,21 +777,33 @@ maive_normalize_ci_bounds <- function(ci_row) {
   ci_vals
 }
 
+#' Anderson-Rubin weights matching the second stage
+#'
+#' The second stage divides every variable by `w`, so its regression weights
+#' are `1 / w^2`. The AR test uses the same weights, which covers MAIVE-adjusted
+#' weights, study weights, and the WAIVE decay alike (#32).
+#'
+#' @param w Final second-stage weight vector
+#' @param M Number of rows used by the second stage
+#' @return Numeric weight vector of length `M`
 #' @keywords internal
-maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, adjusted_variance = NULL, f_stat = NULL) {
+#' @noRd
+maive_ar_weights <- function(w, M) {
+  if (!is.numeric(w) || length(w) != M) {
+    stop("w must be a numeric vector aligned with the data used in the AR test.")
+  }
+  1 / w^2
+}
+
+#' @keywords internal
+maive_compute_egger_ar_ci <- function(opts, fits, prepared, invNs, w, adjusted_variance = NULL, f_stat = NULL) {
   if (opts$AR != 1L || opts$weight == 1L || opts$instrument == 0L || prepared$dummy == 1L) {
     return("NA")
   }
   if (is.null(fits$fatpet)) {
     return("NA")
   }
-  ar_weights <- NULL
-  if (opts$weight == 2L) {
-    if (is.null(adjusted_variance)) {
-      stop("Adjusted variance estimates are required when computing weighted AR intervals.")
-    }
-    ar_weights <- 1 / adjusted_variance
-  }
+  ar_weights <- maive_ar_weights(w, prepared$M)
 
   # Determine which SE to use for AR test
 
@@ -920,7 +934,7 @@ maive_compute_hausman <- function(beta_iv, beta_ols, model_iv, model_ols, g, typ
 }
 
 #' @keywords internal
-maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_choice, adjusted_variance = NULL) {
+maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_choice, w, adjusted_variance = NULL) {
   if (opts$AR != 1L || opts$method == 4L || opts$weight == 1L || prepared$dummy == 1L) {
     return(list(b0_CI = "NA", b1_CI = "NA"))
   }
@@ -936,13 +950,7 @@ maive_compute_ar_ci <- function(opts, fits, selection, prepared, invNs, type_cho
     stop("Invalid method")
   )
 
-  ar_weights <- NULL
-  if (opts$weight == 2L) {
-    if (is.null(adjusted_variance)) {
-      stop("Adjusted variance estimates are required when computing weighted AR intervals.")
-    }
-    ar_weights <- 1 / adjusted_variance
-  }
+  ar_weights <- maive_ar_weights(w, prepared$M)
 
   # When instrument=1, use instrumented SE for consistency with fitted model
   if (opts$instrument == 1L && !is.null(adjusted_variance)) {

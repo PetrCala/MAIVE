@@ -193,7 +193,7 @@ compute_AR_CI_optimized <- function(model, adjust_fun, bs, sebs, invNs, g, type_
 #'
 #' Algorithm (per tjhavranek, Nov 2025):
 #' 1. For each candidate slope b1, form residuals: r_i = y_i - b1 * x_i
-#' 2. Run auxiliary regression: r ~ 1 + z (intercept absorbs b0)
+#' 2. Run auxiliary regression: r ~ sqrt(w) + z (scaled intercept absorbs b0)
 #' 3. Use cluster-robust (CR2) variance for the z coefficient
 #' 4. Test statistic: t_z^2 from the clustered test
 #' 5. Accept b1 if t_z^2 <= qchisq(0.95, df = 1) = 3.84
@@ -252,10 +252,12 @@ compute_AR_CI_slope_only <- function(model, adjust_fun, bs, sebs, invNs, g, type
     # Form residuals under the null slope
     r <- y - b1_val * x
 
-    # Auxiliary regression: r ~ 1 + z
-    # The intercept absorbs b0 (nuisance parameter)
+    # Auxiliary regression: r ~ sqrt(w) + z
+    # The scaled intercept absorbs b0 (nuisance parameter). It must be scaled
+    # like y, x and z; an unscaled intercept is a different regressor under
+    # heterogeneous weights (#32). With no weights sqrt_weights is all ones.
     fit <- tryCatch(
-      lm(r ~ z),
+      lm(r ~ 0 + sqrt_weights + z),
       error = function(e) NULL
     )
 
