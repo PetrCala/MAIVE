@@ -56,6 +56,29 @@
   PET-PEESE intercept
   ([\#31](https://github.com/PetrCala/MAIVE/issues/31)).
 
+- The Anderson-Rubin intervals now use the second stage’s own weights,
+  `1 / w^2` of the final weight vector. Previously they were weighted
+  only for `weight = 2`, so with study weights (`weight = 3`) and in
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md) with
+  `weight = 0` or `3` they were computed unweighted, and
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md) with
+  `weight = 2` dropped the decay. `AR_CI` and `egger_ar_ci` from
+  [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) with
+  `weight = 0` or `2` are unaffected by this change. AR stays off for
+  `weight = 1` ([\#32](https://github.com/PetrCala/MAIVE/issues/32)).
+
+- The subset Anderson-Rubin interval for the Egger slope (`egger_ar_ci`)
+  scales its intercept by the square root of the weights, like the
+  estimates, the regressor and the instrument. The unscaled intercept
+  absorbed every candidate slope under `weight = 2`, where the scaled
+  PET regressor is constant, so the weighted Egger AR interval came back
+  as the whole search grid or `NA`; it is now finite and covers the
+  weighted Egger estimate. Weighted Egger AR intervals (`weight = 2` or
+  `3`, and
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md))
+  change; unweighted ones do not, since the scaled intercept is then a
+  column of ones ([\#32](https://github.com/PetrCala/MAIVE/issues/32)).
+
 ------------------------------------------------------------------------
 
 ## MAIVE 0.4.1
