@@ -12,9 +12,9 @@
   `1 / decay`, and an estimate at the 0.05 floor got up to 20 times the
   weight of an unpenalized one. The rows are now divided by the square
   root of the decay weight, so the least-squares weight is `decay`
-  (times the base weight `1 / base_w^2` when `weight` is 1 or 2). WAIVE
-  estimates, standard errors, and test statistics move whenever the
-  decay weights differ across estimates;
+  (times the base weight `1 / base_w^2` when `weight` is 1, 2, or 3).
+  WAIVE estimates, standard errors, and test statistics move whenever
+  the decay weights differ across estimates;
   [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) is
   unaffected. On the simulated data in
   [\#30](https://github.com/PetrCala/MAIVE/issues/30) the WAIVE PET
@@ -29,6 +29,21 @@
   sizes WAIVE points by `1 / weights^2`, so the downweighted estimates
   are still drawn smallest
   ([\#30](https://github.com/PetrCala/MAIVE/issues/30)).
+
+- Study weights (`weight = 3`) now give an estimate from a study with k
+  estimates the least-squares weight 1/k, so every study carries the
+  same total weight. The second stage divides each row by the weight
+  vector, which makes the regression weight its inverse square, and code
+  3 returned `1/k`, so estimates entered with weight k^2 and large
+  studies dominated. Estimates, standard errors, and Hausman statistics
+  with study weights will move, in
+  [`maive()`](https://petrcala.github.io/MAIVE/reference/maive.md) and
+  in [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md),
+  which combines its decay weights with the study weights. Codes 0, 1,
+  and 2 are unchanged. The returned `weights` element is now `sqrt(k)`
+  for code 3, consistent with codes 1 and 2, which return the standard
+  error each row is divided by
+  ([\#29](https://github.com/PetrCala/MAIVE/issues/29)).
 
 ------------------------------------------------------------------------
 
