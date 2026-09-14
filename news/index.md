@@ -1,6 +1,8 @@
 # Changelog
 
-## MAIVE (development version)
+## MAIVE 0.5.0
+
+*Released: 2026-09-14*
 
 ### Bug Fixes
 
