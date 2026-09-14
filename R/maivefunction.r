@@ -275,7 +275,16 @@ maive_expand_to_input <- function(values, keep) {
   out
 }
 
+#' Second-stage row divisors
+#'
+#' The design matrices divide every row by \code{w}, so a row enters least
+#' squares with weight \code{1 / w^2}. Codes 1 and 2 return standard errors;
+#' code 3 returns \code{sqrt(k)}, with \code{k} the number of estimates in the
+#' row's study, so each estimate gets weight \code{1 / k} and every study the
+#' same total weight.
+#'
 #' @keywords internal
+#' @noRd
 maive_compute_weights <- function(weight, sebs, sebs2fit1, studyid = NULL) {
   if (weight == 0L) {
     rep(1, length(sebs))
@@ -291,7 +300,7 @@ maive_compute_weights <- function(weight, sebs, sebs2fit1, studyid = NULL) {
       stop("studyid must align with sebs when using study weights.")
     }
     counts <- ave(rep(1, length(studyid)), studyid, FUN = length)
-    1 / counts
+    sqrt(counts)
   } else {
     stop("Invalid weight option.")
   }
