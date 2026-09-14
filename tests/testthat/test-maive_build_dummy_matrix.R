@@ -98,6 +98,10 @@ test_that("euro results match the 0.2.5 reference at all four studylevels", {
         # beta_standard at method 3 changed deliberately in 0.2.6 (it now comes
         # from the conventional PET-PEESE fit); it is covered by its own test.
         if (method == 3L && field == "beta_standard") next
+        # The conventional EK fit with study dummies has a negative PET-PEESE
+        # intercept here, so it kinks since #31 and no longer returns PET; the
+        # new values are pinned in test-ek-sign-symmetry.R.
+        if (method == 4L && studylevel %in% c(1L, 3L) && field %in% c("beta_standard", "SE_standard")) next
         got <- if (field == "SE_instrumented_sum") sum(res$SE_instrumented) else res[[field]]
         expected <- sub$value[i]
         label <- sprintf("studylevel %d, method %d, %s", studylevel, method, field)

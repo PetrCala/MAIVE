@@ -643,7 +643,11 @@ maive_fit_ek <- function(selection, design, sighats, method) {
     return(list(ekreg = NULL, ekreg0 = NULL, structure = "linear", a0 = NA_real_, a00 = NA_real_))
   }
 
-  intercept <- coef(selection$petpeese)[1]
+  # The kink location is a distance along the SE axis and the kink slope is
+  # free, so the absolute PET-PEESE intercept handles bias on either side. A
+  # signed rule never kinks for a negative intercept and silently returns PET;
+  # with abs(), EK on -bs is exactly minus EK on bs (#31).
+  intercept <- abs(coef(selection$petpeese)[1])
   threshold <- 1.96 * sighats$sighhat0
   if (intercept > threshold) {
     a0 <- (intercept - threshold) * (intercept + threshold) / (2 * 1.96 * intercept)
@@ -651,7 +655,7 @@ maive_fit_ek <- function(selection, design, sighats, method) {
     a0 <- 0
   }
 
-  intercept0 <- coef(selection$petpeese0)[1]
+  intercept0 <- abs(coef(selection$petpeese0)[1])
   threshold0 <- 1.96 * sighats$sighhat00
   if (intercept0 > threshold0) {
     a00 <- (intercept0 - threshold0) * (intercept0 + threshold0) / (2 * 1.96 * intercept0)
