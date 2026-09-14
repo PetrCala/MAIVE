@@ -56,8 +56,10 @@ test_that("the conventional pair at method 3 does not move with MAIVE weights", 
 
 test_that("the Hausman statistic at method 3 is unchanged by the beta_standard fix", {
   skip_if_not_installed("clubSandwich")
-  # Reference values computed with MAIVE 0.2.5 on the same fixture and options
-  reference <- c(NA_real_, NA_real_, 7.8151132630996862, NA_real_)
+  # Reference values computed with MAIVE 0.2.5 on the same fixture and options.
+  # Weight 3 was NA there because study weights entered as k^2 instead of 1 / k;
+  # its value is the one after that fix (#29).
+  reference <- c(NA_real_, NA_real_, 7.8151132630996862, 17.194858930553654)
 
   for (weight in 0:3) {
     res <- run_education(method = 3, weight = weight)
