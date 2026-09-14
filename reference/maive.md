@@ -158,8 +158,12 @@ maive(
 - peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA
   otherwise)
 
-- weights: second-stage weights, one per input row; NA for excluded
-  estimates
+- weights: second-stage row scale, one per input row; NA for excluded
+  estimates. Each row of the second-stage regressions is divided by it,
+  so the least-squares weight of an estimate is `1 / weights^2`. In
+  [`waive()`](https://petrcala.github.io/MAIVE/reference/waive.md) it is
+  also divided by the square root of the exponential-decay weight, so
+  with `weight = 0`, `1 / weights^2` is the decay weight itself
 
 - instrument_strength: "strong", "weak", "very_weak", "unknown", or
   "not_applicable", from the first-stage F-test

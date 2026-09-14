@@ -37,6 +37,14 @@
     </div>
 
     <div class="section level2">
+<h2 class="pkg-version" data-toc-text="development version" id="maive-development-version">MAIVE (development version)<a class="anchor" aria-label="anchor" href="#maive-development-version"></a></h2>
+<div class="section level3">
+<h3 id="bug-fixes-development-version">Bug Fixes<a class="anchor" aria-label="anchor" href="#bug-fixes-development-version"></a></h3>
+<ul><li>
+<code><a href="../reference/waive.html">waive()</a></code> gave the spuriously precise estimates it is meant to discount more weight, not less. The second-stage rows are divided by the returned <code>weights</code>, so an estimate’s least-squares weight is <code>1 / weights^2</code>; multiplying by the square root of the exponential-decay weight therefore applied <code>1 / decay</code>, and an estimate at the 0.05 floor got up to 20 times the weight of an unpenalized one. The rows are now divided by the square root of the decay weight, so the least-squares weight is <code>decay</code> (times the base weight <code>1 / base_w^2</code> when <code>weight</code> is 1 or 2). WAIVE estimates, standard errors, and test statistics move whenever the decay weights differ across estimates; <code><a href="../reference/maive.html">maive()</a></code> is unaffected. On the simulated data in <a href="https://github.com/PetrCala/MAIVE/issues/30" class="external-link">#30</a> the WAIVE PET intercept goes from 0.381 to 0.223, which is the <code><a href="https://rdrr.io/r/stats/lm.html" class="external-link">lm()</a></code> fit with weights <code>decay</code>. <code>result$weights</code> keeps its meaning as the row divisor (now documented in <code><a href="../reference/maive.html">?maive</a></code>), so under <code><a href="../reference/waive.html">waive()</a></code> with <code>weight = 0</code> it is <code>1 / sqrt(decay)</code>. <code><a href="../reference/get_funnel_plot.html">get_funnel_plot()</a></code> sizes WAIVE points by <code>1 / weights^2</code>, so the downweighted estimates are still drawn smallest (<a href="https://github.com/PetrCala/MAIVE/issues/30" class="external-link">#30</a>).</li>
+</ul><hr></div>
+</div>
+    <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.4.1" id="maive-041">MAIVE 0.4.1<a class="anchor" aria-label="anchor" href="#maive-041"></a></h2>
 <p><em>Released: 2026-09-11</em></p>
 <div class="section level3">
