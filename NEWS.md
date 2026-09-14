@@ -8,6 +8,10 @@
 
 * EK (`method = 4`) now handles bias on the negative side. The kink location was computed only when the PET-PEESE intercept exceeded `1.96 * sigma_h`, so a negative intercept never kinked and EK silently returned PET. It now uses the absolute intercept: the kink location is a distance along the standard-error axis and the kink slope is free, so EK on `-bs` gives exactly minus EK on `bs`, the same as reversing the sign, running EK and reversing back. Results for a positive intercept are unchanged; EK estimates move for data with a negative PET-PEESE intercept (#31).
 
+* The Anderson-Rubin intervals now use the second stage's own weights, `1 / w^2` of the final weight vector. Previously they were weighted only for `weight = 2`, so with study weights (`weight = 3`) and in `waive()` with `weight = 0` or `3` they were computed unweighted, and `waive()` with `weight = 2` dropped the decay. `AR_CI` and `egger_ar_ci` from `maive()` with `weight = 0` or `2` are unaffected by this change. AR stays off for `weight = 1` (#32).
+
+* The subset Anderson-Rubin interval for the Egger slope (`egger_ar_ci`) scales its intercept by the square root of the weights, like the estimates, the regressor and the instrument. The unscaled intercept absorbed every candidate slope under `weight = 2`, where the scaled PET regressor is constant, so the weighted Egger AR interval came back as the whole search grid or `NA`; it is now finite and covers the weighted Egger estimate. Weighted Egger AR intervals (`weight = 2` or `3`, and `waive()`) change; unweighted ones do not, since the scaled intercept is then a column of ones (#32).
+
 ---
 
 
