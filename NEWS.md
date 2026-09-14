@@ -1,3 +1,12 @@
+# MAIVE (development version)
+
+## Bug Fixes
+
+* `waive()` gave the spuriously precise estimates it is meant to discount more weight, not less. The second-stage rows are divided by the returned `weights`, so an estimate's least-squares weight is `1 / weights^2`; multiplying by the square root of the exponential-decay weight therefore applied `1 / decay`, and an estimate at the 0.05 floor got up to 20 times the weight of an unpenalized one. The rows are now divided by the square root of the decay weight, so the least-squares weight is `decay` (times the base weight `1 / base_w^2` when `weight` is 1 or 2). WAIVE estimates, standard errors, and test statistics move whenever the decay weights differ across estimates; `maive()` is unaffected. On the simulated data in #30 the WAIVE PET intercept goes from 0.381 to 0.223, which is the `lm()` fit with weights `decay`. `result$weights` keeps its meaning as the row divisor (now documented in `?maive`), so under `waive()` with `weight = 0` it is `1 / sqrt(decay)`. `get_funnel_plot()` sizes WAIVE points by `1 / weights^2`, so the downweighted estimates are still drawn smallest (#30).
+
+---
+
+
 # MAIVE 0.4.1
 
 *Released: 2026-09-11*

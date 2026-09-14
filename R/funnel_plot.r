@@ -327,7 +327,7 @@ maive_funnel_extract_adjusted_se <- function(result, instrument, n_points) {
 #' @param model_type Normalized model type.
 #' @param instrument Integer 0/1.
 #' @param n_points Expected vector length.
-#' @return Numeric vector or NULL.
+#' @return Numeric vector of least-squares weights (`1 / result$weights^2`) or NULL.
 #' @keywords internal
 #' @noRd
 maive_funnel_extract_adjusted_weights <- function(result, model_type, instrument, n_points) {
@@ -344,7 +344,9 @@ maive_funnel_extract_adjusted_weights <- function(result, model_type, instrument
   if (!any(is.finite(w)) || !any(w > 0, na.rm = TRUE)) {
     return(NULL)
   }
-  w
+  # result$weights divides the rows, so the least-squares weight is 1 / w^2
+  # (the decay weight itself with weight = 0). Size the points by that (#30).
+  1 / w^2
 }
 
 #' Extract slope metadata from MAIVE result
