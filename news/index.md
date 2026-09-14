@@ -45,6 +45,17 @@
   error each row is divided by
   ([\#29](https://github.com/PetrCala/MAIVE/issues/29)).
 
+- EK (`method = 4`) now handles bias on the negative side. The kink
+  location was computed only when the PET-PEESE intercept exceeded
+  `1.96 * sigma_h`, so a negative intercept never kinked and EK silently
+  returned PET. It now uses the absolute intercept: the kink location is
+  a distance along the standard-error axis and the kink slope is free,
+  so EK on `-bs` gives exactly minus EK on `bs`, the same as reversing
+  the sign, running EK and reversing back. Results for a positive
+  intercept are unchanged; EK estimates move for data with a negative
+  PET-PEESE intercept
+  ([\#31](https://github.com/PetrCala/MAIVE/issues/31)).
+
 ------------------------------------------------------------------------
 
 ## MAIVE 0.4.1
