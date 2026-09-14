@@ -1031,10 +1031,13 @@ maive_analyze <- function(dat,
 
   if (identical(weight_mode, "waive")) {
     decay_weights <- maive_compute_waive_weights(instrumentation$first_stage_model, exclusion$keep)
+    # w divides each row of the second stage, so the least-squares weight is
+    # 1 / w^2. Dividing by sqrt(decay) gives each estimate least-squares weight
+    # decay / base_w^2, which shrinks as the decay penalty grows (#30).
     if (opts$weight == 0L) {
-      w <- sqrt(decay_weights)
+      w <- 1 / sqrt(decay_weights)
     } else {
-      w <- base_w * sqrt(decay_weights)
+      w <- base_w / sqrt(decay_weights)
     }
   } else {
     w <- base_w
@@ -1134,7 +1137,12 @@ maive_analyze <- function(dat,
 #'   \item petpeese_selected: Which model (PET or PEESE) was selected when method=3 (NA otherwise)
 #'   \item peese_se2_coef: Coefficient on SE^2 when PEESE is the final model (NA otherwise)
 #'   \item peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA otherwise)
-#'   \item weights: second-stage weights, one per input row; NA for excluded estimates
+#'   \item weights: second-stage row scale, one per input row; NA for excluded
+#'     estimates. Each row of the second-stage regressions is divided by it, so
+#'     the least-squares weight of an estimate is \code{1 / weights^2}. In
+#'     \code{waive()} it is also divided by the square root of the
+#'     exponential-decay weight, so with \code{weight = 0},
+#'     \code{1 / weights^2} is the decay weight itself
 #'   \item instrument_strength: "strong", "weak", "very_weak", "unknown", or
 #'     "not_applicable", from the first-stage F-test
 #'   \item n_excluded: number of estimates excluded because the first stage
