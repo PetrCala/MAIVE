@@ -6,6 +6,8 @@
 
 * Study weights (`weight = 3`) now give an estimate from a study with k estimates the least-squares weight 1/k, so every study carries the same total weight. The second stage divides each row by the weight vector, which makes the regression weight its inverse square, and code 3 returned `1/k`, so estimates entered with weight k^2 and large studies dominated. Estimates, standard errors, and Hausman statistics with study weights will move, in `maive()` and in `waive()`, which combines its decay weights with the study weights. Codes 0, 1, and 2 are unchanged. The returned `weights` element is now `sqrt(k)` for code 3, consistent with codes 1 and 2, which return the standard error each row is divided by (#29).
 
+* EK (`method = 4`) now handles bias on the negative side. The kink location was computed only when the PET-PEESE intercept exceeded `1.96 * sigma_h`, so a negative intercept never kinked and EK silently returned PET. It now uses the absolute intercept: the kink location is a distance along the standard-error axis and the kink slope is free, so EK on `-bs` gives exactly minus EK on `bs`, the same as reversing the sign, running EK and reversing back. Results for a positive intercept are unchanged; EK estimates move for data with a negative PET-PEESE intercept (#31).
+
 ---
 
 
