@@ -20,7 +20,7 @@
 ## Citation
 
 Source:
-[`inst/CITATION`](https://github.com/PetrCala/MAIVE/blob/0.4.0/inst/CITATION)
+[`inst/CITATION`](https://github.com/PetrCala/MAIVE/blob/0.5.0/inst/CITATION)
 
 Irsova, Z., Bom, P.R.D., Havranek, T., & Rachinger, H. (2025). Spurious
 precision in meta-analysis of observational research. Nature

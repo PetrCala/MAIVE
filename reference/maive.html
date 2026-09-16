@@ -9,7 +9,7 @@ Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.'></hea
 
     <a class="navbar-brand me-2" href="../index.html">MAIVE</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.4.0</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="Released version">0.5.0</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -35,7 +35,7 @@ Zuzana Irsova, Pedro Bom, Tomas Havranek, Petr Cala, and Heiko Rachinger.'></hea
   <main id="main" class="col-md-9"><div class="page-header">
 
       <h1>R code for MAIVE</h1>
-      <small class="dont-index">Source: <a href="https://github.com/PetrCala/MAIVE/blob/0.4.0/R/maivefunction.r" class="external-link"><code>R/maivefunction.r</code></a></small>
+      <small class="dont-index">Source: <a href="https://github.com/PetrCala/MAIVE/blob/0.5.0/R/maivefunction.r" class="external-link"><code>R/maivefunction.r</code></a></small>
       <div class="d-none name"><code>maive.Rd</code></div>
     </div>
 
@@ -166,7 +166,12 @@ says the study-level options have no effect.</p></dd>
 <li><p>petpeese_selected: Which model (PET or PEESE) was selected when method=3 (NA otherwise)</p></li>
 <li><p>peese_se2_coef: Coefficient on SE^2 when PEESE is the final model (NA otherwise)</p></li>
 <li><p>peese_se2_se: Standard error of the PEESE SE^2 coefficient (NA otherwise)</p></li>
-<li><p>weights: second-stage weights, one per input row; NA for excluded estimates</p></li>
+<li><p>weights: second-stage row scale, one per input row; NA for excluded
+    estimates. Each row of the second-stage regressions is divided by it, so
+    the least-squares weight of an estimate is <code>1 / weights^2</code>. In
+    <code><a href="waive.html">waive()</a></code> it is also divided by the square root of the
+    exponential-decay weight, so with <code>weight = 0</code>,
+    <code>1 / weights^2</code> is the decay weight itself</p></li>
 <li><p>instrument_strength: "strong", "weak", "very_weak", "unknown", or
     "not_applicable", from the first-stage F-test</p></li>
 <li><p>n_excluded: number of estimates excluded because the first stage
